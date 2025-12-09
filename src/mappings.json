@@ -1,0 +1,96 @@
+{
+  "profiles": {
+    "videoScenes": {
+      "label": "Video Scenes (Ch10)",
+      "gridSize": [
+        8,
+        8
+      ],
+      "pads": [
+        {
+          "id": "vid_scene_intro",
+          "label": "Intro",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 60,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "osc": {
+            "address": "/video/scene/intro",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "vid_scene_crash",
+          "label": "Crash",
+          "row": 0,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 61,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "osc": {
+            "address": "/video/scene/crash",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "vid_scene_soft",
+          "label": "Soft",
+          "row": 0,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 62,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "osc": {
+            "address": "/video/scene/soft",
+            "args": [
+              1
+            ]
+          }
+        }
+      ]
+    },
+    "patterns": {
+      "label": "Patterns",
+      "gridSize": [
+        8,
+        8
+      ],
+      "pads": [
+        {
+          "id": "pattern_a",
+          "label": "Pattern A",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 40,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        }
+      ]
+    }
+  }
+}
