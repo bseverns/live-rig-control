@@ -5,6 +5,7 @@ import mappings from "./mappings.json" assert { type: "json" };
 let currentProfileId = null;
 let midiAccess = null;
 let midiOutput = null;
+let cachedMidiOutputs = [];
 const padState = new Map(); // id -> boolean
 
 const profileBar = document.getElementById("profile-bar");
@@ -22,6 +23,11 @@ async function main() {
     switchProfile(firstProfile);
   }
 
+  midiSelect.addEventListener("change", () => {
+    const id = midiSelect.value;
+    midiOutput = cachedMidiOutputs.find((o) => o.id === id) || null;
+  });
+
   refreshMidiBtn.addEventListener("click", () => {
     if (!midiAccess) return;
     populateMidiOutputs([...midiAccess.outputs.values()]);
@@ -35,6 +41,8 @@ async function main() {
 }
 
 function populateMidiOutputs(outputs) {
+  cachedMidiOutputs = outputs;
+  const previousSelection = midiSelect.value || midiOutput?.id;
   midiSelect.innerHTML = "";
   outputs.forEach((out, idx) => {
     const opt = document.createElement("option");
@@ -43,17 +51,12 @@ function populateMidiOutputs(outputs) {
     midiSelect.appendChild(opt);
   });
 
-  midiSelect.addEventListener("change", () => {
-    const id = midiSelect.value;
-    midiOutput =
-      [...midiAccess.outputs.values()].find((o) => o.id === id) || null;
-  });
+  const matching = cachedMidiOutputs.find((out) => out.id === previousSelection);
+  const first = cachedMidiOutputs[0];
+  const nextOutput = matching || first || null;
 
-  const first = outputs[0];
-  if (first) {
-    midiSelect.value = first.id;
-    midiOutput = first;
-  }
+  midiOutput = nextOutput;
+  midiSelect.value = nextOutput?.id ?? "";
 }
 
 function buildProfileBar() {
