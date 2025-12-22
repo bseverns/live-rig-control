@@ -21,9 +21,10 @@ export async function initMIDI(onChangeOutputs) {
   return access;
 }
 
-export function sendNote(output, channel, note, velocity, on) {
+export function sendNote(output, channel, note, onVelocity, offVelocity, on) {
   if (!output) return;
   const status = (on ? 0x90 : 0x80) + (channel - 1);
+  const velocity = on ? onVelocity ?? 100 : offVelocity ?? 0;
   output.send([status, note, velocity]);
 }
 
