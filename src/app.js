@@ -77,14 +77,22 @@ function switchProfile(profileId) {
 
   const [cols, rows] = profile.gridSize || [8, 8];
   grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  grid.style.gridTemplateRows = `repeat(${rows}, minmax(64px, 1fr))`;
   grid.innerHTML = "";
   padState.clear();
 
-  profile.pads.forEach((pad) => {
+  profile.pads.forEach((pad, idx) => {
     const div = document.createElement("div");
     div.className = "pad off";
     div.textContent = pad.label || pad.id;
     div.dataset.padId = pad.id;
+
+    const defaultRow = Math.floor(idx / cols);
+    const defaultCol = idx % cols;
+    const row = Number.isFinite(pad.row) ? pad.row : defaultRow;
+    const col = Number.isFinite(pad.col) ? pad.col : defaultCol;
+    div.style.gridRow = row + 1;
+    div.style.gridColumn = col + 1;
 
     padState.set(pad.id, false);
 
