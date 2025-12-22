@@ -111,6 +111,7 @@ function handlePadClick(pad, element) {
         pad.midi.channel,
         pad.midi.note,
         pad.midi.onVelocity ?? 100,
+        pad.midi.offVelocity ?? 0,
         nextState
       );
     } else if (pad.midi.type === "cc") {
