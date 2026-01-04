@@ -16,6 +16,11 @@ The canonical system mapping, device roles, and channel plans live in
 This repo is the performer-facing control surface that reads from a
 structured `mappings.json` file.
 
+## Start here
+
+- **Atlas interop snapshot:** [`atlas/interop.yaml`](atlas/interop.yaml)
+- **Field card (fast ops + failure modes):** [`docs/FIELD_CARD.md`](docs/FIELD_CARD.md)
+
 ## Quick start
 
 1. Clone this repo:
