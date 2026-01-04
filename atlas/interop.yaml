@@ -1,0 +1,34 @@
+repo_role: control_surface
+owned_ids:
+  - src/mappings.json pad ids (stable semantic IDs, e.g. vid_scene_intro)
+interfaces:
+  ports:
+    - name: static_http
+      port: 8080
+      protocol: http
+      notes: Default local static server in README Quick start.
+    - name: osc_bridge_ws
+      port: 9001
+      protocol: ws
+      notes: Optional OSC bridge WebSocket port used by the browser UI.
+  urls:
+    - http://localhost:8080 (or whatever you serve public/ on)
+    - ws(s)://<host>:9001 (OSC bridge)
+  protocols:
+    - WebMIDI (browser -> MIDI output devices)
+    - WebSocket (OSC bridge)
+emits:
+  mqtt_topics: []
+  osc_addresses:
+    - from src/mappings.json pads[].osc.address
+  midi_channels:
+    - from src/mappings.json pads[].midi.channel (note/cc)
+consumes:
+  mqtt_topics: []
+  osc_addresses: []
+  midi_channels: []
+invariants:
+  - src/mappings.json is the single source of truth for pad IDs and routing.
+  - Pad IDs in mappings.json are stable and must not be renumbered or repurposed lightly.
+  - OSC bridge assumes WebSocket on port 9001 unless UI is updated.
+  - Canonical rig contracts live in systems-atlas/contracts; do not duplicate here.
