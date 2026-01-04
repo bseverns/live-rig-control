@@ -1,12 +1,12 @@
 import { initMIDI, sendNote, sendCC } from "./midi.js";
 import { connectOscBridge, sendOscMessage } from "./oscClient.js";
-import mappings from "./mappings.json" assert { type: "json" };
 
 let currentProfileId = null;
 let midiAccess = null;
 let midiOutput = null;
 let cachedMidiOutputs = [];
 const padState = new Map(); // id -> boolean
+let mappings = null;
 
 const profileBar = document.getElementById("profile-bar");
 const grid = document.getElementById("grid");
@@ -14,8 +14,25 @@ const midiSelect = document.getElementById("midi-output-select");
 const refreshMidiBtn = document.getElementById("refresh-midi");
 const oscToggle = document.getElementById("osc-enabled");
 
+async function loadMappings() {
+  const res = await fetch("../src/mappings.json", { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to load mappings.json");
+  mappings = await res.json();
+}
+
+function makeOscUrl() {
+  const host = window.location.hostname || "localhost";
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+  const port = 9001; // default OSC bridge WebSocket port
+  return `${protocol}://${host}:${port}`;
+}
+
 async function main() {
+  await loadMappings();
   midiAccess = await initMIDI(populateMidiOutputs);
+  if (!midiAccess) {
+    disableMidiUi("WebMIDI unavailable");
+  }
   buildProfileBar();
 
   const firstProfile = Object.keys(mappings.profiles)[0];
@@ -35,15 +52,29 @@ async function main() {
 
   oscToggle.addEventListener("change", (e) => {
     if (e.target.checked) {
-      connectOscBridge("ws://localhost:9001");
+      connectOscBridge(makeOscUrl());
     }
   });
+}
+
+function disableMidiUi(message) {
+  midiOutput = null;
+  cachedMidiOutputs = [];
+  midiSelect.innerHTML = "";
+  const opt = document.createElement("option");
+  opt.textContent = message;
+  opt.value = "";
+  midiSelect.appendChild(opt);
+  midiSelect.disabled = true;
+  refreshMidiBtn.disabled = true;
 }
 
 function populateMidiOutputs(outputs) {
   cachedMidiOutputs = outputs;
   const previousSelection = midiSelect.value || midiOutput?.id;
   midiSelect.innerHTML = "";
+  midiSelect.disabled = false;
+  refreshMidiBtn.disabled = false;
   outputs.forEach((out, idx) => {
     const opt = document.createElement("option");
     opt.value = out.id;
