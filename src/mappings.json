@@ -69,6 +69,176 @@
         }
       ]
     },
+    "nwWrldFeed": {
+      "label": "nw_wrld Feed (OSC)",
+      "gridSize": [
+        8,
+        8
+      ],
+      "pads": [
+        {
+          "id": "nw_feed_enable",
+          "label": "nw_wrld On",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/feed/enable",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Bridge this to SC Video Mixer input enable for the nw_wrld feed."
+        },
+        {
+          "id": "nw_feed_blackout",
+          "label": "Blackout",
+          "row": 0,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/feed/blackout",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Hard kill for the nw_wrld feed or mixer layer."
+        },
+        {
+          "id": "nw_scene_intro",
+          "label": "Scene: Intro",
+          "row": 0,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/scene/intro",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_scene_crash",
+          "label": "Scene: Crash",
+          "row": 0,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/scene/crash",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_scene_soft",
+          "label": "Scene: Soft",
+          "row": 0,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/scene/soft",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_mix_clean",
+          "label": "Mix: Clean",
+          "row": 1,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/mix/clean",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Intended to bias toward unprocessed nw_wrld feed in the mixer."
+        },
+        {
+          "id": "nw_mix_processed",
+          "label": "Mix: Processed",
+          "row": 1,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/mix/processed",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Intended to bias toward processed/feedback chain."
+        },
+        {
+          "id": "nw_key_enable",
+          "label": "Key On",
+          "row": 1,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/key/enable",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Key on/off in SC Video Mixer if used."
+        },
+        {
+          "id": "nw_fx_feedback",
+          "label": "FX: Feedback",
+          "row": 1,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/fx/feedback",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_overlay_text",
+          "label": "Overlay: Text",
+          "row": 2,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/overlay/text",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_overlay_grid",
+          "label": "Overlay: Grid",
+          "row": 2,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/overlay/grid",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_overlay_mask",
+          "label": "Overlay: Mask",
+          "row": 2,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/overlay/mask",
+            "args": [
+              1
+            ]
+          }
+        }
+      ]
+    },
     "patterns": {
       "label": "Patterns",
       "gridSize": [
