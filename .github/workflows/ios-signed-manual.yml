@@ -34,4 +34,6 @@ jobs:
 
       - name: Build iOS (signed)
         working-directory: ios
-        run: xcrun --sdk iphoneos swift build -c release --triple arm64-apple-ios17.0
+        run: |
+          SDK_PATH="$(xcrun --sdk iphoneos --show-sdk-path)"
+          xcrun swift build -c release --sdk "$SDK_PATH" --triple arm64-apple-ios17.0

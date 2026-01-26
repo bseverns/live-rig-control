@@ -22,4 +22,6 @@ jobs:
 
       - name: Build iOS (simulator)
         working-directory: ios
-        run: xcrun --sdk iphonesimulator swift build -c release --triple arm64-apple-ios17.0-simulator
+        run: |
+          SDK_PATH="$(xcrun --sdk iphonesimulator --show-sdk-path)"
+          xcrun swift build -c release --sdk "$SDK_PATH" --triple arm64-apple-ios17.0-simulator
