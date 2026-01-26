@@ -10,6 +10,7 @@
 - Add `mappings.json` to the app bundle.
 - Define models for `Mapping`, `Profile`, `Pad`, `MidiMapping`, `OscMapping`.
 - Load mappings at launch and expose as app state.
+- CI build note: avoid `xcrun --sdk <platform> swift build` (sets `SDKROOT` and can break manifest compilation). Prefer `SDK_PATH="$(xcrun --sdk <platform> --show-sdk-path)"` and `swift build --sdk "$SDK_PATH"` instead.
 
 ## UI Parity
 - Profile bar: horizontal list of buttons; active profile state.
