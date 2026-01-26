@@ -77,9 +77,11 @@ final class OscClient: ObservableObject {
             guard let self = self else { return }
             switch result {
             case .success:
-                self.receiveLoop()
+                Task { @MainActor in
+                    self.receiveLoop()
+                }
             case .failure:
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.state = .disconnected
                     self.onEvent?("OSC receive failed; reconnecting")
                     self.scheduleReconnect(host: self.lastHost)
@@ -111,7 +113,7 @@ final class OscClient: ObservableObject {
         socket.send(message) { [weak self] error in
             guard let self = self else { return }
             if error != nil {
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.state = .disconnected
                     self.onEvent?("OSC send failed; reconnecting")
                     self.scheduleReconnect(host: self.lastHost)

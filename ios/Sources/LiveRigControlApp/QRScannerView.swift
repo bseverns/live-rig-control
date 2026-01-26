@@ -1,5 +1,8 @@
-import AVFoundation
 import SwiftUI
+
+#if canImport(UIKit)
+import AVFoundation
+import UIKit
 
 struct QRScannerView: UIViewControllerRepresentable {
     let onScan: (String) -> Void
@@ -94,3 +97,22 @@ final class QRScannerViewController: UIViewController, AVCaptureMetadataOutputOb
         onScan?(string)
     }
 }
+#else
+struct QRScannerView: View {
+    let onScan: (String) -> Void
+    let onCancel: () -> Void
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("QR scanning is only available on iOS.")
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+            Button("Close") {
+                onCancel()
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
+    }
+}
+#endif
