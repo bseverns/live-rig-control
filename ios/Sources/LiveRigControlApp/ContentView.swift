@@ -209,14 +209,17 @@ struct ConnectionBarView: View {
             }
         }
         .sheet(isPresented: $showingScanner) {
-            QRScannerView { code in
-                showingScanner = false
-                Task {
-                    await store.updateOscHostFromQr(code)
+            QRScannerView(
+                onScan: { code in
+                    showingScanner = false
+                    Task {
+                        await store.updateOscHostFromQr(code)
+                    }
+                },
+                onCancel: {
+                    showingScanner = false
                 }
-            } onCancel: {
-                showingScanner = false
-            }
+            )
         }
     }
 
@@ -465,7 +468,10 @@ extension View {
 func buildPadMatrix(pads: [Pad], rows: Int, cols: Int) -> [[Pad?]] {
     let safeRows = max(rows, 1)
     let safeCols = max(cols, 1)
-    var matrix: [[Pad?]] = Array(repeating: Array(repeating: nil, count: safeCols), count: safeRows)
+    var matrix: [[Pad?]] = Array(
+        repeating: Array<Pad?>(repeating: nil, count: safeCols),
+        count: safeRows
+    )
 
     for (index, pad) in pads.enumerated() {
         let defaultRow = index / safeCols
