@@ -1,0 +1,37 @@
+name: iOS Signed Build (Manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-signed:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Swift version
+        run: swift --version
+
+      - name: Configure signing assets
+        env:
+          CERT_P12: ${{ secrets.IOS_SIGNING_CERT_P12 }}
+          CERT_PASSWORD: ${{ secrets.IOS_SIGNING_CERT_PASSWORD }}
+          PROVISION_PROFILE: ${{ secrets.IOS_PROVISION_PROFILE }}
+        run: |
+          if [ -z "$CERT_P12" ] || [ -z "$CERT_PASSWORD" ] || [ -z "$PROVISION_PROFILE" ]; then
+            echo "Missing signing secrets. Configure IOS_SIGNING_CERT_P12, IOS_SIGNING_CERT_PASSWORD, IOS_PROVISION_PROFILE." >&2
+            exit 1
+          fi
+          echo "$CERT_P12" | base64 --decode > /tmp/cert.p12
+          echo "$PROVISION_PROFILE" | base64 --decode > /tmp/profile.mobileprovision
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import /tmp/cert.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
+      - name: Build iOS (signed)
+        working-directory: ios
+        run: xcrun --sdk iphoneos swift build -c release --triple arm64-apple-ios17.0

@@ -1,0 +1,25 @@
+name: iOS SwiftPM Build
+
+on:
+  push:
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-swiftpm.yml"
+  pull_request:
+    paths:
+      - "ios/**"
+      - ".github/workflows/ios-swiftpm.yml"
+
+jobs:
+  build-ios:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Swift version
+        run: swift --version
+
+      - name: Build iOS (simulator)
+        working-directory: ios
+        run: xcrun --sdk iphonesimulator swift build -c release --triple arm64-apple-ios17.0-simulator
