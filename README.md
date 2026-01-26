@@ -1,20 +1,29 @@
 # live-rig-control
 
-Browser-based control surface for the hybrid audio–video live rig documented in
-the companion `live-rig` repo.
+Performer-facing control surface for the hybrid audio–video live rig documented
+in the companion `live-rig` repo. This repo is the
+place where the **touch UI, MIDI/OSC dispatch, and mapping-driven UX** live.
 
-This repo provides a WebMIDI-capable grid UI (optimized for a Surface Pro 7
-running Windows 11) that can:
+## What this repo is trying to do
 
-- trigger **video/scene/pattern changes** via MIDI and/or OSC
-- present **profiles/pages** that mirror the mapping docs in `live-rig`
-- talk directly to your DAW / bridge via WebMIDI, and optionally via an OSC
-  bridge server
+Build a **reliable, mapping-driven control surface** that can run on multiple
+devices (web today, iPad next) and send the exact same MIDI + OSC payloads to
+the rig. The long-term goal is a single source of truth (`mappings.json`) with
+consistent behavior across:
+
+- **Web app (current):** WebMIDI grid UI for Windows touch devices.
+- **iPadOS app (in progress):** SwiftUI mirror of the web UX using Core MIDI.
+- **OSC bridge:** optional WebSocket bridge that forwards OSC messages.
 
 The canonical system mapping, device roles, and channel plans live in
-the companion `live-rig` repo.
-This repo is the performer-facing control surface that reads from a
-structured `mappings.json` file.
+the companion `live-rig` repo. This repo is the controller
+surface that consumes those mappings and sends real-time signals.
+
+## Current state
+
+- Web UI renders profiles/pads from `src/mappings.json` and sends MIDI via WebMIDI.
+- Optional OSC output is sent via a WebSocket bridge (same payload contract as the rig).
+- iPadOS app scaffolding exists under `ios/` and is being brought to feature parity.
 
 ## Start here
 
