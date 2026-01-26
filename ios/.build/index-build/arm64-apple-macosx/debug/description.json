@@ -1,0 +1,335 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+    "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp_LiveRigControlApp.bundle/mappings.json" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Resources/mappings.json"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp_LiveRigControlApp.bundle/mappings.json"
+        }
+      ]
+    }
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.LiveRigControlApp-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources",
+      "importPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LiveRigControlApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LogStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MappingStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MidiManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Models.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscHostStorage.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/QRScannerView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/DerivedSources/resource_bundle_accessor.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<LiveRigControlApp-arm64-apple-macosx26.0-debug.module-resources>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "LiveRigControlApp",
+      "moduleOutputPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/LiveRigControlApp.swiftmodule",
+      "objects" : [
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/ContentView.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/LiveRigControlApp.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/LogStore.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/MappingStore.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/MidiManager.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/Models.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/OscClient.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/OscHostStorage.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/QRScannerView.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/resource_bundle_accessor.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE",
+        "-module-cache-path",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "LiveRigControlApp_main",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "ios"
+      ],
+      "outputFileMapPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/LiveRigControlApp.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/ContentView.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LiveRigControlApp.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LogStore.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MappingStore.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MidiManager.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Models.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscClient.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscHostStorage.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/QRScannerView.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/DerivedSources/resource_bundle_accessor.swift"
+      ],
+      "tempsPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "LiveRigControlApp" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "LiveRigControlApp",
+      "-package-name",
+      "ios",
+      "-c",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/ContentView.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LiveRigControlApp.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LogStore.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MappingStore.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MidiManager.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Models.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscClient.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscHostStorage.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/QRScannerView.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/DerivedSources/resource_bundle_accessor.swift",
+      "-I",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE",
+      "-module-cache-path",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "LiveRigControlApp_main",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "ios",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "LiveRigControlApp" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LiveRigControlApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LogStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MappingStore.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MidiManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Models.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscClient.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscHostStorage.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/QRScannerView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/DerivedSources/resource_bundle_accessor.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources"
+    },
+    "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/ContentView.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LiveRigControlApp.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LogStore.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MappingStore.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MidiManager.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Models.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscClient.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscHostStorage.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/QRScannerView.swift
+/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/DerivedSources/resource_bundle_accessor.swift

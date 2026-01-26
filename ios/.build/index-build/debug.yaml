@@ -1,0 +1,58 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "LiveRigControlApp-arm64-apple-macosx26.0-debug.module": ["<LiveRigControlApp-arm64-apple-macosx26.0-debug.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<LiveRigControlApp-arm64-apple-macosx26.0-debug.module>"]
+  "test": ["<LiveRigControlApp-arm64-apple-macosx26.0-debug.module>"]
+default: "main"
+nodes:
+  "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/ContentView.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LiveRigControlApp.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LogStore.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MappingStore.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MidiManager.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Models.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscClient.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscHostStorage.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/QRScannerView.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/DerivedSources/resource_bundle_accessor.swift"]
+    outputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources"]
+    description: "Write auxiliary file /Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources"
+
+  "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp_LiveRigControlApp.bundle/mappings.json":
+    tool: copy-tool
+    inputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Resources/mappings.json"]
+    outputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp_LiveRigControlApp.bundle/mappings.json"]
+    description: "Copying /Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Resources/mappings.json"
+
+  "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Library/Developer/CommandLineTools/usr/bin/swiftc"]
+    outputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+
+  "<LiveRigControlApp-arm64-apple-macosx26.0-debug.module>":
+    tool: phony
+    inputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/LiveRigControlApp.swiftmodule"]
+    outputs: ["<LiveRigControlApp-arm64-apple-macosx26.0-debug.module>"]
+
+  "C.LiveRigControlApp-arm64-apple-macosx26.0-debug.module":
+    tool: shell
+    inputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/ContentView.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LiveRigControlApp.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/LogStore.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MappingStore.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/MidiManager.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/Models.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscClient.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/OscHostStorage.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/QRScannerView.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/DerivedSources/resource_bundle_accessor.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt","<LiveRigControlApp-arm64-apple-macosx26.0-debug.module-resources>","/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources"]
+    outputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/LiveRigControlApp.swiftmodule"]
+    description: "Compiling Swift Module 'LiveRigControlApp' (10 sources)"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","LiveRigControlApp","-emit-dependencies","-emit-module","-emit-module-path","/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/LiveRigControlApp.swiftmodule","-output-file-map","/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/output-file-map.json","-incremental","@/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources","-I","/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx14.0","-incremental","-enable-batch-mode","-serialize-diagnostics","-Onone","-enable-testing","-j8","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_AVAILABLE","-module-cache-path","/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","LiveRigControlApp_main","-swift-version","5","-Xfrontend","-experimental-lazy-typecheck","-Xfrontend","-experimental-skip-all-function-bodies","-Xfrontend","-experimental-allow-module-with-compiler-errors","-Xfrontend","-empty-abi-descriptor","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","ios"]
+
+  "LiveRigControlApp-arm64-apple-macosx26.0-debug.module-resources":
+    tool: phony
+    inputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp_LiveRigControlApp.bundle/mappings.json"]
+    outputs: ["<LiveRigControlApp-arm64-apple-macosx26.0-debug.module-resources>"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/LiveRigControlApp/","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Package.swift","/Users/bseverns/Documents/GitHub/live-rig-control/ios/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+
