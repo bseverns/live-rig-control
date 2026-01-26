@@ -1,0 +1,639 @@
+{
+  "profiles": {
+    "videoScenes": {
+      "label": "Video Scenes (Ch10)",
+      "gridSize": [
+        8,
+        8
+      ],
+      "pads": [
+        {
+          "id": "vid_scene_intro",
+          "label": "Intro",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 60,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "osc": {
+            "address": "/video/scene/intro",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "vid_scene_crash",
+          "label": "Crash",
+          "row": 0,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 61,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "osc": {
+            "address": "/video/scene/crash",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "vid_scene_soft",
+          "label": "Soft",
+          "row": 0,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 62,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "osc": {
+            "address": "/video/scene/soft",
+            "args": [
+              1
+            ]
+          }
+        }
+      ]
+    },
+    "nwWrldFeed": {
+      "label": "nw_wrld Feed (OSC)",
+      "gridSize": [
+        8,
+        8
+      ],
+      "pads": [
+        {
+          "id": "nw_feed_enable",
+          "label": "nw_wrld On",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/feed/enable",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Bridge this to SC Video Mixer input enable for the nw_wrld feed."
+        },
+        {
+          "id": "nw_feed_blackout",
+          "label": "Blackout",
+          "row": 0,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/feed/blackout",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Hard kill for the nw_wrld feed or mixer layer."
+        },
+        {
+          "id": "nw_scene_intro",
+          "label": "Scene: Intro",
+          "row": 0,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/scene/intro",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_scene_crash",
+          "label": "Scene: Crash",
+          "row": 0,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/scene/crash",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_scene_soft",
+          "label": "Scene: Soft",
+          "row": 0,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/scene/soft",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_mix_clean",
+          "label": "Mix: Clean",
+          "row": 1,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/mix/clean",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Intended to bias toward unprocessed nw_wrld feed in the mixer."
+        },
+        {
+          "id": "nw_mix_processed",
+          "label": "Mix: Processed",
+          "row": 1,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/mix/processed",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Intended to bias toward processed/feedback chain."
+        },
+        {
+          "id": "nw_key_enable",
+          "label": "Key On",
+          "row": 1,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/key/enable",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Key on/off in SC Video Mixer if used."
+        },
+        {
+          "id": "nw_fx_feedback",
+          "label": "FX: Feedback",
+          "row": 1,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/fx/feedback",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_overlay_text",
+          "label": "Overlay: Text",
+          "row": 2,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/overlay/text",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_overlay_grid",
+          "label": "Overlay: Grid",
+          "row": 2,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/overlay/grid",
+            "args": [
+              1
+            ]
+          }
+        },
+        {
+          "id": "nw_overlay_mask",
+          "label": "Overlay: Mask",
+          "row": 2,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/nw_wrld/overlay/mask",
+            "args": [
+              1
+            ]
+          }
+        }
+      ]
+    },
+    "nwWrldInput": {
+      "label": "nw_wrld Input (MIDI)",
+      "gridSize": [
+        8,
+        4
+      ],
+      "pads": [
+        {
+          "id": "nw_track_1",
+          "label": "Track 1",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 12,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_2",
+          "label": "Track 2",
+          "row": 0,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 13,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_3",
+          "label": "Track 3",
+          "row": 0,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 14,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_4",
+          "label": "Track 4",
+          "row": 0,
+          "col": 3,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 15,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_5",
+          "label": "Track 5",
+          "row": 0,
+          "col": 4,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 16,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_6",
+          "label": "Track 6",
+          "row": 0,
+          "col": 5,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 17,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_7",
+          "label": "Track 7",
+          "row": 0,
+          "col": 6,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 18,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_8",
+          "label": "Track 8",
+          "row": 0,
+          "col": 7,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 19,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_1",
+          "label": "Ch 1",
+          "row": 1,
+          "col": 0,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 112,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_2",
+          "label": "Ch 2",
+          "row": 1,
+          "col": 1,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 113,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_3",
+          "label": "Ch 3",
+          "row": 1,
+          "col": 2,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 114,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_4",
+          "label": "Ch 4",
+          "row": 1,
+          "col": 3,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 115,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_5",
+          "label": "Ch 5",
+          "row": 1,
+          "col": 4,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 116,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_6",
+          "label": "Ch 6",
+          "row": 1,
+          "col": 5,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 117,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_7",
+          "label": "Ch 7",
+          "row": 1,
+          "col": 6,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 118,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_8",
+          "label": "Ch 8",
+          "row": 1,
+          "col": 7,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 119,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_9",
+          "label": "Ch 9",
+          "row": 2,
+          "col": 0,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 120,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_10",
+          "label": "Ch 10",
+          "row": 2,
+          "col": 1,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 121,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_11",
+          "label": "Ch 11",
+          "row": 2,
+          "col": 2,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 122,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_12",
+          "label": "Ch 12",
+          "row": 2,
+          "col": 3,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 123,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_13",
+          "label": "Ch 13",
+          "row": 2,
+          "col": 4,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 124,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_14",
+          "label": "Ch 14",
+          "row": 2,
+          "col": 5,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 125,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_15",
+          "label": "Ch 15",
+          "row": 2,
+          "col": 6,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 126,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_ch_16",
+          "label": "Ch 16",
+          "row": 2,
+          "col": 7,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 2,
+            "note": 127,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_9",
+          "label": "Track 9",
+          "row": 3,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 20,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "nw_track_10",
+          "label": "Track 10",
+          "row": 3,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 21,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        }
+      ]
+    },
+    "patterns": {
+      "label": "Patterns",
+      "gridSize": [
+        8,
+        8
+      ],
+      "pads": [
+        {
+          "id": "pattern_a",
+          "label": "Pattern A",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 40,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        }
+      ]
+    }
+  }
+}

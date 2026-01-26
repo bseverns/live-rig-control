@@ -1,5 +1,20 @@
 import SwiftUI
+
+#if canImport(UIKit)
 import UIKit
+
+struct HapticFeedback {
+    private let generator = UIImpactFeedbackGenerator(style: .light)
+
+    func impactOccurred() {
+        generator.impactOccurred()
+    }
+}
+#else
+struct HapticFeedback {
+    func impactOccurred() {}
+}
+#endif
 
 struct ContentView: View {
     @StateObject private var store = MappingStore()
@@ -104,10 +119,7 @@ struct ConnectionBarView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     TextField("192.168.1.10", text: $store.oscHost)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.URL)
-                        .textContentType(.URL)
+                        .oscHostInputModifiers()
                         .onSubmit {
                             Task {
                                 await store.updateOscHost(store.oscHost.trimmingCharacters(in: .whitespacesAndNewlines))
@@ -197,10 +209,10 @@ struct ConnectionBarView: View {
             }
         }
         .sheet(isPresented: $showingScanner) {
-            QRScannerView {
+            QRScannerView { code in
                 showingScanner = false
                 Task {
-                    await store.updateOscHostFromQr($0)
+                    await store.updateOscHostFromQr(code)
                 }
             } onCancel: {
                 showingScanner = false
@@ -375,7 +387,7 @@ struct PadView: View {
     let onPress: () -> Void
     let onRelease: () -> Void
     @State private var isPressed: Bool = false
-    private let haptic = UIImpactFeedbackGenerator(style: .light)
+    private let haptic = HapticFeedback()
 
     var body: some View {
         Text(pad.label ?? pad.id)
@@ -435,12 +447,25 @@ extension View {
     func pressEvents(onPress: @escaping () -> Void, onRelease: @escaping () -> Void) -> some View {
         modifier(PressEventModifier(onPress: onPress, onRelease: onRelease))
     }
+
+    @ViewBuilder
+    func oscHostInputModifiers() -> some View {
+        #if canImport(UIKit)
+        self
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .keyboardType(.URL)
+            .textContentType(.URL)
+        #else
+        self
+        #endif
+    }
 }
 
 func buildPadMatrix(pads: [Pad], rows: Int, cols: Int) -> [[Pad?]] {
     let safeRows = max(rows, 1)
     let safeCols = max(cols, 1)
-    var matrix = Array(repeating: Array(repeating: nil, count: safeCols), count: safeRows)
+    var matrix: [[Pad?]] = Array(repeating: Array(repeating: nil, count: safeCols), count: safeRows)
 
     for (index, pad) in pads.enumerated() {
         let defaultRow = index / safeCols

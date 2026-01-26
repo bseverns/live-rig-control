@@ -81,10 +81,7 @@ final class MidiManager: ObservableObject {
                 buffer.count,
                 buffer.bindMemory(to: UInt8.self).baseAddress!
             )
-
-            if packet != nil {
-                _ = MIDISend(outPort, endpoint, &packetList)
-            }
+            _ = MIDISend(outPort, endpoint, &packetList)
         }
     }
 
@@ -137,6 +134,7 @@ final class MidiManager: ObservableObject {
     }
 
     private func configureAudioSession() {
+        #if os(iOS)
         let session = AVAudioSession.sharedInstance()
         do {
             try session.setCategory(.playback, options: [.mixWithOthers])
@@ -145,6 +143,9 @@ final class MidiManager: ObservableObject {
         } catch {
             onEvent?("AVAudioSession error: \(error.localizedDescription)")
         }
+        #else
+        onEvent?("AVAudioSession not available on macOS")
+        #endif
     }
 }
 
