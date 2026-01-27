@@ -1,0 +1,348 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/live-rig-control/interop.schema.json",
+  "title": "Live Rig Control Mappings Interop",
+  "type": "object",
+  "required": [
+    "profiles"
+  ],
+  "properties": {
+    "interopVersion": {
+      "type": "string"
+    },
+    "profiles": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/profile"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "required": [
+        "pads"
+      ],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "gridSize": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "pads": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pad"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "pad": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string"
+        },
+        "row": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "col": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "toggle": {
+          "type": "boolean"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "toggle",
+            "momentary"
+          ]
+        },
+        "group": {
+          "$ref": "#/$defs/group"
+        },
+        "midi": {
+          "$ref": "#/$defs/midiMapping"
+        },
+        "osc": {
+          "$ref": "#/$defs/oscMapping"
+        },
+        "state": {
+          "$ref": "#/$defs/stateMapping"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "midi"
+          ]
+        },
+        {
+          "required": [
+            "osc"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "toggle": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "osc": {
+                "required": [
+                  "onArgs",
+                  "offArgs"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "toggle"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "osc": {
+                "required": [
+                  "onArgs",
+                  "offArgs"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "group": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "exclusive"
+              ]
+            },
+            "exclusive": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "oscArg": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "oscArgs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/oscArg"
+      }
+    },
+    "oscMapping": {
+      "type": "object",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "minLength": 1
+        },
+        "args": {
+          "$ref": "#/$defs/oscArgs"
+        },
+        "onArgs": {
+          "$ref": "#/$defs/oscArgs"
+        },
+        "offArgs": {
+          "$ref": "#/$defs/oscArgs"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "args"
+          ]
+        },
+        {
+          "required": [
+            "onArgs"
+          ]
+        }
+      ]
+    },
+    "stateMapping": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "$ref": "#/$defs/oscAction"
+        },
+        "publish": {
+          "$ref": "#/$defs/oscAction"
+        }
+      },
+      "additionalProperties": false
+    },
+    "oscAction": {
+      "type": "object",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "minLength": 1
+        },
+        "args": {
+          "$ref": "#/$defs/oscArgs"
+        }
+      },
+      "additionalProperties": false
+    },
+    "midiMapping": {
+      "type": "object",
+      "required": [
+        "type",
+        "channel"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "note",
+            "cc"
+          ]
+        },
+        "channel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "note": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "cc": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "onVelocity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "offVelocity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "onValue": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "offValue": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "note"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "note"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "cc"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "cc"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

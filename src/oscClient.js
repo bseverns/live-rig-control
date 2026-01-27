@@ -13,9 +13,15 @@ export function sendOscMessage(mapping, state) {
   if (!socket || socket.readyState !== WebSocket.OPEN) return;
   if (!mapping.osc) return;
 
+  const isToggle = typeof mapping.toggle === "boolean"
+    ? mapping.toggle
+    : mapping.mode === "toggle";
+  const args = state === "on"
+    ? mapping.osc.onArgs ?? mapping.osc.args ?? []
+    : mapping.osc.offArgs ?? (isToggle ? [0] : mapping.osc.args ?? []);
   const payload = {
     address: mapping.osc.address,
-    args: mapping.osc.args ?? [],
+    args,
     state: state // "on" / "off"
   };
 

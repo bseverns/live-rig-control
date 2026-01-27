@@ -1,4 +1,5 @@
 {
+  "interopVersion": "1.0.0",
   "profiles": {
     "videoScenes": {
       "label": "Video Scenes (Ch10)",
@@ -24,7 +25,18 @@
             "address": "/video/scene/intro",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
+          },
+          "group": {
+            "id": "video_scene",
+            "mode": "exclusive",
+            "exclusive": true
           }
         },
         {
@@ -44,7 +56,18 @@
             "address": "/video/scene/crash",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
+          },
+          "group": {
+            "id": "video_scene",
+            "mode": "exclusive",
+            "exclusive": true
           }
         },
         {
@@ -64,7 +87,18 @@
             "address": "/video/scene/soft",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
+          },
+          "group": {
+            "id": "video_scene",
+            "mode": "exclusive",
+            "exclusive": true
           }
         }
       ]
@@ -86,6 +120,12 @@
             "address": "/nw_wrld/feed/enable",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           },
           "notes": "Bridge this to SC Video Mixer input enable for the nw_wrld feed."
@@ -100,6 +140,12 @@
             "address": "/nw_wrld/feed/blackout",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           },
           "notes": "Hard kill for the nw_wrld feed or mixer layer."
@@ -114,7 +160,18 @@
             "address": "/nw_wrld/scene/intro",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
+          },
+          "group": {
+            "id": "nw_scene",
+            "mode": "exclusive",
+            "exclusive": true
           }
         },
         {
@@ -127,7 +184,18 @@
             "address": "/nw_wrld/scene/crash",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
+          },
+          "group": {
+            "id": "nw_scene",
+            "mode": "exclusive",
+            "exclusive": true
           }
         },
         {
@@ -140,7 +208,18 @@
             "address": "/nw_wrld/scene/soft",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
+          },
+          "group": {
+            "id": "nw_scene",
+            "mode": "exclusive",
+            "exclusive": true
           }
         },
         {
@@ -153,6 +232,12 @@
             "address": "/nw_wrld/mix/clean",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           },
           "notes": "Intended to bias toward unprocessed nw_wrld feed in the mixer."
@@ -167,6 +252,12 @@
             "address": "/nw_wrld/mix/processed",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           },
           "notes": "Intended to bias toward processed/feedback chain."
@@ -181,6 +272,12 @@
             "address": "/nw_wrld/key/enable",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           },
           "notes": "Key on/off in SC Video Mixer if used."
@@ -195,6 +292,12 @@
             "address": "/nw_wrld/fx/feedback",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           }
         },
@@ -208,6 +311,12 @@
             "address": "/nw_wrld/overlay/text",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           }
         },
@@ -221,6 +330,12 @@
             "address": "/nw_wrld/overlay/grid",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           }
         },
@@ -234,6 +349,12 @@
             "address": "/nw_wrld/overlay/mask",
             "args": [
               1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
             ]
           }
         }
