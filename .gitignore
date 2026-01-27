@@ -3,7 +3,7 @@
 # Build artifacts
 dist/
 build/
-ios/build/
+ios/.build/
 out/
 release/
 bin/
