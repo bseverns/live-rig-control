@@ -5,7 +5,8 @@ let currentProfileId = null;
 let midiAccess = null;
 let midiOutput = null;
 let cachedMidiOutputs = [];
-const padState = new Map(); // id -> boolean
+const padState = new Map(); // id -> { on, lastSent, updatedAt }
+const padElements = new Map(); // id -> HTMLElement
 let mappings = null;
 
 const profileBar = document.getElementById("profile-bar");
@@ -29,6 +30,7 @@ function makeOscUrl() {
 
 async function main() {
   await loadMappings();
+  initPadState();
   midiAccess = await initMIDI(populateMidiOutputs);
   if (!midiAccess) {
     disableMidiUi("WebMIDI unavailable");
@@ -113,7 +115,7 @@ function switchProfile(profileId) {
   grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
   grid.style.gridTemplateRows = `repeat(${rows}, minmax(64px, 1fr))`;
   grid.innerHTML = "";
-  padState.clear();
+  padElements.clear();
 
   profile.pads.forEach((pad, idx) => {
     const div = document.createElement("div");
@@ -128,21 +130,75 @@ function switchProfile(profileId) {
     div.style.gridRow = row + 1;
     div.style.gridColumn = col + 1;
 
-    padState.set(pad.id, false);
+    if (!padState.has(pad.id)) {
+      padState.set(pad.id, { on: false, lastSent: null, updatedAt: null });
+    }
+    padElements.set(pad.id, div);
+
+    const initialOn = getPadState(pad.id).on;
+    div.classList.toggle("on", initialOn);
+    div.classList.toggle("off", !initialOn);
 
     div.addEventListener("click", () => handlePadClick(pad, div));
     grid.appendChild(div);
   });
 }
 
-function handlePadClick(pad, element) {
-  const isOn = padState.get(pad.id) || false;
-  const nextState = pad.toggle ? !isOn : true;
+function initPadState() {
+  padState.clear();
+  for (const profile of Object.values(mappings.profiles ?? {})) {
+    for (const pad of profile.pads ?? []) {
+      padState.set(pad.id, { on: false, lastSent: null, updatedAt: null });
+    }
+  }
+}
 
-  padState.set(pad.id, nextState);
-  element.classList.toggle("on", nextState);
-  element.classList.toggle("off", !nextState);
+function isTogglePad(pad) {
+  if (typeof pad.toggle === "boolean") return pad.toggle;
+  if (pad.mode) return pad.mode === "toggle";
+  return false;
+}
 
+function getGroupInfo(pad) {
+  if (!pad.group) return null;
+  if (typeof pad.group === "string") {
+    return { id: pad.group, exclusive: true };
+  }
+  return {
+    id: pad.group.id,
+    exclusive: pad.group.mode === "exclusive" || Boolean(pad.group.exclusive)
+  };
+}
+
+function getPadState(id) {
+  return padState.get(id) ?? { on: false, lastSent: null, updatedAt: null };
+}
+
+function setPadState(id, next) {
+  padState.set(id, next);
+}
+
+function setPadUi(id, on) {
+  const el = padElements.get(id);
+  if (!el) return;
+  el.classList.toggle("on", on);
+  el.classList.toggle("off", !on);
+}
+
+function recordSent(id, payload) {
+  const prev = getPadState(id);
+  const lastSent = {
+    ...(prev.lastSent ?? {}),
+    ...payload
+  };
+  setPadState(id, {
+    on: prev.on,
+    lastSent,
+    updatedAt: new Date().toISOString()
+  });
+}
+
+function sendOutputs(pad, state, { force = false } = {}) {
   if (pad.midi) {
     if (pad.midi.type === "note") {
       sendNote(
@@ -151,25 +207,106 @@ function handlePadClick(pad, element) {
         pad.midi.note,
         pad.midi.onVelocity ?? 100,
         pad.midi.offVelocity ?? 0,
-        nextState
+        state === "on"
       );
+      recordSent(pad.id, { midi: { type: "note", state } });
     } else if (pad.midi.type === "cc") {
-      const val = nextState
+      const val = state === "on"
         ? pad.midi.onValue ?? 127
         : pad.midi.offValue ?? 0;
       sendCC(midiOutput, pad.midi.channel, pad.midi.cc, val);
+      recordSent(pad.id, { midi: { type: "cc", state } });
     }
   }
 
-  if (oscToggle.checked) {
-    sendOscMessage(pad, nextState ? "on" : "off");
-  }
-
-  if (!pad.toggle) {
-    padState.set(pad.id, false);
-    element.classList.remove("on");
-    element.classList.add("off");
+  if ((oscToggle.checked || force) && pad.osc) {
+    sendOscMessage(pad, state);
+    recordSent(pad.id, { osc: { address: pad.osc.address, state } });
   }
 }
+
+function enforceExclusiveGroup(pad, profile) {
+  const group = getGroupInfo(pad);
+  if (!group?.exclusive) return;
+  for (const other of profile.pads) {
+    if (other.id === pad.id) continue;
+    const otherGroup = getGroupInfo(other);
+    if (!otherGroup || otherGroup.id !== group.id) continue;
+    if (!isTogglePad(other)) continue;
+    setPadState(other.id, { on: false, lastSent: getPadState(other.id).lastSent, updatedAt: new Date().toISOString() });
+    setPadUi(other.id, false);
+    sendOutputs(other, "off");
+  }
+}
+
+function handlePadClick(pad, element) {
+  const current = getPadState(pad.id).on;
+  const togglePad = isTogglePad(pad);
+  const nextOn = togglePad ? !current : true;
+  const state = nextOn ? "on" : "off";
+
+  const profile = mappings.profiles[currentProfileId];
+  if (nextOn && profile) {
+    enforceExclusiveGroup(pad, profile);
+  }
+
+  setPadState(pad.id, {
+    on: nextOn,
+    lastSent: getPadState(pad.id).lastSent,
+    updatedAt: new Date().toISOString()
+  });
+  setPadUi(pad.id, nextOn);
+  sendOutputs(pad, state);
+
+  if (!togglePad) {
+    setPadState(pad.id, {
+      on: false,
+      lastSent: getPadState(pad.id).lastSent,
+      updatedAt: new Date().toISOString()
+    });
+    setPadUi(pad.id, false);
+  }
+}
+
+function dumpState() {
+  const snapshot = {};
+  for (const [id, entry] of padState.entries()) {
+    snapshot[id] = entry;
+  }
+  console.log("Pad state snapshot:", snapshot);
+  return snapshot;
+}
+
+function safeBlackout() {
+  const allPads = [];
+  for (const profile of Object.values(mappings.profiles ?? {})) {
+    for (const pad of profile.pads ?? []) {
+      allPads.push(pad);
+    }
+  }
+
+  const blackoutPads = allPads.filter((pad) => pad.osc?.address === "/nw_wrld/feed/blackout" || pad.id === "nw_feed_blackout");
+  const overlayOrFxPads = allPads.filter((pad) =>
+    pad.id?.startsWith("nw_overlay_") ||
+    pad.id?.startsWith("nw_fx_") ||
+    pad.osc?.address?.includes("/overlay/") ||
+    pad.osc?.address?.includes("/fx/")
+  );
+
+  for (const pad of overlayOrFxPads) {
+    setPadState(pad.id, { on: false, lastSent: getPadState(pad.id).lastSent, updatedAt: new Date().toISOString() });
+    setPadUi(pad.id, false);
+    sendOutputs(pad, "off", { force: true });
+  }
+
+  for (const pad of blackoutPads) {
+    setPadState(pad.id, { on: true, lastSent: getPadState(pad.id).lastSent, updatedAt: new Date().toISOString() });
+    setPadUi(pad.id, true);
+    sendOutputs(pad, "on", { force: true });
+  }
+}
+
+window.dumpState = dumpState;
+window.safeBlackout = safeBlackout;
 
 main().catch(console.error);
