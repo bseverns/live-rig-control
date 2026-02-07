@@ -42,10 +42,15 @@ struct Pad: Codable, Identifiable {
     let label: String?
     let row: Int?
     let col: Int?
-    let toggle: Bool
+    let toggle: Bool?
     let midi: MidiMapping?
     let osc: OscMapping?
     let notes: String?
+    let ui: UiMapping?
+
+    var isToggle: Bool {
+        toggle ?? false
+    }
 }
 
 struct MidiMapping: Codable {
@@ -57,11 +62,28 @@ struct MidiMapping: Codable {
     let offVelocity: Int?
     let onValue: Int?
     let offValue: Int?
+    let program: Int?
+    let bankMsb: Int?
+    let bankLsb: Int?
+    let programBankMode: String?
+    let realtime: String?
 }
 
 struct OscMapping: Codable {
     let address: String
     let args: [CodableValue]?
+}
+
+struct UiMapping: Codable {
+    let type: String?
+    let role: String?
+    let min: Int?
+    let max: Int?
+    let step: Int?
+    let initial: Int?
+    let showValue: Bool?
+    let target: String?
+    let bank: Int?
 }
 
 enum CodableValue: Codable, Hashable {

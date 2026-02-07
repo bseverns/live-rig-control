@@ -62,6 +62,43 @@ final class MidiManager: ObservableObject {
         sendPacket(bytes: bytes)
     }
 
+    func sendProgramChange(channel: Int, program: Int, bankMsb: Int?, bankLsb: Int?) {
+        let safeChannel = clampChannel(channel)
+        let safeProgram = clampDataByte(program)
+        logClampIfNeeded(label: "channel", original: channel, clamped: safeChannel)
+        logClampIfNeeded(label: "program", original: program, clamped: safeProgram)
+        if let bankMsb {
+            let safeMsb = clampDataByte(bankMsb)
+            logClampIfNeeded(label: "bankMsb", original: bankMsb, clamped: safeMsb)
+            let status: UInt8 = 0xB0 + UInt8(safeChannel - 1)
+            sendPacket(bytes: [status, 0x00, UInt8(safeMsb)])
+        }
+        if let bankLsb {
+            let safeLsb = clampDataByte(bankLsb)
+            logClampIfNeeded(label: "bankLsb", original: bankLsb, clamped: safeLsb)
+            let status: UInt8 = 0xB0 + UInt8(safeChannel - 1)
+            sendPacket(bytes: [status, 0x20, UInt8(safeLsb)])
+        }
+        let status: UInt8 = 0xC0 + UInt8(safeChannel - 1)
+        sendPacket(bytes: [status, UInt8(safeProgram)])
+    }
+
+    func sendRealtime(_ message: String) {
+        let status: UInt8?
+        switch message {
+        case "start":
+            status = 0xFA
+        case "continue":
+            status = 0xFB
+        case "stop":
+            status = 0xFC
+        default:
+            status = nil
+        }
+        guard let status else { return }
+        sendPacket(bytes: [status])
+    }
+
     func sendPacket(bytes: [UInt8]) {
         guard let output = outputs.first(where: { $0.id == selectedOutputId }) else {
             onEvent?("MIDI no output selected")
