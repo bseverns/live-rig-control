@@ -16,3 +16,7 @@ You can also add references here like:
 
 - `videoScenes` profile ↔ `08_midi-mapping-2025-03-15-basement-noise.md`
 - `patterns` profile ↔ `08_midi-mapping-2025-04-01-gallery-set.md`
+- `pcm30Macros` profile ↔ `08_midi-mapping-2025-03-15-basement-noise.md` (PCM-30 macros on Ch 11; Ch 10 reserved for drum/sequencer stack; video scenes on Ch 12)
+- `drumStack` profile ↔ DrumKid default MIDI map (notes + CC 16–31) + DR-550 factory pads (Bank A–D), all on Ch 10 (includes global + per-pad velocity sliders)
+- `electribe` profile ↔ Electribe 2S CC map + pattern select (Ch 11) with bank A/B toggles + quick scenes (Bank B uses patterns 1–121)
+- `transport` profile ↔ MIDI Start/Continue/Stop controls for external sync setups

@@ -412,20 +412,20 @@ struct PadView: View {
             .animation(.easeInOut(duration: 0.15), value: isOn)
             .contentShape(RoundedRectangle(cornerRadius: 10))
             .onTapGesture {
-                if pad.toggle {
+                if pad.isToggle {
                     onTap()
                 }
             }
             .pressEvents {
                 isPressed = true
                 haptic.impactOccurred()
-                if !pad.toggle {
+                if !pad.isToggle {
                     onPress()
                 }
             } onRelease: {
                 isPressed = false
                 haptic.impactOccurred()
-                if !pad.toggle {
+                if !pad.isToggle {
                     onRelease()
                 }
             }

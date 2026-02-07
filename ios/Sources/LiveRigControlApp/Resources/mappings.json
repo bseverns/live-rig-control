@@ -2,7 +2,7 @@
   "interopVersion": "1.0.0",
   "profiles": {
     "videoScenes": {
-      "label": "Video Scenes (Ch10)",
+      "label": "Video Scenes (Ch12)",
       "gridSize": [
         8,
         8
@@ -16,7 +16,7 @@
           "toggle": true,
           "midi": {
             "type": "note",
-            "channel": 10,
+            "channel": 12,
             "note": 60,
             "onVelocity": 100,
             "offVelocity": 0
@@ -47,7 +47,7 @@
           "toggle": true,
           "midi": {
             "type": "note",
-            "channel": 10,
+            "channel": 12,
             "note": 61,
             "onVelocity": 100,
             "offVelocity": 0
@@ -78,7 +78,7 @@
           "toggle": true,
           "midi": {
             "type": "note",
-            "channel": 10,
+            "channel": 12,
             "note": 62,
             "onVelocity": 100,
             "offVelocity": 0
@@ -753,6 +753,2035 @@
             "onVelocity": 100,
             "offVelocity": 0
           }
+        }
+      ]
+    },
+    "pcm30Macros": {
+      "label": "PCM-30 Macros (Ch11)",
+      "gridSize": [
+        8,
+        3
+      ],
+      "pads": [
+        {
+          "id": "pcm30_f1_xfade",
+          "label": "F1 XFade (CC1)",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 1,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_f2_fb",
+          "label": "F2 FB Feedback (CC2)",
+          "row": 0,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 2,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_f3_mosh",
+          "label": "F3 Mosh (CC3)",
+          "row": 0,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 3,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_f4_mael",
+          "label": "F4 Maelstrom (CC4)",
+          "row": 0,
+          "col": 3,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 4,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_f5_retrace",
+          "label": "F5 ReTrace (CC5)",
+          "row": 0,
+          "col": 4,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 5,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_f6_contrast",
+          "label": "F6 Contrast (CC6)",
+          "row": 0,
+          "col": 5,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 6,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_f7_spare",
+          "label": "F7 Spare (CC7)",
+          "row": 0,
+          "col": 6,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 7,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_f8_blackout",
+          "label": "F8 Blackout (CC8)",
+          "row": 0,
+          "col": 7,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 8,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_k1_glitch",
+          "label": "K1 Fine Glitch (CC21)",
+          "row": 1,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 21,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_k2_fb",
+          "label": "K2 Fine FB (CC22)",
+          "row": 1,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 22,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_k3_warp",
+          "label": "K3 Warp (CC23)",
+          "row": 1,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 23,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_k4_wire",
+          "label": "K4 Wireframe (CC24)",
+          "row": 1,
+          "col": 3,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 24,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_k5_texture",
+          "label": "K5 Texture (CC25)",
+          "row": 1,
+          "col": 4,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 25,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_k6_blend",
+          "label": "K6 frZone Blend (CC26)",
+          "row": 1,
+          "col": 5,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 26,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_k7_hue",
+          "label": "K7 Hue (CC27)",
+          "row": 1,
+          "col": 6,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 27,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_k8_spare",
+          "label": "K8 Spare (CC28)",
+          "row": 1,
+          "col": 7,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 28,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "pcm30_scene_crash",
+          "label": "Scene Crash (Note60)",
+          "row": 2,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 11,
+            "note": 60,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "group": {
+            "id": "pcm30_scene",
+            "mode": "exclusive",
+            "exclusive": true
+          }
+        },
+        {
+          "id": "pcm30_scene_soft",
+          "label": "Scene Soft (Note61)",
+          "row": 2,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 11,
+            "note": 61,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "group": {
+            "id": "pcm30_scene",
+            "mode": "exclusive",
+            "exclusive": true
+          }
+        },
+        {
+          "id": "pcm30_blackout",
+          "label": "Blackout (Note62)",
+          "row": 2,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "note",
+            "channel": 11,
+            "note": 62,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "group": {
+            "id": "pcm30_scene",
+            "mode": "exclusive",
+            "exclusive": true
+          }
+        }
+      ]
+    },
+    "drumStack": {
+      "label": "Drum Stack (Ch10)",
+      "gridSize": [
+        12,
+        8
+      ],
+      "pads": [
+        {
+          "id": "drumkid_kick",
+          "label": "Kick (C1/36)",
+          "row": 0,
+          "col": 0,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 36,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DrumKid default note output: Kick C1 (36) on Ch 10."
+        },
+        {
+          "id": "drumkid_click",
+          "label": "Click (C#1/37)",
+          "row": 0,
+          "col": 1,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 37,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DrumKid default note output: Click C#1 (37) on Ch 10."
+        },
+        {
+          "id": "drumkid_snare",
+          "label": "Snare (D1/38)",
+          "row": 0,
+          "col": 2,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 38,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DrumKid default note output: Snare D1 (38) on Ch 10."
+        },
+        {
+          "id": "drumkid_hat_closed",
+          "label": "HH Closed (F#1/42)",
+          "row": 0,
+          "col": 3,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 42,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DrumKid default note output: Closed hat F#1 (42) on Ch 10."
+        },
+        {
+          "id": "drumkid_tom",
+          "label": "Tom (G1/43)",
+          "row": 0,
+          "col": 4,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 43,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DrumKid default note output: Tom G1 (43) on Ch 10."
+        },
+        {
+          "id": "drum_velocity",
+          "label": "Velocity",
+          "row": 0,
+          "col": 5,
+          "ui": {
+            "type": "slider",
+            "role": "velocity",
+            "min": 1,
+            "max": 127,
+            "step": 1,
+            "initial": 100,
+            "showValue": true
+          },
+          "notes": "Global velocity for note pads in this profile."
+        },
+        {
+          "id": "drumkid_cc16_chance",
+          "label": "Chance (CC16)",
+          "row": 1,
+          "col": 0,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 16,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc17_zoom",
+          "label": "Zoom (CC17)",
+          "row": 1,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 17,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc18_range",
+          "label": "Range (CC18)",
+          "row": 1,
+          "col": 2,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 18,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc19_midpoint",
+          "label": "Midpoint (CC19)",
+          "row": 1,
+          "col": 3,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 19,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc20_pitch",
+          "label": "Pitch (CC20)",
+          "row": 1,
+          "col": 4,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 20,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc21_crush",
+          "label": "Crush (CC21)",
+          "row": 1,
+          "col": 5,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 21,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc22_crop",
+          "label": "Crop (CC22)",
+          "row": 1,
+          "col": 6,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 22,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc23_drop",
+          "label": "Drop (CC23)",
+          "row": 1,
+          "col": 7,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 23,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc24_drone",
+          "label": "Drone (CC24)",
+          "row": 2,
+          "col": 0,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 24,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc25_modulate",
+          "label": "Modulate (CC25)",
+          "row": 2,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 25,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc26_tuning",
+          "label": "Tuning (CC26)",
+          "row": 2,
+          "col": 2,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 26,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc27_note",
+          "label": "Note (CC27)",
+          "row": 2,
+          "col": 3,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 27,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC27 is 'Note' but regular note commands are preferred."
+        },
+        {
+          "id": "drumkid_cc28_beat",
+          "label": "Beat (CC28)",
+          "row": 2,
+          "col": 4,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 28,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc29_beats_bar",
+          "label": "Beats/Bar (CC29)",
+          "row": 2,
+          "col": 5,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 29,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc30_swing",
+          "label": "Swing (CC30)",
+          "row": 2,
+          "col": 6,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 30,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc31_tempo",
+          "label": "Tempo (CC31)",
+          "row": 2,
+          "col": 7,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 31,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC31 (Tempo) ignored when DrumKid is synced to external clock."
+        },
+        {
+          "id": "drumkid_kick_vel",
+          "label": "Kick Vel",
+          "row": 3,
+          "col": 0,
+          "ui": {
+            "type": "slider",
+            "role": "velocityOverride",
+            "min": 1,
+            "max": 127,
+            "step": 1,
+            "initial": 100,
+            "showValue": true,
+            "target": "drumkid_kick"
+          },
+          "notes": "Per-pad velocity override for DrumKid note pad."
+        },
+        {
+          "id": "drumkid_click_vel",
+          "label": "Click Vel",
+          "row": 3,
+          "col": 1,
+          "ui": {
+            "type": "slider",
+            "role": "velocityOverride",
+            "min": 1,
+            "max": 127,
+            "step": 1,
+            "initial": 100,
+            "showValue": true,
+            "target": "drumkid_click"
+          },
+          "notes": "Per-pad velocity override for DrumKid note pad."
+        },
+        {
+          "id": "drumkid_snare_vel",
+          "label": "Snare Vel",
+          "row": 3,
+          "col": 2,
+          "ui": {
+            "type": "slider",
+            "role": "velocityOverride",
+            "min": 1,
+            "max": 127,
+            "step": 1,
+            "initial": 100,
+            "showValue": true,
+            "target": "drumkid_snare"
+          },
+          "notes": "Per-pad velocity override for DrumKid note pad."
+        },
+        {
+          "id": "drumkid_hat_closed_vel",
+          "label": "Hat Closed Vel",
+          "row": 3,
+          "col": 3,
+          "ui": {
+            "type": "slider",
+            "role": "velocityOverride",
+            "min": 1,
+            "max": 127,
+            "step": 1,
+            "initial": 100,
+            "showValue": true,
+            "target": "drumkid_hat_closed"
+          },
+          "notes": "Per-pad velocity override for DrumKid note pad."
+        },
+        {
+          "id": "drumkid_tom_vel",
+          "label": "Tom Vel",
+          "row": 3,
+          "col": 4,
+          "ui": {
+            "type": "slider",
+            "role": "velocityOverride",
+            "min": 1,
+            "max": 127,
+            "step": 1,
+            "initial": 100,
+            "showValue": true,
+            "target": "drumkid_tom"
+          },
+          "notes": "Per-pad velocity override for DrumKid note pad."
+        },
+        {
+          "id": "dr550_a_01",
+          "label": "A1 (39)",
+          "row": 4,
+          "col": 0,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 39,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 1."
+        },
+        {
+          "id": "dr550_a_02",
+          "label": "A2 (56)",
+          "row": 4,
+          "col": 1,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 56,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 2."
+        },
+        {
+          "id": "dr550_a_03",
+          "label": "A3 (49)",
+          "row": 4,
+          "col": 2,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 49,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 3."
+        },
+        {
+          "id": "dr550_a_04",
+          "label": "A4 (53)",
+          "row": 4,
+          "col": 3,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 53,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 4."
+        },
+        {
+          "id": "dr550_a_05",
+          "label": "A5 (37)",
+          "row": 4,
+          "col": 4,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 37,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 5."
+        },
+        {
+          "id": "dr550_a_06",
+          "label": "A6 (43)",
+          "row": 4,
+          "col": 5,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 43,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 6."
+        },
+        {
+          "id": "dr550_a_07",
+          "label": "A7 (47)",
+          "row": 4,
+          "col": 6,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 47,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 7."
+        },
+        {
+          "id": "dr550_a_08",
+          "label": "A8 (50)",
+          "row": 4,
+          "col": 7,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 50,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 8."
+        },
+        {
+          "id": "dr550_a_09",
+          "label": "A9 (36)",
+          "row": 4,
+          "col": 8,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 36,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 9."
+        },
+        {
+          "id": "dr550_a_10",
+          "label": "A10 (40)",
+          "row": 4,
+          "col": 9,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 40,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 10."
+        },
+        {
+          "id": "dr550_a_11",
+          "label": "A11 (42)",
+          "row": 4,
+          "col": 10,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 42,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 11."
+        },
+        {
+          "id": "dr550_a_12",
+          "label": "A12 (46)",
+          "row": 4,
+          "col": 11,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 46,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank A pad 12."
+        },
+        {
+          "id": "dr550_b_01",
+          "label": "B1 (35)",
+          "row": 5,
+          "col": 0,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 35,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 1."
+        },
+        {
+          "id": "dr550_b_02",
+          "label": "B2 (38)",
+          "row": 5,
+          "col": 1,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 38,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 2."
+        },
+        {
+          "id": "dr550_b_04",
+          "label": "B4 (51)",
+          "row": 5,
+          "col": 3,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 51,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 4."
+        },
+        {
+          "id": "dr550_b_05",
+          "label": "B5 (75)",
+          "row": 5,
+          "col": 4,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 75,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 5."
+        },
+        {
+          "id": "dr550_b_06",
+          "label": "B6 (41)",
+          "row": 5,
+          "col": 5,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 41,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 6."
+        },
+        {
+          "id": "dr550_b_07",
+          "label": "B7 (45)",
+          "row": 5,
+          "col": 6,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 45,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 7."
+        },
+        {
+          "id": "dr550_b_08",
+          "label": "B8 (48)",
+          "row": 5,
+          "col": 7,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 48,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 8."
+        },
+        {
+          "id": "dr550_b_09",
+          "label": "B9 (85)",
+          "row": 5,
+          "col": 8,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 85,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 9."
+        },
+        {
+          "id": "dr550_b_10",
+          "label": "B10 (86)",
+          "row": 5,
+          "col": 9,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 86,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank B pad 10."
+        },
+        {
+          "id": "dr550_c_01",
+          "label": "C1 (69)",
+          "row": 6,
+          "col": 0,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 69,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 1."
+        },
+        {
+          "id": "dr550_c_03",
+          "label": "C3 (68)",
+          "row": 6,
+          "col": 2,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 68,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 3."
+        },
+        {
+          "id": "dr550_c_04",
+          "label": "C4 (67)",
+          "row": 6,
+          "col": 3,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 67,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 4."
+        },
+        {
+          "id": "dr550_c_05",
+          "label": "C5 (71)",
+          "row": 6,
+          "col": 4,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 71,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 5."
+        },
+        {
+          "id": "dr550_c_06",
+          "label": "C6 (64)",
+          "row": 6,
+          "col": 5,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 64,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 6."
+        },
+        {
+          "id": "dr550_c_07",
+          "label": "C7 (63)",
+          "row": 6,
+          "col": 6,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 63,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 7."
+        },
+        {
+          "id": "dr550_c_08",
+          "label": "C8 (62)",
+          "row": 6,
+          "col": 7,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 62,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 8."
+        },
+        {
+          "id": "dr550_c_09",
+          "label": "C9 (61)",
+          "row": 6,
+          "col": 8,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 61,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 9."
+        },
+        {
+          "id": "dr550_c_10",
+          "label": "C10 (60)",
+          "row": 6,
+          "col": 9,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 60,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 10."
+        },
+        {
+          "id": "dr550_c_11",
+          "label": "C11 (66)",
+          "row": 6,
+          "col": 10,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 66,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 11."
+        },
+        {
+          "id": "dr550_c_12",
+          "label": "C12 (65)",
+          "row": 6,
+          "col": 11,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 65,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank C pad 12."
+        },
+        {
+          "id": "dr550_d_07",
+          "label": "D7 (89)",
+          "row": 7,
+          "col": 6,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 89,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank D pad 7."
+        },
+        {
+          "id": "dr550_d_08",
+          "label": "D8 (91)",
+          "row": 7,
+          "col": 7,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 91,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank D pad 8."
+        },
+        {
+          "id": "dr550_d_09",
+          "label": "D9 (84)",
+          "row": 7,
+          "col": 8,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 84,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank D pad 9."
+        },
+        {
+          "id": "dr550_d_10",
+          "label": "D10 (58)",
+          "row": 7,
+          "col": 9,
+          "toggle": false,
+          "midi": {
+            "type": "note",
+            "channel": 10,
+            "note": 58,
+            "onVelocity": 100,
+            "offVelocity": 0
+          },
+          "notes": "DR-550 factory pad map: Bank D pad 10."
+        }
+      ]
+    },
+    "electribe": {
+      "label": "Electribe 2S (Ch11)",
+      "gridSize": [
+        8,
+        4
+      ],
+      "pads": [
+        {
+          "id": "electribe_pattern",
+          "label": "Pattern #",
+          "row": 0,
+          "col": 0,
+          "midi": {
+            "type": "program",
+            "channel": 11,
+            "program": 1,
+            "programBankMode": "electribePattern"
+          },
+          "ui": {
+            "type": "slider",
+            "role": "pattern",
+            "min": 1,
+            "max": 127,
+            "step": 1,
+            "initial": 1,
+            "showValue": true
+          },
+          "notes": "Electribe pattern select (1-127) with bank toggle A/B."
+        },
+        {
+          "id": "electribe_bank_a",
+          "label": "Bank A",
+          "row": 0,
+          "col": 1,
+          "ui": {
+            "type": "button",
+            "role": "patternBank",
+            "bank": 0
+          },
+          "notes": "Electribe pattern bank A (LSB 0)."
+        },
+        {
+          "id": "electribe_bank_b",
+          "label": "Bank B",
+          "row": 0,
+          "col": 2,
+          "ui": {
+            "type": "button",
+            "role": "patternBank",
+            "bank": 1
+          },
+          "notes": "Electribe pattern bank B (LSB 1)."
+        },
+        {
+          "id": "electribe_scene_1",
+          "label": "Scene 1",
+          "row": 0,
+          "col": 3,
+          "toggle": false,
+          "midi": {
+            "type": "program",
+            "channel": 11,
+            "program": 1,
+            "programBankMode": "electribePattern"
+          },
+          "notes": "Quick scene (pattern) select; uses current bank."
+        },
+        {
+          "id": "electribe_scene_2",
+          "label": "Scene 2",
+          "row": 0,
+          "col": 4,
+          "toggle": false,
+          "midi": {
+            "type": "program",
+            "channel": 11,
+            "program": 2,
+            "programBankMode": "electribePattern"
+          },
+          "notes": "Quick scene (pattern) select; uses current bank."
+        },
+        {
+          "id": "electribe_scene_3",
+          "label": "Scene 3",
+          "row": 0,
+          "col": 5,
+          "toggle": false,
+          "midi": {
+            "type": "program",
+            "channel": 11,
+            "program": 3,
+            "programBankMode": "electribePattern"
+          },
+          "notes": "Quick scene (pattern) select; uses current bank."
+        },
+        {
+          "id": "electribe_scene_4",
+          "label": "Scene 4",
+          "row": 0,
+          "col": 6,
+          "toggle": false,
+          "midi": {
+            "type": "program",
+            "channel": 11,
+            "program": 4,
+            "programBankMode": "electribePattern"
+          },
+          "notes": "Quick scene (pattern) select; uses current bank."
+        },
+        {
+          "id": "electribe_cc7",
+          "label": "Amp Level (CC7)",
+          "row": 1,
+          "col": 0,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 7,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc10",
+          "label": "Amp Pan (CC10)",
+          "row": 1,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 10,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc74",
+          "label": "Filter Cutoff (CC74)",
+          "row": 1,
+          "col": 2,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 74,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc71",
+          "label": "Filter Resonance (CC71)",
+          "row": 1,
+          "col": 3,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 71,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc73",
+          "label": "EG Attack (CC73)",
+          "row": 1,
+          "col": 4,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 73,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc72",
+          "label": "EG Decay/Release (CC72)",
+          "row": 1,
+          "col": 5,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 72,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc83",
+          "label": "Filter EG Int (CC83)",
+          "row": 1,
+          "col": 6,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 83,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc80",
+          "label": "Osc Pitch (CC80)",
+          "row": 1,
+          "col": 7,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 80,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc81",
+          "label": "Osc Glide (CC81)",
+          "row": 2,
+          "col": 0,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 81,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc82",
+          "label": "Osc Edit (CC82)",
+          "row": 2,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 82,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc85",
+          "label": "Modulation Depth (CC85)",
+          "row": 2,
+          "col": 2,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 85,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc86",
+          "label": "Modulation Speed (CC86)",
+          "row": 2,
+          "col": 3,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 86,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc87",
+          "label": "Insert FX Edit (CC87)",
+          "row": 2,
+          "col": 4,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 87,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc102",
+          "label": "Master FX X (CC102)",
+          "row": 2,
+          "col": 5,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 102,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc103",
+          "label": "Master FX Y (CC103)",
+          "row": 2,
+          "col": 6,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 103,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "Electribe 2S panel control CC."
+        },
+        {
+          "id": "electribe_cc104",
+          "label": "Insert FX On/Off (CC104)",
+          "row": 2,
+          "col": 7,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 104,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "notes": "Electribe 2S panel control on/off (0=Off, 127=On)."
+        },
+        {
+          "id": "electribe_cc105",
+          "label": "MFX Send On/Off (CC105)",
+          "row": 3,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 105,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "notes": "Electribe 2S panel control on/off (0=Off, 127=On)."
+        },
+        {
+          "id": "electribe_cc106",
+          "label": "Master FX On/Off (CC106)",
+          "row": 3,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 11,
+            "cc": 106,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "notes": "Electribe 2S panel control on/off (0=Off, 127=On)."
+        }
+      ]
+    },
+    "transport": {
+      "label": "Transport",
+      "gridSize": [
+        4,
+        1
+      ],
+      "pads": [
+        {
+          "id": "transport_start",
+          "label": "Start",
+          "row": 0,
+          "col": 0,
+          "toggle": false,
+          "midi": {
+            "type": "realtime",
+            "channel": 1,
+            "realtime": "start"
+          },
+          "notes": "MIDI realtime Start (FA)."
+        },
+        {
+          "id": "transport_continue",
+          "label": "Continue",
+          "row": 0,
+          "col": 1,
+          "toggle": false,
+          "midi": {
+            "type": "realtime",
+            "channel": 1,
+            "realtime": "continue"
+          },
+          "notes": "MIDI realtime Continue (FB)."
+        },
+        {
+          "id": "transport_stop",
+          "label": "Stop",
+          "row": 0,
+          "col": 2,
+          "toggle": false,
+          "midi": {
+            "type": "realtime",
+            "channel": 1,
+            "realtime": "stop"
+          },
+          "notes": "MIDI realtime Stop (FC)."
         }
       ]
     }

@@ -82,6 +82,21 @@ function buildOutputs(pad, state) {
       outputs.push(
         `MIDI -> cc ch${pad.midi.channel} cc ${pad.midi.cc} val ${value}`
       );
+    } else if (pad.midi.type === "program") {
+      if (state === "on") {
+        const bankMsb = Number.isFinite(pad.midi.bankMsb) ? pad.midi.bankMsb : null;
+        const bankLsb = Number.isFinite(pad.midi.bankLsb) ? pad.midi.bankLsb : null;
+        const bankInfo = bankMsb !== null || bankLsb !== null
+          ? ` bank ${bankMsb ?? "-"},${bankLsb ?? "-"}`
+          : "";
+        outputs.push(
+          `MIDI -> program ch${pad.midi.channel} program ${pad.midi.program}${bankInfo}`
+        );
+      }
+    } else if (pad.midi.type === "realtime") {
+      if (state === "on") {
+        outputs.push(`MIDI -> realtime ${pad.midi.realtime}`);
+      }
     }
   }
   return outputs;

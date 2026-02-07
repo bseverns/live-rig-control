@@ -62,7 +62,7 @@ final class MappingStore: ObservableObject {
     }
 
     func handlePadTap(_ pad: Pad) {
-        guard pad.toggle else { return }
+        guard pad.isToggle else { return }
         let isOn = padStates[pad.id] ?? false
         let nextState = !isOn
         padStates[pad.id] = nextState
@@ -73,7 +73,7 @@ final class MappingStore: ObservableObject {
     }
 
     func handlePadPress(_ pad: Pad) {
-        guard !pad.toggle else { return }
+        guard !pad.isToggle else { return }
         let isOn = padStates[pad.id] ?? false
         if isOn { return }
         padStates[pad.id] = true
@@ -83,7 +83,7 @@ final class MappingStore: ObservableObject {
     }
 
     func handlePadRelease(_ pad: Pad) {
-        guard !pad.toggle else { return }
+        guard !pad.isToggle else { return }
         let isOn = padStates[pad.id] ?? false
         if !isOn { return }
         padStates[pad.id] = false
@@ -148,6 +148,22 @@ final class MappingStore: ObservableObject {
                 cc: cc,
                 value: value
             )
+        case "program":
+            guard state else { return }
+            let program = midiMapping.program ?? 1
+            logs.add("MIDI program \(program) ch \(midiMapping.channel)")
+            midi.sendProgramChange(
+                channel: midiMapping.channel,
+                program: program,
+                bankMsb: midiMapping.bankMsb,
+                bankLsb: midiMapping.bankLsb
+            )
+        case "realtime":
+            guard state else { return }
+            if let message = midiMapping.realtime {
+                logs.add("MIDI realtime \(message)")
+                midi.sendRealtime(message)
+            }
         default:
             break
         }

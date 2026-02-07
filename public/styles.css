@@ -73,3 +73,29 @@ h1 {
 .pad.off {
   opacity: 0.6;
 }
+
+.pad.slider {
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 8px;
+}
+
+.pad-label {
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.pad.slider .pad-label {
+  text-align: left;
+}
+
+.pad-value {
+  font-size: 0.7rem;
+  text-align: right;
+  color: #9ad5ff;
+}
+
+.pad input[type="range"] {
+  width: 100%;
+}

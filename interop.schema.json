@@ -87,6 +87,9 @@
         "osc": {
           "$ref": "#/$defs/oscMapping"
         },
+        "ui": {
+          "$ref": "#/$defs/uiMapping"
+        },
         "state": {
           "$ref": "#/$defs/stateMapping"
         },
@@ -104,6 +107,11 @@
         {
           "required": [
             "osc"
+          ]
+        },
+        {
+          "required": [
+            "ui"
           ]
         }
       ],
@@ -273,7 +281,9 @@
           "type": "string",
           "enum": [
             "note",
-            "cc"
+            "cc",
+            "program",
+            "realtime"
           ]
         },
         "channel": {
@@ -310,6 +320,35 @@
           "type": "integer",
           "minimum": 0,
           "maximum": 127
+        },
+        "program": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "bankMsb": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "bankLsb": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "programBankMode": {
+          "type": "string",
+          "enum": [
+            "electribePattern"
+          ]
+        },
+        "realtime": {
+          "type": "string",
+          "enum": [
+            "start",
+            "continue",
+            "stop"
+          ]
         }
       },
       "additionalProperties": false,
@@ -341,8 +380,93 @@
               "cc"
             ]
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "program"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "program"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "realtime"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "realtime"
+            ]
+          }
         }
       ]
+    },
+    "uiMapping": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "button",
+            "slider"
+          ]
+        },
+        "min": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 127
+        },
+        "step": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 127
+        },
+        "initial": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 127
+        },
+        "showValue": {
+          "type": "boolean"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "velocity",
+            "velocityOverride",
+            "pattern",
+            "patternBank"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bank": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
     }
   }
 }
