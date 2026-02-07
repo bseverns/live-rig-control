@@ -49,7 +49,13 @@ struct Pad: Codable, Identifiable {
     let ui: UiMapping?
 
     var isToggle: Bool {
-        toggle ?? false
+        if ui?.type == "slider" {
+            return false
+        }
+        if ui?.role == "patternBank" {
+            return true
+        }
+        return toggle ?? false
     }
 }
 

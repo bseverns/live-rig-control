@@ -5,20 +5,31 @@
 - Replace WebMIDI with Core MIDI.
 - Keep OSC bridge behavior and payloads consistent.
 
+## Status (2026-02-07)
+- DONE: SwiftUI app in `ios/` with Core MIDI send (note/cc/program/realtime) + OSC WebSocket client.
+- DONE: Profile bar + grid + toggle/momentary behavior + sliders (including velocity + per-pad overrides).
+- DONE: Mappings bundled + loaded at launch (`Resources/mappings.json`).
+- DONE: QR scan + OSC host persistence + connection status UI.
+- TODO: iPad-only target / Xcode app target (still a SwiftPM package).
+- TODO: Persist selected profile, selected MIDI output, and OSC enabled state.
+- TODO: Add a small known-good `mappings.json` fixture for tests.
+
 ## Project Setup
-- Create a new iPadOS SwiftUI project (iPad-only target).
-- Add `mappings.json` to the app bundle.
-- Define models for `Mapping`, `Profile`, `Pad`, `MidiMapping`, `OscMapping`.
-- Load mappings at launch and expose as app state.
+- TODO: Create a new iPadOS SwiftUI project (iPad-only target).
+- DONE: Add `mappings.json` to the app bundle.
+- DONE: Define models for `Mapping`, `Profile`, `Pad`, `MidiMapping`, `OscMapping` (plus `UiMapping`).
+- DONE: Load mappings at launch and expose as app state.
 - CI build note: avoid `xcrun --sdk <platform> swift build` (sets `SDKROOT` and can break manifest compilation). Prefer `SDK_PATH="$(xcrun --sdk <platform> --show-sdk-path)"` and `swift build --sdk "$SDK_PATH"` instead.
 
 ## UI Parity
-- Profile bar: horizontal list of buttons; active profile state.
-- Grid: `LazyVGrid` sized by profile `gridSize`.
-- Pad visual states: `on`/`off` styling, label rendering.
-- Tap handling: toggle vs momentary behavior.
+- DONE: Profile bar: horizontal list of buttons; active profile state.
+- DONE: Grid: `Grid` sized by profile `gridSize`.
+- DONE: Pad visual states: `on`/`off` styling, label rendering.
+- DONE: Tap handling: toggle vs momentary behavior.
+- DONE: Slider UI for variable controls.
 
 ## SwiftUI Layout Sketch
+Note: Implemented in `ios/Sources/LiveRigControlApp/ContentView.swift`; sketch retained for reference.
 ```swift
 import SwiftUI
 
@@ -618,27 +629,27 @@ extension Mapping {
 - Safely no-op MIDI sends when no output selected.
 
 ## OSC Bridge (WebSocket)
-- Implement WebSocket client and OSC JSON payloads matching web app.
-- Add OSC toggle UI; connect/disconnect.
-- Use dynamic host-based URL, e.g. `ws://<host>:9001`.
-- Ensure OSC sends work when MIDI is unavailable.
+- DONE: WebSocket client and OSC JSON payloads matching web app.
+- DONE: OSC toggle UI; connect/disconnect + reconnect.
+- DONE: Dynamic host-based URL, e.g. `ws://<host>:9001`.
+- DONE: OSC sends work when MIDI is unavailable.
 
 ## Data + State
-- Persist selected profile, MIDI output, and OSC enabled state.
-- Add a simple connection status indicator for OSC.
+- TODO: Persist selected profile, MIDI output, and OSC enabled state.
+- DONE: Connection status indicator for OSC (connecting/connected/disconnected + queued).
 
 ## Testing
-- iPad Air: app loads, profiles/pads render, taps toggle state.
-- No MIDI device: no errors, UI still functional.
-- With MIDI device: outputs list and messages send correctly.
-- OSC enabled: pad presses send OSC over bridge.
+- TODO: iPad Air: app loads, profiles/pads render, taps toggle state.
+- TODO: No MIDI device: no errors, UI still functional.
+- TODO: With MIDI device: outputs list and messages send correctly.
+- TODO: OSC enabled: pad presses send OSC over bridge.
 
 ## Prep Work (Before Swift Build)
-- Create a small "known-good" `mappings.json` fixture with 1-2 profiles and a few pads.
-- Document the exact JSON shape from `src/mappings.json` and decide whether Swift mirrors or normalizes it.
-- Define an OSC payload contract (fields, types, examples) shared by native app and bridge.
-- Decide how the app discovers the OSC host (Info.plist default, in-app setting, or QR input).
-- Sketch UI placement for MIDI output picker + OSC toggle with clear empty states.
+- TODO: Create a small "known-good" `mappings.json` fixture with 1-2 profiles and a few pads.
+- DONE: Document the JSON shape from `src/mappings.json` (updated below).
+- DONE: Define OSC payload contract (fields, types, examples).
+- DONE: OSC host discovery via Info.plist default + in-app setting + QR input.
+- DONE: UI placement for MIDI output picker + OSC toggle with clear empty states.
 
 ## UI Placement Sketch (MIDI + OSC)
 - Header row under title:
@@ -658,6 +669,10 @@ extension Mapping {
 ```sh
 cd ios
 swift build
+```
+- Validate mappings:
+```sh
+swift run MappingValidator --mappings ../src/mappings.json
 ```
 - To run on device, open the folder in Xcode only for signing or use `swift run` with a simulator target once configured.
 - Resources (like `mappings.json`) are bundled via `Resources/` in `Package.swift`.
@@ -691,14 +706,14 @@ base64 -i profile.mobileprovision | pbcopy
   - `IOS_PROVISION_PROFILE` = base64 output of the `.mobileprovision`
 
 ## Testing + Validation (Lightweight)
-- Add a `swift test` target later for model decoding and mapping validation.
-- Manual smoke tests:
+- DONE: Swift test target for mapping validation (`swift test --enable-swift-testing --filter MappingValidatorTests`).
+- TODO: Manual smoke tests:
   - App loads without crash; profiles and pads render.
   - Toggle pads change state; momentary pads hold while pressed.
   - MIDI output selection changes; sending no-ops when empty.
   - OSC connects/disconnects; queue drains after reconnect.
-- Mapping validation tool (optional):
-  - Small Swift CLI that loads `mappings.json` and reports collisions/out-of-bounds.
+- DONE: Mapping validation tool:
+  - `swift run MappingValidator --mappings ../src/mappings.json`
 
 ## OSC Host UI + Status (Expanded)
 - Field behavior:
@@ -783,18 +798,30 @@ base64 -i profile.mobileprovision | pbcopy
   - `id` (string)
   - `label` (string, optional)
   - `row` / `col` (int, optional; zero-based)
-  - `toggle` (bool)
+  - `toggle` (bool, optional)
+  - `mode` (string, optional: `toggle` or `momentary`)
+  - `group` (string or object, optional)
   - `midi` (object, optional)
   - `osc` (object, optional)
+  - `ui` (object, optional)
   - `notes` (string, optional; comments only)
 - MIDI object (when present):
-  - `type` ("note" or "cc")
-  - `channel` (int, 1-16)
+  - `type` ("note" | "cc" | "program" | "realtime")
+  - `channel` (int, 1-16; required for note/cc/program)
   - For notes: `note` (int), `onVelocity` (int), `offVelocity` (int)
   - For CC: `cc` (int), `onValue` (int), `offValue` (int)
+  - For program: `program` (int), `bankMsb` (int), `bankLsb` (int), `programBankMode` (string)
+  - For realtime: `realtime` ("start" | "continue" | "stop")
 - OSC object (when present):
   - `address` (string)
   - `args` (array, optional; ints/strings)
+- UI object (when present):
+  - `type` ("button" | "slider")
+  - `role` ("velocity" | "velocityOverride" | "pattern" | "patternBank", optional)
+  - `min` / `max` / `step` / `initial` (ints, optional)
+  - `showValue` (bool, optional)
+  - `target` (string, optional; for velocity overrides)
+  - `bank` (int, optional; for pattern bank toggles)
 
 ## OSC Payload Contract
 - Transport: WebSocket JSON message.
