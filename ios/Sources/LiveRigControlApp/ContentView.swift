@@ -45,6 +45,8 @@ struct ContentView: View {
                 PadGridView(
                     profile: profile,
                     padStates: store.padStates,
+                    sliderValue: store.sliderValue,
+                    onSliderChange: store.handleSliderChange,
                     onPadTap: store.handlePadTap,
                     onPadPress: store.handlePadPress,
                     onPadRelease: store.handlePadRelease
@@ -345,6 +347,8 @@ struct ProfileIssuesView: View {
 struct PadGridView: View {
     let profile: Profile
     let padStates: [String: Bool]
+    let sliderValue: (Pad) -> Int
+    let onSliderChange: (Pad, Int) -> Void
     let onPadTap: (Pad) -> Void
     let onPadPress: (Pad) -> Void
     let onPadRelease: (Pad) -> Void
@@ -364,13 +368,21 @@ struct PadGridView: View {
                     GridRow {
                         ForEach(0..<cols, id: \.self) { col in
                             if let pad = matrix[row][col] {
-                                PadView(
-                                    pad: pad,
-                                    isOn: padStates[pad.id] ?? false,
-                                    onTap: { onPadTap(pad) },
-                                    onPress: { onPadPress(pad) },
-                                    onRelease: { onPadRelease(pad) }
-                                )
+                                if pad.ui?.type == "slider" {
+                                    PadSliderView(
+                                        pad: pad,
+                                        value: sliderValue(pad),
+                                        onChange: { onSliderChange(pad, $0) }
+                                    )
+                                } else {
+                                    PadView(
+                                        pad: pad,
+                                        isOn: padStates[pad.id] ?? false,
+                                        onTap: { onPadTap(pad) },
+                                        onPress: { onPadPress(pad) },
+                                        onRelease: { onPadRelease(pad) }
+                                    )
+                                }
                             } else {
                                 Color.clear
                                     .frame(minHeight: 64)
@@ -429,6 +441,48 @@ struct PadView: View {
                     onRelease()
                 }
             }
+    }
+}
+
+struct PadSliderView: View {
+    let pad: Pad
+    let value: Int
+    let onChange: (Int) -> Void
+
+    private var minValue: Double { Double(pad.ui?.min ?? 0) }
+    private var maxValue: Double { Double(pad.ui?.max ?? 127) }
+    private var stepValue: Double { Double(pad.ui?.step ?? 1) }
+    private var showValue: Bool { pad.ui?.showValue ?? true }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(pad.label ?? pad.id)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(2)
+            Slider(
+                value: Binding(
+                    get: { Double(value) },
+                    set: { onChange(Int($0)) }
+                ),
+                in: minValue...maxValue,
+                step: stepValue
+            )
+            if showValue {
+                Text("\(value)")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 64)
+        .padding(8)
+        .background(Color.gray.opacity(0.15))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+        )
     }
 }
 

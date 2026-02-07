@@ -8,7 +8,8 @@ let package = Package(
         .macOS(.v14)
     ],
     products: [
-        .executable(name: "LiveRigControlApp", targets: ["LiveRigControlApp"])
+        .executable(name: "LiveRigControlApp", targets: ["LiveRigControlApp"]),
+        .executable(name: "MappingValidator", targets: ["MappingValidator"])
     ],
     targets: [
         .executableTarget(
@@ -16,6 +17,13 @@ let package = Package(
             resources: [
                 .process("Resources")
             ]
+        ),
+        .executableTarget(
+            name: "MappingValidator"
+        ),
+        .testTarget(
+            name: "MappingValidatorTests",
+            dependencies: ["MappingValidator"]
         )
     ]
 )
