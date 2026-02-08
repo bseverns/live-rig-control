@@ -10,12 +10,12 @@
 - DONE: Profile bar + grid + toggle/momentary behavior + sliders (including velocity + per-pad overrides).
 - DONE: Mappings bundled + loaded at launch (`Resources/mappings.json`).
 - DONE: QR scan + OSC host persistence + connection status UI.
-- TODO: iPad-only target / Xcode app target (still a SwiftPM package).
-- TODO: Persist selected profile, selected MIDI output, and OSC enabled state.
-- TODO: Add a small known-good `mappings.json` fixture for tests.
+- DONE: iPad-only Xcode app target at `ios/LiveRigControlApp.xcodeproj` (uses `App/Info.plist` + iPad-only device family).
+- DONE: Persist selected profile, selected MIDI output, and OSC enabled state.
+- DONE: Add a small known-good `mappings.json` fixture for tests (`ios/Tests/fixtures/mappings.json`).
 
 ## Project Setup
-- TODO: Create a new iPadOS SwiftUI project (iPad-only target).
+- DONE: Create a new iPadOS SwiftUI project (iPad-only target) at `ios/LiveRigControlApp.xcodeproj`.
 - DONE: Add `mappings.json` to the app bundle.
 - DONE: Define models for `Mapping`, `Profile`, `Pad`, `MidiMapping`, `OscMapping` (plus `UiMapping`).
 - DONE: Load mappings at launch and expose as app state.

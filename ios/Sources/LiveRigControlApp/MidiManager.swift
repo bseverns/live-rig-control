@@ -4,8 +4,14 @@ import Foundation
 
 @MainActor
 final class MidiManager: ObservableObject {
+    private static let selectedOutputKey = "midi_output_id"
+
     @Published var outputs: [MidiOutput] = []
-    @Published var selectedOutputId: String = ""
+    @Published var selectedOutputId: String = UserDefaults.standard.string(forKey: MidiManager.selectedOutputKey) ?? "" {
+        didSet {
+            UserDefaults.standard.set(selectedOutputId, forKey: MidiManager.selectedOutputKey)
+        }
+    }
     var onEvent: ((String) -> Void)?
 
     private var client = MIDIClientRef()
