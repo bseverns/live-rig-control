@@ -1,6 +1,10 @@
 {
   "builtTestProducts" : [
-
+    {
+      "binaryPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.xctest/Contents/MacOS/LiveRigControlAppPackageTests",
+      "packagePath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios",
+      "productName" : "LiveRigControlAppPackageTests"
+    }
   ],
   "copyCommands" : {
     "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp_LiveRigControlApp.bundle/mappings.json" : {
@@ -105,7 +109,7 @@
       ],
       "otherArguments" : [
         "-target",
-        "arm64-apple-macosx14.0",
+        "arm64-apple-macosx10.13",
         "-incremental",
         "-enable-batch-mode",
         "-serialize-diagnostics",
@@ -174,6 +178,280 @@
       ],
       "tempsPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build",
       "wholeModuleOptimization" : false
+    },
+    "C.LiveRigControlAppPackageTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build/sources",
+      "importPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/MappingValidatorTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "LiveRigControlAppPackageTests",
+      "moduleOutputPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/LiveRigControlAppPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build/include/LiveRigControlAppPackageTests-Swift.h",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "ios"
+      ],
+      "outputFileMapPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/LiveRigControlAppPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.MappingValidator-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidator.build/sources",
+      "importPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/MappingValidator/MappingValidator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/MappingValidator/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidator.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "MappingValidator",
+      "moduleOutputPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/MappingValidator.swiftmodule",
+      "objects" : [
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidator.build/MappingValidator.swift.o",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidator.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "MappingValidator_main",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "ios"
+      ],
+      "outputFileMapPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidator.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/MappingValidator.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/MappingValidator/MappingValidator.swift",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/MappingValidator/main.swift"
+      ],
+      "tempsPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidator.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.MappingValidatorTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidatorTests.build/sources",
+      "importPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Tests/MappingValidatorTests/MappingValidatorTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/MappingValidator.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidatorTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "MappingValidatorTests",
+      "moduleOutputPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/MappingValidatorTests.swiftmodule",
+      "objects" : [
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidatorTests.build/MappingValidatorTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx10.13",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-Xfrontend",
+        "-experimental-lazy-typecheck",
+        "-Xfrontend",
+        "-experimental-skip-all-function-bodies",
+        "-Xfrontend",
+        "-experimental-allow-module-with-compiler-errors",
+        "-Xfrontend",
+        "-empty-abi-descriptor",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "ios"
+      ],
+      "outputFileMapPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidatorTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules/MappingValidatorTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : true,
+      "sources" : [
+        "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Tests/MappingValidatorTests/MappingValidatorTests.swift"
+      ],
+      "tempsPath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidatorTests.build",
+      "wholeModuleOptimization" : false
     }
   },
   "swiftFrontendCommands" : {
@@ -200,7 +478,7 @@
       "-I",
       "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
       "-target",
-      "arm64-apple-macosx14.0",
+      "arm64-apple-macosx10.13",
       "-incremental",
       "-enable-batch-mode",
       "-serialize-diagnostics",
@@ -248,11 +526,201 @@
       "ios",
       "-driver-use-frontend-path",
       "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ],
+    "LiveRigControlAppPackageTests" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "LiveRigControlAppPackageTests",
+      "-package-name",
+      "ios",
+      "-c",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build/include/LiveRigControlAppPackageTests-Swift.h",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "ios",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ],
+    "MappingValidator" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "MappingValidator",
+      "-package-name",
+      "ios",
+      "-c",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/MappingValidator/MappingValidator.swift",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/MappingValidator/main.swift",
+      "-I",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "MappingValidator_main",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "ios",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ],
+    "MappingValidatorTests" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "MappingValidatorTests",
+      "-package-name",
+      "ios",
+      "-c",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Tests/MappingValidatorTests/MappingValidatorTests.swift",
+      "-I",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx10.13",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-Xfrontend",
+      "-experimental-lazy-typecheck",
+      "-Xfrontend",
+      "-experimental-skip-all-function-bodies",
+      "-Xfrontend",
+      "-experimental-allow-module-with-compiler-errors",
+      "-Xfrontend",
+      "-empty-abi-descriptor",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "ios",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
     ]
   },
   "targetDependencyMap" : {
     "LiveRigControlApp" : [
 
+    ],
+    "LiveRigControlAppPackageTests" : [
+      "MappingValidatorTests",
+      "MappingValidator"
+    ],
+    "MappingValidator" : [
+
+    ],
+    "MappingValidatorTests" : [
+      "MappingValidator"
     ]
   },
   "testDiscoveryCommands" : {
@@ -316,6 +784,52 @@
         }
       ],
       "outputFilePath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlApp.build/sources"
+    },
+    "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/LiveRigControlAppPackageTests.build/sources"
+    },
+    "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidator.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/MappingValidator/MappingValidator.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Sources/MappingValidator/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidator.build/sources"
+    },
+    "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidatorTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/Tests/MappingValidatorTests/MappingValidatorTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/MappingValidatorTests.build/sources"
     },
     "/Users/bseverns/Documents/GitHub/live-rig-control/ios/.build/index-build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt" : {
       "alwaysOutOfDate" : true,

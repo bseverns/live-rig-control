@@ -25,3 +25,5 @@ Surface Pro and talk to the hybrid live rig defined in the `live-rig` repo.
 
 The goal is to keep device/channel/scene knowledge encoded in `live-rig`
 while `live-rig-control` focuses on the performer-facing interface.
+
+For mapping structure rationale, see `docs/mappings-rationale.md`.

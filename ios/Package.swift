@@ -4,8 +4,7 @@ import PackageDescription
 let package = Package(
     name: "LiveRigControlApp",
     platforms: [
-        .iOS(.v17),
-        .macOS(.v14)
+        .iOS(.v17)
     ],
     products: [
         .executable(name: "LiveRigControlApp", targets: ["LiveRigControlApp"]),

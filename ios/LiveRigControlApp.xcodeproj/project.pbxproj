@@ -1,0 +1,244 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FA24FFC776294F38901DA034 = {isa = PBXBuildFile; fileRef = 04BDDFB864EC460FA561A054; };
+		467C4C50FA2840C19EE9A69E = {isa = PBXBuildFile; fileRef = 8A0B9C889A4C444CB104743A; };
+		1B827CECE7374528AE96D539 = {isa = PBXBuildFile; fileRef = CD01A597ECBE4938B110267A; };
+		64C16476D1E0499FA3E7253E = {isa = PBXBuildFile; fileRef = 32AB4C1F85014D91A3AD4FFE; };
+		2D5AA17A760E42528871C065 = {isa = PBXBuildFile; fileRef = E2AB14F739E64E21B4A8CA38; };
+		728A385288074A7AA70A00EA = {isa = PBXBuildFile; fileRef = 6CE800F459E949AC9C3FC7A6; };
+		087CF70043E14258A15D2FF3 = {isa = PBXBuildFile; fileRef = E6E3E05E55E14B8DA65FAF20; };
+		EC3060F5D4C840E8A471B14F = {isa = PBXBuildFile; fileRef = 6AFF4251C459417889152A41; };
+		96EBB8FA81F84B0D8B0352B3 = {isa = PBXBuildFile; fileRef = CB194780BD5A473F8C3524DE; };
+		CF72F29EBFE545AABE56E9E0 = {isa = PBXBuildFile; fileRef = 26C43E000116487692C030E0; };
+		1E79438BD4584D38870811ED = {isa = PBXBuildFile; fileRef = 82BBC46DB29E4EBF90591532; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		04BDDFB864EC460FA561A054 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = <group>; };
+		8A0B9C889A4C444CB104743A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRigControlApp.swift; sourceTree = <group>; };
+		CD01A597ECBE4938B110267A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStore.swift; sourceTree = <group>; };
+		32AB4C1F85014D91A3AD4FFE = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingStore.swift; sourceTree = <group>; };
+		E2AB14F739E64E21B4A8CA38 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiManager.swift; sourceTree = <group>; };
+		6CE800F459E949AC9C3FC7A6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = <group>; };
+		E6E3E05E55E14B8DA65FAF20 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OscClient.swift; sourceTree = <group>; };
+		6AFF4251C459417889152A41 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OscHostStorage.swift; sourceTree = <group>; };
+		CB194780BD5A473F8C3524DE = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = <group>; };
+		26C43E000116487692C030E0 = {isa = PBXFileReference; lastKnownFileType = text.json; path = mappings.json; sourceTree = <group>; };
+		82BBC46DB29E4EBF90591532 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = <group>; };
+		B61A2A9E8612419096FD7C79 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = <group>; };
+		8FC0D9C08DC94E2A8003C1ED = {isa = PBXFileReference; explicitFileType = wrapper.application; path = LiveRigControlApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		4D36B1745AAF46C3AE92BF74 = {isa = PBXGroup; children = (
+			26C43E000116487692C030E0,
+		); name = Resources; path = Resources; sourceTree = <group>; };
+		F0C3D6A929F54A7D84830BF4 = {isa = PBXGroup; children = (
+			04BDDFB864EC460FA561A054,
+			8A0B9C889A4C444CB104743A,
+			CD01A597ECBE4938B110267A,
+			32AB4C1F85014D91A3AD4FFE,
+			E2AB14F739E64E21B4A8CA38,
+			6CE800F459E949AC9C3FC7A6,
+			E6E3E05E55E14B8DA65FAF20,
+			6AFF4251C459417889152A41,
+			CB194780BD5A473F8C3524DE,
+			4D36B1745AAF46C3AE92BF74,
+		); name = LiveRigControlApp; path = Sources/LiveRigControlApp; sourceTree = <group>; };
+		BD61C221C81B4E1B8FE1356D = {isa = PBXGroup; children = (
+			B61A2A9E8612419096FD7C79,
+			82BBC46DB29E4EBF90591532,
+		); name = App; path = App; sourceTree = <group>; };
+		B71696388526408A987908E0 = {isa = PBXGroup; children = (
+			8FC0D9C08DC94E2A8003C1ED,
+		); name = Products; sourceTree = <group>; };
+		B1815AD0F2304BA0A6658B5C = {isa = PBXGroup; children = (
+			BD61C221C81B4E1B8FE1356D,
+			F0C3D6A929F54A7D84830BF4,
+			B71696388526408A987908E0,
+		); sourceTree = <group>; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6E2B972E96514110884FB049 = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7943E8DF76D64F6986AA4314;
+			buildPhases = (
+				0AD84D889E7F402AA9886FB4,
+				EF82F542661B40389F3D3EA3,
+				6EDCE3CC434F4CC1A8D60E7B,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LiveRigControlApp;
+			productName = LiveRigControlApp;
+			productReference = 8FC0D9C08DC94E2A8003C1ED;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DAAFCEC465A94DF1BDC2CD29 = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+			};
+			buildConfigurationList = DA0D045D42134701A6624CD7;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B1815AD0F2304BA0A6658B5C;
+			productRefGroup = B71696388526408A987908E0;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6E2B972E96514110884FB049,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6EDCE3CC434F4CC1A8D60E7B = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			CF72F29EBFE545AABE56E9E0,
+			1E79438BD4584D38870811ED,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0AD84D889E7F402AA9886FB4 = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			FA24FFC776294F38901DA034,
+			467C4C50FA2840C19EE9A69E,
+			1B827CECE7374528AE96D539,
+			64C16476D1E0499FA3E7253E,
+			2D5AA17A760E42528871C065,
+			728A385288074A7AA70A00EA,
+			087CF70043E14258A15D2FF3,
+			EC3060F5D4C840E8A471B14F,
+			96EBB8FA81F84B0D8B0352B3,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EF82F542661B40389F3D3EA3 = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		9A7B0D789B664ECEBB7E09D8 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		CDE56188F832426A942F5413 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		F873FC784F644E568E76A9AA = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				PRODUCT_BUNDLE_IDENTIFIER = com.bseverns.LiveRigControlApp;
+				PRODUCT_NAME = LiveRigControlApp;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+			};
+			name = Debug;
+		};
+		A0DBBF1B50474BA4BA606584 = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks");
+				PRODUCT_BUNDLE_IDENTIFIER = com.bseverns.LiveRigControlApp;
+				PRODUCT_NAME = LiveRigControlApp;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DA0D045D42134701A6624CD7 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A7B0D789B664ECEBB7E09D8,
+				CDE56188F832426A942F5413,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7943E8DF76D64F6986AA4314 = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F873FC784F644E568E76A9AA,
+				A0DBBF1B50474BA4BA606584,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = DAAFCEC465A94DF1BDC2CD29;
+}

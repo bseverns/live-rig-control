@@ -19,6 +19,26 @@
             "target": "LiveRigControlApp",
             "configuration": "release",
             "preLaunchTask": "swift: Build Release LiveRigControlApp (ios)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:live-rig-control}/ios",
+            "name": "Debug MappingValidator (ios)",
+            "target": "MappingValidator",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug MappingValidator (ios)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:live-rig-control}/ios",
+            "name": "Release MappingValidator (ios)",
+            "target": "MappingValidator",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release MappingValidator (ios)"
         }
     ]
 }

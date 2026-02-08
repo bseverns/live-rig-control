@@ -2,6 +2,9 @@ import Foundation
 
 @MainActor
 final class MappingStore: ObservableObject {
+    private static let selectedProfileKey = "selected_profile_id"
+    private static let oscEnabledKey = "osc_enabled"
+
     @Published private(set) var mappings: Mapping?
     @Published var selectedProfileId: String?
     @Published var padStates: [String: Bool] = [:]
@@ -16,8 +19,11 @@ final class MappingStore: ObservableObject {
     let osc = OscClient()
     let logs = LogStore()
     private var profileControls: [String: ProfileControlState] = [:]
+    private var preferredProfileId: String?
 
     init() {
+        preferredProfileId = UserDefaults.standard.string(forKey: Self.selectedProfileKey)
+        oscEnabled = UserDefaults.standard.bool(forKey: Self.oscEnabledKey)
         oscHost = OscHostStorage.loadDefault()
         osc.onEvent = { [weak self] message in
             self?.logs.add(message)
@@ -26,6 +32,12 @@ final class MappingStore: ObservableObject {
             self?.logs.add(message)
         }
         midi.setup()
+
+        if oscEnabled {
+            Task { [weak self] in
+                await self?.setOscEnabled(true)
+            }
+        }
     }
 
     var profiles: [Profile] {
@@ -48,11 +60,20 @@ final class MappingStore: ObservableObject {
             let data = try Data(contentsOf: url)
             let decoded = try JSONDecoder().decode(Mapping.self, from: data)
             mappings = decoded
-            selectedProfileId = decoded.normalizedProfiles().first?.id
+            let profiles = decoded.normalizedProfiles()
+            if let preferredProfileId,
+               profiles.contains(where: { $0.id == preferredProfileId }) {
+                selectedProfileId = preferredProfileId
+            } else {
+                selectedProfileId = profiles.first?.id
+            }
+            if let selectedProfileId {
+                UserDefaults.standard.set(selectedProfileId, forKey: Self.selectedProfileKey)
+            }
             padStates = [:]
             sliderValues = [:]
             logs.add("Loaded mappings.json")
-            validateProfiles(decoded.normalizedProfiles())
+            validateProfiles(profiles)
             syncPatternBankState()
         } catch {
             logs.add("Failed to load mappings.json: \(error.localizedDescription)")
@@ -62,6 +83,7 @@ final class MappingStore: ObservableObject {
 
     func selectProfile(_ id: String) {
         selectedProfileId = id
+        UserDefaults.standard.set(id, forKey: Self.selectedProfileKey)
         padStates = [:]
         sliderValues = [:]
         syncPatternBankState()
@@ -167,6 +189,7 @@ final class MappingStore: ObservableObject {
 
     func setOscEnabled(_ enabled: Bool) async {
         oscEnabled = enabled
+        UserDefaults.standard.set(enabled, forKey: Self.oscEnabledKey)
         if enabled {
             logs.add("OSC enabled")
             await osc.connect(host: oscHost)

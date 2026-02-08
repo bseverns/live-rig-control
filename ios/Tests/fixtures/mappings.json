@@ -1,0 +1,39 @@
+{
+  "profiles": {
+    "testProfile": {
+      "label": "Test Profile",
+      "gridSize": [
+        2,
+        1
+      ],
+      "pads": [
+        {
+          "id": "test_note",
+          "label": "Note",
+          "row": 0,
+          "col": 0,
+          "midi": {
+            "type": "note",
+            "channel": 1,
+            "note": 60,
+            "onVelocity": 100,
+            "offVelocity": 0
+          }
+        },
+        {
+          "id": "test_cc",
+          "label": "CC",
+          "row": 0,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 74,
+            "onValue": 127,
+            "offValue": 0
+          }
+        }
+      ]
+    }
+  }
+}
