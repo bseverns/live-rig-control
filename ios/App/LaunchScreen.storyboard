@@ -13,7 +13,93 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KZ3-jc-MQw">
+                                <rect key="frame" x="26.5" y="197.5" width="322" height="322"/>
+                                <subviews>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="BS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="g3n-6t-4oP">
+                                        <rect key="frame" x="124" y="122.5" width="74" height="77"/>
+                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="72"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="B_S_" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="C1h-9N-2sJ">
+                                        <rect key="frame" x="16" y="12" width="69" height="41"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="34"/>
+                                        <color key="textColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="BS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="UwP-df-wiZ">
+                                        <rect key="frame" x="265" y="40" width="43" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="28"/>
+                                        <color key="textColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="B_S_" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="Dqf-1d-e8B">
+                                        <rect key="frame" x="211" y="63" width="52" height="29"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
+                                        <color key="textColor" red="0.35" green="0.35" blue="0.35" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="BS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="jSg-kC-6db">
+                                        <rect key="frame" x="55" y="95" width="30" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
+                                        <color key="textColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="B_S_" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="EoA-WX-Yt6">
+                                        <rect key="frame" x="28" y="205" width="57" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="26"/>
+                                        <color key="textColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="BS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="1hP-3r-Yeq">
+                                        <rect key="frame" x="259" y="190" width="34" height="26"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
+                                        <color key="textColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="B_S_" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="O86-4R-fXa">
+                                        <rect key="frame" x="8" y="276" width="40" height="23"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
+                                        <color key="textColor" red="0.35" green="0.35" blue="0.35" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="BS" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="g0B-tZ-t8f">
+                                        <rect key="frame" x="274" y="262" width="30" height="23"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
+                                        <color key="textColor" red="0.35" green="0.35" blue="0.35" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="B_S_" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="1" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="hH6-Bm-R5X">
+                                        <rect key="frame" x="96" y="120" width="52" height="29"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
+                                        <color key="textColor" red="0.2" green="0.2" blue="0.2" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="C1h-9N-2sJ" firstAttribute="leading" secondItem="KZ3-jc-MQw" secondAttribute="leading" constant="16" id="0M0-cb-ffP"/>
+                                    <constraint firstItem="C1h-9N-2sJ" firstAttribute="top" secondItem="KZ3-jc-MQw" secondAttribute="top" constant="12" id="1n5-hn-yPa"/>
+                                    <constraint firstItem="g3n-6t-4oP" firstAttribute="centerX" secondItem="KZ3-jc-MQw" secondAttribute="centerX" id="2cG-7s-tYg"/>
+                                    <constraint firstItem="g3n-6t-4oP" firstAttribute="centerY" secondItem="KZ3-jc-MQw" secondAttribute="centerY" id="7oL-Ve-8sy"/>
+                                    <constraint firstItem="UwP-df-wiZ" firstAttribute="trailing" secondItem="KZ3-jc-MQw" secondAttribute="trailing" constant="-12" id="9pH-vf-PxQ"/>
+                                    <constraint firstItem="UwP-df-wiZ" firstAttribute="top" secondItem="KZ3-jc-MQw" secondAttribute="top" constant="40" id="A1X-d5-bmO"/>
+                                    <constraint firstItem="Dqf-1d-e8B" firstAttribute="centerX" secondItem="KZ3-jc-MQw" secondAttribute="centerX" constant="70" id="B0g-2S-1Rq"/>
+                                    <constraint firstItem="Dqf-1d-e8B" firstAttribute="centerY" secondItem="KZ3-jc-MQw" secondAttribute="centerY" constant="-80" id="BHk-1P-JrA"/>
+                                    <constraint firstItem="jSg-kC-6db" firstAttribute="centerX" secondItem="KZ3-jc-MQw" secondAttribute="centerX" constant="-90" id="Cgm-Yd-PRa"/>
+                                    <constraint firstItem="jSg-kC-6db" firstAttribute="centerY" secondItem="KZ3-jc-MQw" secondAttribute="centerY" constant="-40" id="E1f-7m-FJg"/>
+                                    <constraint firstItem="EoA-WX-Yt6" firstAttribute="centerX" secondItem="KZ3-jc-MQw" secondAttribute="centerX" constant="-110" id="Hjk-Fb-3fD"/>
+                                    <constraint firstItem="EoA-WX-Yt6" firstAttribute="centerY" secondItem="KZ3-jc-MQw" secondAttribute="centerY" constant="70" id="I0H-7X-s2D"/>
+                                    <constraint firstItem="1hP-3r-Yeq" firstAttribute="centerX" secondItem="KZ3-jc-MQw" secondAttribute="centerX" constant="120" id="N8q-m6-WqX"/>
+                                    <constraint firstItem="1hP-3r-Yeq" firstAttribute="centerY" secondItem="KZ3-jc-MQw" secondAttribute="centerY" constant="50" id="O7J-6f-6Qg"/>
+                                    <constraint firstItem="O86-4R-fXa" firstAttribute="leading" secondItem="KZ3-jc-MQw" secondAttribute="leading" constant="8" id="QPn-9t-4qs"/>
+                                    <constraint firstItem="O86-4R-fXa" firstAttribute="bottom" secondItem="KZ3-jc-MQw" secondAttribute="bottom" constant="-16" id="Sfo-CX-H7s"/>
+                                    <constraint firstItem="g0B-tZ-t8f" firstAttribute="trailing" secondItem="KZ3-jc-MQw" secondAttribute="trailing" constant="-16" id="TcW-z0-7s4"/>
+                                    <constraint firstItem="g0B-tZ-t8f" firstAttribute="bottom" secondItem="KZ3-jc-MQw" secondAttribute="bottom" constant="-28" id="V3d-V7-AgO"/>
+                                    <constraint firstItem="hH6-Bm-R5X" firstAttribute="centerX" secondItem="KZ3-jc-MQw" secondAttribute="centerX" constant="-60" id="Yu7-9r-SIY"/>
+                                    <constraint firstItem="hH6-Bm-R5X" firstAttribute="top" secondItem="KZ3-jc-MQw" secondAttribute="top" constant="120" id="jWS-Xk-f4I"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="KZ3-jc-MQw" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="B7F-Jb-3zX"/>
+                            <constraint firstItem="KZ3-jc-MQw" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="H4c-nW-S7Y"/>
+                            <constraint firstItem="KZ3-jc-MQw" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.7" id="Q3d-wg-uMC"/>
+                            <constraint firstItem="KZ3-jc-MQw" firstAttribute="height" secondItem="KZ3-jc-MQw" secondAttribute="width" multiplier="1" id="dfB-eB-1mq"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="tZ6-bH-Vph"/>
                     </view>
                 </viewController>

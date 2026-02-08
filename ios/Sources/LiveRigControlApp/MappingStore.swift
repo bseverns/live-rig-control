@@ -14,14 +14,22 @@ final class MappingStore: ObservableObject {
     @Published var oscHostHint: String?
     @Published var profileIssues: [String: [String]] = [:]
     @Published var sliderValues: [String: Int] = [:]
+    @Published var isLoading: Bool = true
+    private var overlayDeadline: TimeInterval?
 
     let midi = MidiManager()
     let osc = OscClient()
     let logs = LogStore()
     private var profileControls: [String: ProfileControlState] = [:]
     private var preferredProfileId: String?
+    private var lastSliderSend: [String: TimeInterval] = [:]
+    private let sliderSendInterval: TimeInterval = 0.02
+    private var pendingSliderValues: [String: Int] = [:]
+    private var pendingSliderWorkItems: [String: DispatchWorkItem] = [:]
 
     init() {
+        let now = ProcessInfo.processInfo.systemUptime
+        overlayDeadline = now + 0.8
         preferredProfileId = UserDefaults.standard.string(forKey: Self.selectedProfileKey)
         oscEnabled = UserDefaults.standard.bool(forKey: Self.oscEnabledKey)
         oscHost = OscHostStorage.loadDefault()
@@ -50,6 +58,7 @@ final class MappingStore: ObservableObject {
     }
 
     func loadMappings() async {
+        isLoading = true
         #if SWIFT_PACKAGE
         let url = Bundle.module.url(forResource: "mappings", withExtension: "json")
             ?? Bundle.main.url(forResource: "mappings", withExtension: "json")
@@ -57,6 +66,7 @@ final class MappingStore: ObservableObject {
         let url = Bundle.main.url(forResource: "mappings", withExtension: "json")
         #endif
         guard let url else {
+            finishLoading()
             return
         }
 
@@ -83,6 +93,7 @@ final class MappingStore: ObservableObject {
             logs.add("Failed to load mappings.json: \(error.localizedDescription)")
             print("Failed to load mappings.json:", error)
         }
+        finishLoading()
     }
 
     func selectProfile(_ id: String) {
@@ -178,16 +189,7 @@ final class MappingStore: ObservableObject {
 
         sliderValues[pad.id] = clamped
         if let midiMapping = pad.midi {
-            switch midiMapping.type {
-            case "cc":
-                guard let cc = midiMapping.cc else { return }
-                midi.sendCC(channel: midiMapping.channel, cc: cc, value: clamped)
-                logs.add("MIDI CC \(cc) ch \(midiMapping.channel) = \(clamped)")
-            case "program":
-                sendProgramChangeForPad(pad, program: clamped)
-            default:
-                break
-            }
+            sendSliderValue(for: pad, midiMapping: midiMapping, value: clamped)
         }
     }
 
@@ -421,6 +423,87 @@ final class MappingStore: ObservableObject {
             logs.add("Profile \(profile.id) has \(messages.count) issue(s)")
         }
         return messages
+    }
+
+    private func finishLoading() {
+        let now = ProcessInfo.processInfo.systemUptime
+        let deadline = overlayDeadline ?? now
+        let delay = max(0, deadline - now)
+        if delay == 0 {
+            isLoading = false
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+                self?.isLoading = false
+            }
+        }
+    }
+
+    private func sendSliderValue(for pad: Pad, midiMapping: MidiMapping, value: Int) {
+        let now = ProcessInfo.processInfo.systemUptime
+        let last = lastSliderSend[pad.id] ?? 0
+        let elapsed = now - last
+
+        if elapsed >= sliderSendInterval {
+            lastSliderSend[pad.id] = now
+            sendMidiForSlider(pad: pad, midiMapping: midiMapping, value: value)
+            return
+        }
+
+        pendingSliderValues[pad.id] = value
+        if pendingSliderWorkItems[pad.id] == nil {
+            let delay = max(sliderSendInterval - elapsed, 0.0)
+            let work = DispatchWorkItem { [weak self] in
+                self?.flushPendingSlider(for: pad.id, midiMapping: midiMapping)
+            }
+            pendingSliderWorkItems[pad.id] = work
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: work)
+        }
+    }
+
+    private func flushPendingSlider(for padId: String, midiMapping: MidiMapping) {
+        pendingSliderWorkItems[padId] = nil
+        guard let value = pendingSliderValues.removeValue(forKey: padId) else { return }
+        lastSliderSend[padId] = ProcessInfo.processInfo.systemUptime
+        sendMidiForSlider(padId: padId, midiMapping: midiMapping, value: value)
+    }
+
+    private func sendMidiForSlider(pad: Pad, midiMapping: MidiMapping, value: Int) {
+        sendMidiForSlider(padId: pad.id, midiMapping: midiMapping, value: value)
+    }
+
+    private func sendMidiForSlider(padId: String, midiMapping: MidiMapping, value: Int) {
+        switch midiMapping.type {
+        case "cc":
+            guard let cc = midiMapping.cc else { return }
+            midi.sendCC(channel: midiMapping.channel, cc: cc, value: value)
+            logs.add("MIDI CC \(cc) ch \(midiMapping.channel) = \(value)")
+        case "program":
+            sendProgramChangeForPadId(padId, midiMapping: midiMapping, program: value)
+        default:
+            break
+        }
+    }
+
+    private func sendProgramChangeForPadId(_ padId: String, midiMapping: MidiMapping, program: Int) {
+        let mode = midiMapping.programBankMode ?? "none"
+        let bankMsb: Int?
+        let bankLsb: Int?
+        switch mode {
+        case "msb":
+            bankMsb = midiMapping.bankMsb
+            bankLsb = nil
+        case "lsb":
+            bankMsb = nil
+            bankLsb = midiMapping.bankLsb
+        case "both":
+            bankMsb = midiMapping.bankMsb
+            bankLsb = midiMapping.bankLsb
+        default:
+            bankMsb = nil
+            bankLsb = nil
+        }
+        midi.sendProgramChange(channel: midiMapping.channel, program: program, bankMsb: bankMsb, bankLsb: bankLsb)
+        logs.add("MIDI Program ch \(midiMapping.channel) = \(program)")
     }
 }
 

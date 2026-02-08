@@ -1,915 +1,512 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>archiveVersion</key>
-	<string>1</string>
-	<key>classes</key>
-	<dict/>
-	<key>objectVersion</key>
-	<string>56</string>
-	<key>objects</key>
-	<dict>
-		<key>A80AEB12D44F4DDBB2C13339</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>534C3DB6ADB04D3B9E36A05E</string>
-		</dict>
-		<key>874109F92F824650BF92489D</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>3BF189A2076E4ED5848C56D4</string>
-		</dict>
-		<key>2741EECFF85A4FA990EF9D6C</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>920B2AFAEB994AEAA7FEE7D5</string>
-		</dict>
-		<key>E7EA2AC670FD423D813F4D30</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>2765F4E594324C1A862C17BD</string>
-		</dict>
-		<key>2A291BBC43C440409F68FF81</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>B2EFDF4D9CB54958A7C691E9</string>
-		</dict>
-		<key>D3F44F381B234FA19B639C66</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>154EAFCF74C1480CACB3C4AC</string>
-		</dict>
-		<key>6B594F460A9A4570B4FDE31B</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>FE10B06F2DD34F3A894BB621</string>
-		</dict>
-		<key>CF6000D6385C4444823FBAF3</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>3A7AF62E41A74971BCA03B4B</string>
-		</dict>
-		<key>5B658BDD88D44C55BCB997CE</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>7D40A78358B440849B58DF74</string>
-		</dict>
-		<key>17A18A4094B34DA48FDEEEAC</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>240B3CDDC4D046E0B38C7386</string>
-		</dict>
-		<key>CDDC45AD55134FFB8D3257D4</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>1895E88763C24D8C87A81078</string>
-		</dict>
-		<key>89F725E456AD44229A0A0359</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>8734FBF86FBE44368E23E58F</string>
-		</dict>
-		<key>617480B859304D6F9085836E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>02005BEA0CD946FDAA89665D</string>
-		</dict>
-		<key>DF828E6F73D9423685B10C87</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>2AAB262733E24DCA8C4F4D6D</string>
-		</dict>
-		<key>80F642D6C8B44CE1A69A49B8</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-			<key>fileRef</key>
-			<string>C71A20D182AC4DDDB53A51E5</string>
-		</dict>
-		<key>534C3DB6ADB04D3B9E36A05E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>ContentView.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>3BF189A2076E4ED5848C56D4</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>LiveRigControlApp.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>920B2AFAEB994AEAA7FEE7D5</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>LogStore.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2765F4E594324C1A862C17BD</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>MappingStore.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>B2EFDF4D9CB54958A7C691E9</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>MidiManager.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>154EAFCF74C1480CACB3C4AC</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>Models.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>FE10B06F2DD34F3A894BB621</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>OscClient.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>3A7AF62E41A74971BCA03B4B</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>OscHostStorage.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>7D40A78358B440849B58DF74</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>QRScannerView.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>240B3CDDC4D046E0B38C7386</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.json</string>
-			<key>path</key>
-			<string>mappings.json</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>1895E88763C24D8C87A81078</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>folder.assetcatalog</string>
-			<key>path</key>
-			<string>Assets.xcassets</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>8734FBF86FBE44368E23E58F</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>file.storyboard</string>
-			<key>path</key>
-			<string>LaunchScreen.storyboard</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>DEB6C65474984BC386B23E8F</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.plist.xml</string>
-			<key>path</key>
-			<string>Info.plist</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>02005BEA0CD946FDAA89665D</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>MappingValidatorAppTests.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>2AAB262733E24DCA8C4F4D6D</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.swift</string>
-			<key>path</key>
-			<string>MappingValidator.swift</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C71A20D182AC4DDDB53A51E5</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.json</string>
-			<key>path</key>
-			<string>mappings.json</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>A9CACE7C0F094938A492FCED</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>explicitFileType</key>
-			<string>wrapper.application</string>
-			<key>path</key>
-			<string>LiveRigControlApp.app</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>7C9562DF86694CCD8CF2AC6D</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>explicitFileType</key>
-			<string>wrapper.cfbundle</string>
-			<key>path</key>
-			<string>LiveRigControlAppTests.xctest</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>A8E0B9C5F7EB453F8940FF7D</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>240B3CDDC4D046E0B38C7386</string>
-			</array>
-			<key>name</key>
-			<string>Resources</string>
-			<key>path</key>
-			<string>Resources</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>76F73F7872CA46E6B0DE4B71</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>534C3DB6ADB04D3B9E36A05E</string>
-				<string>3BF189A2076E4ED5848C56D4</string>
-				<string>920B2AFAEB994AEAA7FEE7D5</string>
-				<string>2765F4E594324C1A862C17BD</string>
-				<string>B2EFDF4D9CB54958A7C691E9</string>
-				<string>154EAFCF74C1480CACB3C4AC</string>
-				<string>FE10B06F2DD34F3A894BB621</string>
-				<string>3A7AF62E41A74971BCA03B4B</string>
-				<string>7D40A78358B440849B58DF74</string>
-				<string>A8E0B9C5F7EB453F8940FF7D</string>
-			</array>
-			<key>name</key>
-			<string>LiveRigControlApp</string>
-			<key>path</key>
-			<string>Sources/LiveRigControlApp</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>6EC5B39C57434BA7896BD725</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>DEB6C65474984BC386B23E8F</string>
-				<string>1895E88763C24D8C87A81078</string>
-				<string>8734FBF86FBE44368E23E58F</string>
-			</array>
-			<key>name</key>
-			<string>App</string>
-			<key>path</key>
-			<string>App</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F7C32FDEB4BC488EA0A54950</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>02005BEA0CD946FDAA89665D</string>
-			</array>
-			<key>name</key>
-			<string>AppTests</string>
-			<key>path</key>
-			<string>AppTests</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>6F3E4C631D544329BD666EB4</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>2AAB262733E24DCA8C4F4D6D</string>
-			</array>
-			<key>name</key>
-			<string>MappingValidator</string>
-			<key>path</key>
-			<string>Sources/MappingValidator</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>6893E9655BE7423A9407AF3A</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>C71A20D182AC4DDDB53A51E5</string>
-			</array>
-			<key>name</key>
-			<string>Fixtures</string>
-			<key>path</key>
-			<string>Tests/fixtures</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>060EEEADC3204FDC838D0A06</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>F7C32FDEB4BC488EA0A54950</string>
-				<string>6F3E4C631D544329BD666EB4</string>
-				<string>6893E9655BE7423A9407AF3A</string>
-			</array>
-			<key>name</key>
-			<string>Tests</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>CBBF07EB2DA44B08A6147449</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>A9CACE7C0F094938A492FCED</string>
-				<string>7C9562DF86694CCD8CF2AC6D</string>
-			</array>
-			<key>name</key>
-			<string>Products</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>859083F90B634196A177B810</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>children</key>
-			<array>
-				<string>6EC5B39C57434BA7896BD725</string>
-				<string>76F73F7872CA46E6B0DE4B71</string>
-				<string>060EEEADC3204FDC838D0A06</string>
-				<string>CBBF07EB2DA44B08A6147449</string>
-			</array>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>4F0FDD830A18462F8AB6347E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXContainerItemProxy</string>
-			<key>containerPortal</key>
-			<string>BB2BE82810104CD5B0752377</string>
-			<key>proxyType</key>
-			<string>1</string>
-			<key>remoteGlobalIDString</key>
-			<string>B91188D935F84C78AE92B689</string>
-			<key>remoteInfo</key>
-			<string>LiveRigControlApp</string>
-		</dict>
-		<key>97E81BE10ABE4E1D88E632EE</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXTargetDependency</string>
-			<key>target</key>
-			<string>B91188D935F84C78AE92B689</string>
-			<key>targetProxy</key>
-			<string>4F0FDD830A18462F8AB6347E</string>
-		</dict>
-		<key>D5F864093BFC4432A9F7EF57</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXResourcesBuildPhase</string>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>17A18A4094B34DA48FDEEEAC</string>
-				<string>CDDC45AD55134FFB8D3257D4</string>
-				<string>89F725E456AD44229A0A0359</string>
-			</array>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>149CDB25E6C942C1B42AD483</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXResourcesBuildPhase</string>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>80F642D6C8B44CE1A69A49B8</string>
-			</array>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>726FF108D9B2416CA2DAA161</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXSourcesBuildPhase</string>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>A80AEB12D44F4DDBB2C13339</string>
-				<string>874109F92F824650BF92489D</string>
-				<string>2741EECFF85A4FA990EF9D6C</string>
-				<string>E7EA2AC670FD423D813F4D30</string>
-				<string>2A291BBC43C440409F68FF81</string>
-				<string>D3F44F381B234FA19B639C66</string>
-				<string>6B594F460A9A4570B4FDE31B</string>
-				<string>CF6000D6385C4444823FBAF3</string>
-				<string>5B658BDD88D44C55BCB997CE</string>
-			</array>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>26D277CBBABA4586A2DB50B6</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXSourcesBuildPhase</string>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>617480B859304D6F9085836E</string>
-				<string>DF828E6F73D9423685B10C87</string>
-			</array>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>4AFA4352C2ED497F80887F5D</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFrameworksBuildPhase</string>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>3E3F0973F94F4E18B5AD82B1</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFrameworksBuildPhase</string>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array/>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>B91188D935F84C78AE92B689</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXNativeTarget</string>
-			<key>buildConfigurationList</key>
-			<string>B6DF9E0B371B42E19F0A397D</string>
-			<key>buildPhases</key>
-			<array>
-				<string>726FF108D9B2416CA2DAA161</string>
-				<string>4AFA4352C2ED497F80887F5D</string>
-				<string>D5F864093BFC4432A9F7EF57</string>
-			</array>
-			<key>buildRules</key>
-			<array/>
-			<key>dependencies</key>
-			<array/>
-			<key>name</key>
-			<string>LiveRigControlApp</string>
-			<key>productName</key>
-			<string>LiveRigControlApp</string>
-			<key>productReference</key>
-			<string>A9CACE7C0F094938A492FCED</string>
-			<key>productType</key>
-			<string>com.apple.product-type.application</string>
-		</dict>
-		<key>054980E86FC24DBCA448849C</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXNativeTarget</string>
-			<key>buildConfigurationList</key>
-			<string>EDC69FF147EF480B80098BB7</string>
-			<key>buildPhases</key>
-			<array>
-				<string>26D277CBBABA4586A2DB50B6</string>
-				<string>3E3F0973F94F4E18B5AD82B1</string>
-				<string>149CDB25E6C942C1B42AD483</string>
-			</array>
-			<key>buildRules</key>
-			<array/>
-			<key>dependencies</key>
-			<array>
-				<string>97E81BE10ABE4E1D88E632EE</string>
-			</array>
-			<key>name</key>
-			<string>LiveRigControlAppTests</string>
-			<key>productName</key>
-			<string>LiveRigControlAppTests</string>
-			<key>productReference</key>
-			<string>7C9562DF86694CCD8CF2AC6D</string>
-			<key>productType</key>
-			<string>com.apple.product-type.bundle.unit-test</string>
-		</dict>
-		<key>BB2BE82810104CD5B0752377</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXProject</string>
-			<key>attributes</key>
-			<dict>
-				<key>BuildIndependentTargetsInParallel</key>
-				<string>1</string>
-				<key>LastSwiftUpdateCheck</key>
-				<string>1500</string>
-				<key>LastUpgradeCheck</key>
-				<string>1500</string>
-			</dict>
-			<key>buildConfigurationList</key>
-			<string>C1633092DD8F442D9EF393C0</string>
-			<key>compatibilityVersion</key>
-			<string>Xcode 15.0</string>
-			<key>developmentRegion</key>
-			<string>en</string>
-			<key>hasScannedForEncodings</key>
-			<string>0</string>
-			<key>knownRegions</key>
-			<array>
-				<string>en</string>
-				<string>Base</string>
-			</array>
-			<key>mainGroup</key>
-			<string>859083F90B634196A177B810</string>
-			<key>productRefGroup</key>
-			<string>CBBF07EB2DA44B08A6147449</string>
-			<key>projectDirPath</key>
-			<string></string>
-			<key>projectRoot</key>
-			<string></string>
-			<key>targets</key>
-			<array>
-				<string>B91188D935F84C78AE92B689</string>
-				<string>054980E86FC24DBCA448849C</string>
-			</array>
-		</dict>
-		<key>E53718DE3B9D4019A6BCC9BC</key>
-		<dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>CODE_SIGN_STYLE</key>
-				<string>Automatic</string>
-				<key>DEVELOPMENT_TEAM</key>
-				<string></string>
-				<key>ENABLE_PREVIEWS</key>
-				<string>YES</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>17.0</string>
-				<key>SWIFT_VERSION</key>
-				<string>5.9</string>
-				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>2</string>
-			</dict>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-		<key>A325C55E02024D6DA868619E</key>
-		<dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>CODE_SIGN_STYLE</key>
-				<string>Automatic</string>
-				<key>DEVELOPMENT_TEAM</key>
-				<string></string>
-				<key>ENABLE_PREVIEWS</key>
-				<string>YES</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>17.0</string>
-				<key>SWIFT_VERSION</key>
-				<string>5.9</string>
-				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>2</string>
-			</dict>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-		<key>969E7DA9A8D647CA850220A2</key>
-		<dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
-				<string>AppIcon</string>
-				<key>CLANG_ENABLE_MODULES</key>
-				<string>YES</string>
-				<key>CODE_SIGN_STYLE</key>
-				<string>Automatic</string>
-				<key>CURRENT_PROJECT_VERSION</key>
-				<string>1</string>
-				<key>DEVELOPMENT_TEAM</key>
-				<string></string>
-				<key>INFOPLIST_FILE</key>
-				<string>App/Info.plist</string>
-				<key>LD_RUNPATH_SEARCH_PATHS</key>
-				<array>
-					<string>$(inherited)</string>
-					<string>@executable_path/Frameworks</string>
-				</array>
-				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
-				<string>com.bseverns.LiveRigControlApp</string>
-				<key>PRODUCT_NAME</key>
-				<string>LiveRigControlApp</string>
-				<key>SUPPORTED_PLATFORMS</key>
-				<string>iphoneos iphonesimulator</string>
-				<key>SWIFT_ACTIVE_COMPILATION_CONDITIONS</key>
-				<string>DEBUG</string>
-				<key>SWIFT_VERSION</key>
-				<string>5.9</string>
-				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>2</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>17.0</string>
-			</dict>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-		<key>76BE44875DBF45C9934F1AB8</key>
-		<dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>ASSETCATALOG_COMPILER_APPICON_NAME</key>
-				<string>AppIcon</string>
-				<key>CLANG_ENABLE_MODULES</key>
-				<string>YES</string>
-				<key>CODE_SIGN_STYLE</key>
-				<string>Automatic</string>
-				<key>CURRENT_PROJECT_VERSION</key>
-				<string>1</string>
-				<key>DEVELOPMENT_TEAM</key>
-				<string></string>
-				<key>INFOPLIST_FILE</key>
-				<string>App/Info.plist</string>
-				<key>LD_RUNPATH_SEARCH_PATHS</key>
-				<array>
-					<string>$(inherited)</string>
-					<string>@executable_path/Frameworks</string>
-				</array>
-				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
-				<string>com.bseverns.LiveRigControlApp</string>
-				<key>PRODUCT_NAME</key>
-				<string>LiveRigControlApp</string>
-				<key>SUPPORTED_PLATFORMS</key>
-				<string>iphoneos iphonesimulator</string>
-				<key>SWIFT_VERSION</key>
-				<string>5.9</string>
-				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>2</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>17.0</string>
-			</dict>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-		<key>1AE27320A9484C5894F5B24D</key>
-		<dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>CLANG_ENABLE_MODULES</key>
-				<string>YES</string>
-				<key>CODE_SIGN_STYLE</key>
-				<string>Automatic</string>
-				<key>CURRENT_PROJECT_VERSION</key>
-				<string>1</string>
-				<key>DEVELOPMENT_TEAM</key>
-				<string></string>
-				<key>GENERATE_INFOPLIST_FILE</key>
-				<string>YES</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>17.0</string>
-				<key>LD_RUNPATH_SEARCH_PATHS</key>
-				<array>
-					<string>$(inherited)</string>
-					<string>@executable_path/Frameworks</string>
-					<string>@loader_path/Frameworks</string>
-				</array>
-				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
-				<string>com.bseverns.LiveRigControlAppTests</string>
-				<key>PRODUCT_NAME</key>
-				<string>LiveRigControlAppTests</string>
-				<key>SUPPORTED_PLATFORMS</key>
-				<string>iphoneos iphonesimulator</string>
-				<key>SWIFT_ACTIVE_COMPILATION_CONDITIONS</key>
-				<string>DEBUG</string>
-				<key>SWIFT_VERSION</key>
-				<string>5.9</string>
-				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>2</string>
-				<key>TEST_HOST</key>
-				<string>$(BUILT_PRODUCTS_DIR)/LiveRigControlApp.app/LiveRigControlApp</string>
-				<key>BUNDLE_LOADER</key>
-				<string>$(TEST_HOST)</string>
-			</dict>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-		<key>88D49DC7D8B347BF9698958F</key>
-		<dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>CLANG_ENABLE_MODULES</key>
-				<string>YES</string>
-				<key>CODE_SIGN_STYLE</key>
-				<string>Automatic</string>
-				<key>CURRENT_PROJECT_VERSION</key>
-				<string>1</string>
-				<key>DEVELOPMENT_TEAM</key>
-				<string></string>
-				<key>GENERATE_INFOPLIST_FILE</key>
-				<string>YES</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>17.0</string>
-				<key>LD_RUNPATH_SEARCH_PATHS</key>
-				<array>
-					<string>$(inherited)</string>
-					<string>@executable_path/Frameworks</string>
-					<string>@loader_path/Frameworks</string>
-				</array>
-				<key>PRODUCT_BUNDLE_IDENTIFIER</key>
-				<string>com.bseverns.LiveRigControlAppTests</string>
-				<key>PRODUCT_NAME</key>
-				<string>LiveRigControlAppTests</string>
-				<key>SUPPORTED_PLATFORMS</key>
-				<string>iphoneos iphonesimulator</string>
-				<key>SWIFT_VERSION</key>
-				<string>5.9</string>
-				<key>TARGETED_DEVICE_FAMILY</key>
-				<string>2</string>
-				<key>TEST_HOST</key>
-				<string>$(BUILT_PRODUCTS_DIR)/LiveRigControlApp.app/LiveRigControlApp</string>
-				<key>BUNDLE_LOADER</key>
-				<string>$(TEST_HOST)</string>
-			</dict>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-		<key>C1633092DD8F442D9EF393C0</key>
-		<dict>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-			<key>buildConfigurations</key>
-			<array>
-				<string>E53718DE3B9D4019A6BCC9BC</string>
-				<string>A325C55E02024D6DA868619E</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Debug</string>
-		</dict>
-		<key>B6DF9E0B371B42E19F0A397D</key>
-		<dict>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-			<key>buildConfigurations</key>
-			<array>
-				<string>969E7DA9A8D647CA850220A2</string>
-				<string>76BE44875DBF45C9934F1AB8</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Debug</string>
-		</dict>
-		<key>EDC69FF147EF480B80098BB7</key>
-		<dict>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-			<key>buildConfigurations</key>
-			<array>
-				<string>1AE27320A9484C5894F5B24D</string>
-				<string>88D49DC7D8B347BF9698958F</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Debug</string>
-		</dict>
-	</dict>
-	<key>rootObject</key>
-	<string>BB2BE82810104CD5B0752377</string>
-</dict>
-</plist>
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		17A18A4094B34DA48FDEEEAC /* mappings.json in Resources */ = {isa = PBXBuildFile; fileRef = 240B3CDDC4D046E0B38C7386 /* mappings.json */; };
+		2741EECFF85A4FA990EF9D6C /* LogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920B2AFAEB994AEAA7FEE7D5 /* LogStore.swift */; };
+		2A291BBC43C440409F68FF81 /* MidiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EFDF4D9CB54958A7C691E9 /* MidiManager.swift */; };
+		5B658BDD88D44C55BCB997CE /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D40A78358B440849B58DF74 /* QRScannerView.swift */; };
+		617480B859304D6F9085836E /* MappingValidatorAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02005BEA0CD946FDAA89665D /* MappingValidatorAppTests.swift */; };
+		6B594F460A9A4570B4FDE31B /* OscClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE10B06F2DD34F3A894BB621 /* OscClient.swift */; };
+		80F642D6C8B44CE1A69A49B8 /* mappings.json in Resources */ = {isa = PBXBuildFile; fileRef = C71A20D182AC4DDDB53A51E5 /* mappings.json */; };
+		874109F92F824650BF92489D /* LiveRigControlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF189A2076E4ED5848C56D4 /* LiveRigControlApp.swift */; };
+		89F725E456AD44229A0A0359 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8734FBF86FBE44368E23E58F /* LaunchScreen.storyboard */; };
+		A80AEB12D44F4DDBB2C13339 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C3DB6ADB04D3B9E36A05E /* ContentView.swift */; };
+		CDDC45AD55134FFB8D3257D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1895E88763C24D8C87A81078 /* Assets.xcassets */; };
+		CF6000D6385C4444823FBAF3 /* OscHostStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AF62E41A74971BCA03B4B /* OscHostStorage.swift */; };
+		D3F44F381B234FA19B639C66 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 154EAFCF74C1480CACB3C4AC /* Models.swift */; };
+		DF828E6F73D9423685B10C87 /* MappingValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAB262733E24DCA8C4F4D6D /* MappingValidator.swift */; };
+		E7EA2AC670FD423D813F4D30 /* MappingStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2765F4E594324C1A862C17BD /* MappingStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4F0FDD830A18462F8AB6347E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB2BE82810104CD5B0752377 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B91188D935F84C78AE92B689;
+			remoteInfo = LiveRigControlApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		02005BEA0CD946FDAA89665D /* MappingValidatorAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingValidatorAppTests.swift; sourceTree = "<group>"; };
+		154EAFCF74C1480CACB3C4AC /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		1895E88763C24D8C87A81078 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		240B3CDDC4D046E0B38C7386 /* mappings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mappings.json; sourceTree = "<group>"; };
+		2765F4E594324C1A862C17BD /* MappingStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingStore.swift; sourceTree = "<group>"; };
+		2AAB262733E24DCA8C4F4D6D /* MappingValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingValidator.swift; sourceTree = "<group>"; };
+		3A7AF62E41A74971BCA03B4B /* OscHostStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OscHostStorage.swift; sourceTree = "<group>"; };
+		3BF189A2076E4ED5848C56D4 /* LiveRigControlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveRigControlApp.swift; sourceTree = "<group>"; };
+		534C3DB6ADB04D3B9E36A05E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7C9562DF86694CCD8CF2AC6D /* LiveRigControlAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = LiveRigControlAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D40A78358B440849B58DF74 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		8734FBF86FBE44368E23E58F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		920B2AFAEB994AEAA7FEE7D5 /* LogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStore.swift; sourceTree = "<group>"; };
+		A9CACE7C0F094938A492FCED /* LiveRigControlApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = LiveRigControlApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2EFDF4D9CB54958A7C691E9 /* MidiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiManager.swift; sourceTree = "<group>"; };
+		C71A20D182AC4DDDB53A51E5 /* mappings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = mappings.json; sourceTree = "<group>"; };
+		DEB6C65474984BC386B23E8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE10B06F2DD34F3A894BB621 /* OscClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OscClient.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3E3F0973F94F4E18B5AD82B1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4AFA4352C2ED497F80887F5D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		060EEEADC3204FDC838D0A06 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				F7C32FDEB4BC488EA0A54950 /* AppTests */,
+				6F3E4C631D544329BD666EB4 /* MappingValidator */,
+				6893E9655BE7423A9407AF3A /* Fixtures */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
+		6893E9655BE7423A9407AF3A /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				C71A20D182AC4DDDB53A51E5 /* mappings.json */,
+			);
+			name = Fixtures;
+			path = Tests/fixtures;
+			sourceTree = "<group>";
+		};
+		6EC5B39C57434BA7896BD725 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				DEB6C65474984BC386B23E8F /* Info.plist */,
+				1895E88763C24D8C87A81078 /* Assets.xcassets */,
+				8734FBF86FBE44368E23E58F /* LaunchScreen.storyboard */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6F3E4C631D544329BD666EB4 /* MappingValidator */ = {
+			isa = PBXGroup;
+			children = (
+				2AAB262733E24DCA8C4F4D6D /* MappingValidator.swift */,
+			);
+			name = MappingValidator;
+			path = Sources/MappingValidator;
+			sourceTree = "<group>";
+		};
+		76F73F7872CA46E6B0DE4B71 /* LiveRigControlApp */ = {
+			isa = PBXGroup;
+			children = (
+				534C3DB6ADB04D3B9E36A05E /* ContentView.swift */,
+				3BF189A2076E4ED5848C56D4 /* LiveRigControlApp.swift */,
+				920B2AFAEB994AEAA7FEE7D5 /* LogStore.swift */,
+				2765F4E594324C1A862C17BD /* MappingStore.swift */,
+				B2EFDF4D9CB54958A7C691E9 /* MidiManager.swift */,
+				154EAFCF74C1480CACB3C4AC /* Models.swift */,
+				FE10B06F2DD34F3A894BB621 /* OscClient.swift */,
+				3A7AF62E41A74971BCA03B4B /* OscHostStorage.swift */,
+				7D40A78358B440849B58DF74 /* QRScannerView.swift */,
+				A8E0B9C5F7EB453F8940FF7D /* Resources */,
+			);
+			name = LiveRigControlApp;
+			path = Sources/LiveRigControlApp;
+			sourceTree = "<group>";
+		};
+		859083F90B634196A177B810 = {
+			isa = PBXGroup;
+			children = (
+				6EC5B39C57434BA7896BD725 /* App */,
+				76F73F7872CA46E6B0DE4B71 /* LiveRigControlApp */,
+				060EEEADC3204FDC838D0A06 /* Tests */,
+				CBBF07EB2DA44B08A6147449 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A8E0B9C5F7EB453F8940FF7D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				240B3CDDC4D046E0B38C7386 /* mappings.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CBBF07EB2DA44B08A6147449 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A9CACE7C0F094938A492FCED /* LiveRigControlApp.app */,
+				7C9562DF86694CCD8CF2AC6D /* LiveRigControlAppTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F7C32FDEB4BC488EA0A54950 /* AppTests */ = {
+			isa = PBXGroup;
+			children = (
+				02005BEA0CD946FDAA89665D /* MappingValidatorAppTests.swift */,
+			);
+			path = AppTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		054980E86FC24DBCA448849C /* LiveRigControlAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EDC69FF147EF480B80098BB7 /* Build configuration list for PBXNativeTarget "LiveRigControlAppTests" */;
+			buildPhases = (
+				26D277CBBABA4586A2DB50B6 /* Sources */,
+				3E3F0973F94F4E18B5AD82B1 /* Frameworks */,
+				149CDB25E6C942C1B42AD483 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				97E81BE10ABE4E1D88E632EE /* PBXTargetDependency */,
+			);
+			name = LiveRigControlAppTests;
+			productName = LiveRigControlAppTests;
+			productReference = 7C9562DF86694CCD8CF2AC6D /* LiveRigControlAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		B91188D935F84C78AE92B689 /* LiveRigControlApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B6DF9E0B371B42E19F0A397D /* Build configuration list for PBXNativeTarget "LiveRigControlApp" */;
+			buildPhases = (
+				726FF108D9B2416CA2DAA161 /* Sources */,
+				4AFA4352C2ED497F80887F5D /* Frameworks */,
+				D5F864093BFC4432A9F7EF57 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LiveRigControlApp;
+			productName = LiveRigControlApp;
+			productReference = A9CACE7C0F094938A492FCED /* LiveRigControlApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BB2BE82810104CD5B0752377 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2620;
+			};
+			buildConfigurationList = C1633092DD8F442D9EF393C0 /* Build configuration list for PBXProject "LiveRigControlApp" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 859083F90B634196A177B810;
+			productRefGroup = CBBF07EB2DA44B08A6147449 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B91188D935F84C78AE92B689 /* LiveRigControlApp */,
+				054980E86FC24DBCA448849C /* LiveRigControlAppTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		149CDB25E6C942C1B42AD483 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80F642D6C8B44CE1A69A49B8 /* mappings.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5F864093BFC4432A9F7EF57 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17A18A4094B34DA48FDEEEAC /* mappings.json in Resources */,
+				CDDC45AD55134FFB8D3257D4 /* Assets.xcassets in Resources */,
+				89F725E456AD44229A0A0359 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		26D277CBBABA4586A2DB50B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				617480B859304D6F9085836E /* MappingValidatorAppTests.swift in Sources */,
+				DF828E6F73D9423685B10C87 /* MappingValidator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		726FF108D9B2416CA2DAA161 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A80AEB12D44F4DDBB2C13339 /* ContentView.swift in Sources */,
+				874109F92F824650BF92489D /* LiveRigControlApp.swift in Sources */,
+				2741EECFF85A4FA990EF9D6C /* LogStore.swift in Sources */,
+				E7EA2AC670FD423D813F4D30 /* MappingStore.swift in Sources */,
+				2A291BBC43C440409F68FF81 /* MidiManager.swift in Sources */,
+				D3F44F381B234FA19B639C66 /* Models.swift in Sources */,
+				6B594F460A9A4570B4FDE31B /* OscClient.swift in Sources */,
+				CF6000D6385C4444823FBAF3 /* OscHostStorage.swift in Sources */,
+				5B658BDD88D44C55BCB997CE /* QRScannerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		97E81BE10ABE4E1D88E632EE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B91188D935F84C78AE92B689 /* LiveRigControlApp */;
+			targetProxy = 4F0FDD830A18462F8AB6347E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1AE27320A9484C5894F5B24D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bseverns.LiveRigControlAppTests;
+				PRODUCT_NAME = LiveRigControlAppTests;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LiveRigControlApp.app/LiveRigControlApp";
+			};
+			name = Debug;
+		};
+		76BE44875DBF45C9934F1AB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bseverns.LiveRigControlApp;
+				PRODUCT_NAME = LiveRigControlApp;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		88D49DC7D8B347BF9698958F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bseverns.LiveRigControlAppTests;
+				PRODUCT_NAME = LiveRigControlAppTests;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LiveRigControlApp.app/LiveRigControlApp";
+			};
+			name = Release;
+		};
+		969E7DA9A8D647CA850220A2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bseverns.LiveRigControlApp;
+				PRODUCT_NAME = LiveRigControlApp;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		A325C55E02024D6DA868619E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		E53718DE3B9D4019A6BCC9BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B6DF9E0B371B42E19F0A397D /* Build configuration list for PBXNativeTarget "LiveRigControlApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				969E7DA9A8D647CA850220A2 /* Debug */,
+				76BE44875DBF45C9934F1AB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C1633092DD8F442D9EF393C0 /* Build configuration list for PBXProject "LiveRigControlApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E53718DE3B9D4019A6BCC9BC /* Debug */,
+				A325C55E02024D6DA868619E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EDC69FF147EF480B80098BB7 /* Build configuration list for PBXNativeTarget "LiveRigControlAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AE27320A9484C5894F5B24D /* Debug */,
+				88D49DC7D8B347BF9698958F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BB2BE82810104CD5B0752377 /* Project object */;
+}
