@@ -50,8 +50,12 @@ final class MappingStore: ObservableObject {
     }
 
     func loadMappings() async {
+        #if SWIFT_PACKAGE
         let url = Bundle.module.url(forResource: "mappings", withExtension: "json")
             ?? Bundle.main.url(forResource: "mappings", withExtension: "json")
+        #else
+        let url = Bundle.main.url(forResource: "mappings", withExtension: "json")
+        #endif
         guard let url else {
             return
         }
