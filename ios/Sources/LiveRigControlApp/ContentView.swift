@@ -20,43 +20,51 @@ struct ContentView: View {
     @StateObject private var store = MappingStore()
 
     var body: some View {
-        VStack(spacing: 16) {
-            Text("Live Rig Control")
-                .font(.largeTitle)
-                .bold()
+        ZStack {
+            VStack(spacing: 12) {
+                Text("Live Rig Control")
+                    .font(.title2)
+                    .bold()
 
-            ConnectionBarView(store: store, midi: store.midi, osc: store.osc)
+                ConnectionBarView(store: store, midi: store.midi, osc: store.osc)
 
-            LogPanelView(logs: store.logs)
+                LogPanelView(logs: store.logs)
 
-            ProfileBarView(
-                profiles: store.profiles,
-                selectedId: store.selectedProfileId,
-                issues: store.profileIssues,
-                onSelect: store.selectProfile
-            )
-
-            ProfileIssuesView(
-                profileId: store.selectedProfileId,
-                issues: store.profileIssues
-            )
-
-            if let profile = store.selectedProfile {
-                PadGridView(
-                    profile: profile,
-                    padStates: store.padStates,
-                    sliderValue: store.sliderValue,
-                    onSliderChange: store.handleSliderChange,
-                    onPadTap: store.handlePadTap,
-                    onPadPress: store.handlePadPress,
-                    onPadRelease: store.handlePadRelease
+                ProfileBarView(
+                    profiles: store.profiles,
+                    selectedId: store.selectedProfileId,
+                    issues: store.profileIssues,
+                    onSelect: store.selectProfile
                 )
-            } else {
-                Text("No profile loaded")
-                    .foregroundStyle(.secondary)
+
+                ProfileIssuesView(
+                    profileId: store.selectedProfileId,
+                    issues: store.profileIssues
+                )
+
+                if let profile = store.selectedProfile {
+                    PadGridContainer(
+                        profile: profile,
+                        padStates: store.padStates,
+                        sliderValue: store.sliderValue,
+                        onSliderChange: store.handleSliderChange,
+                        onPadTap: store.handlePadTap,
+                        onPadPress: store.handlePadPress,
+                        onPadRelease: store.handlePadRelease
+                    )
+                } else {
+                    Text("No profile loaded")
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            if store.isLoading {
+                LoadingOverlayView()
             }
         }
-        .padding()
         .task {
             await store.loadMappings()
         }
@@ -344,6 +352,47 @@ struct ProfileIssuesView: View {
     }
 }
 
+struct PadGridContainer: View {
+    let profile: Profile
+    let padStates: [String: Bool]
+    let sliderValue: (Pad) -> Int
+    let onSliderChange: (Pad, Int) -> Void
+    let onPadTap: (Pad) -> Void
+    let onPadPress: (Pad) -> Void
+    let onPadRelease: (Pad) -> Void
+
+    var body: some View {
+        GeometryReader { proxy in
+            let spacing: CGFloat = 10
+            let cols = max(profile.gridSize?.first ?? 8, 1)
+            let targetCols = min(cols, 8)
+            let availableWidth = max(proxy.size.width, 320)
+            let computed = (availableWidth - spacing * CGFloat(targetCols - 1)) / CGFloat(targetCols)
+            let cellSize = max(88, floor(computed))
+            let gridWidth = max(availableWidth, CGFloat(cols) * cellSize + spacing * CGFloat(cols - 1))
+            let sliderHeight = max(104, cellSize * 1.15)
+
+            ScrollView([.vertical, .horizontal]) {
+                PadGridView(
+                    profile: profile,
+                    padStates: padStates,
+                    sliderValue: sliderValue,
+                    onSliderChange: onSliderChange,
+                    onPadTap: onPadTap,
+                    onPadPress: onPadPress,
+                    onPadRelease: onPadRelease,
+                    cellSize: cellSize,
+                    sliderHeight: sliderHeight,
+                    spacing: spacing
+                )
+                .frame(width: gridWidth, alignment: .leading)
+                .padding(.bottom, 12)
+            }
+            .scrollIndicators(.visible)
+        }
+    }
+}
+
 struct PadGridView: View {
     let profile: Profile
     let padStates: [String: Bool]
@@ -352,6 +401,9 @@ struct PadGridView: View {
     let onPadTap: (Pad) -> Void
     let onPadPress: (Pad) -> Void
     let onPadRelease: (Pad) -> Void
+    let cellSize: CGFloat
+    let sliderHeight: CGFloat
+    let spacing: CGFloat
 
     var body: some View {
         let rows = max(profile.gridSize?.last ?? 8, 1)
@@ -363,7 +415,7 @@ struct PadGridView: View {
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
         } else {
-            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+            Grid(horizontalSpacing: spacing, verticalSpacing: spacing) {
                 ForEach(0..<rows, id: \.self) { row in
                     GridRow {
                         ForEach(0..<cols, id: \.self) { col in
@@ -372,20 +424,24 @@ struct PadGridView: View {
                                     PadSliderView(
                                         pad: pad,
                                         value: sliderValue(pad),
-                                        onChange: { onSliderChange(pad, $0) }
+                                        onChange: { onSliderChange(pad, $0) },
+                                        minHeight: sliderHeight
                                     )
+                                    .frame(width: cellSize)
                                 } else {
                                     PadView(
                                         pad: pad,
                                         isOn: padStates[pad.id] ?? false,
                                         onTap: { onPadTap(pad) },
                                         onPress: { onPadPress(pad) },
-                                        onRelease: { onPadRelease(pad) }
+                                        onRelease: { onPadRelease(pad) },
+                                        minHeight: cellSize
                                     )
+                                    .frame(width: cellSize)
                                 }
                             } else {
                                 Color.clear
-                                    .frame(minHeight: 64)
+                                    .frame(width: cellSize, height: cellSize)
                             }
                         }
                     }
@@ -401,15 +457,16 @@ struct PadView: View {
     let onTap: () -> Void
     let onPress: () -> Void
     let onRelease: () -> Void
+    let minHeight: CGFloat
     @State private var isPressed: Bool = false
     private let haptic = HapticFeedback()
 
     var body: some View {
         Text(pad.label ?? pad.id)
-            .font(.headline)
+            .font(.subheadline)
             .multilineTextAlignment(.center)
             .lineLimit(2)
-            .frame(maxWidth: .infinity, minHeight: 64)
+            .frame(maxWidth: .infinity, minHeight: minHeight)
             .padding(8)
             .background(isOn ? Color.green.opacity(0.9) : Color.gray.opacity(0.15))
             .foregroundStyle(isOn ? .black : .primary)
@@ -448,6 +505,8 @@ struct PadSliderView: View {
     let pad: Pad
     let value: Int
     let onChange: (Int) -> Void
+    let minHeight: CGFloat
+    @State private var localValue: Double = 0
 
     private var minValue: Double { Double(pad.ui?.min ?? 0) }
     private var maxValue: Double { Double(pad.ui?.max ?? 127) }
@@ -457,25 +516,35 @@ struct PadSliderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(pad.label ?? pad.id)
-                .font(.caption)
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .lineLimit(2)
             Slider(
-                value: Binding(
-                    get: { Double(value) },
-                    set: { onChange(Int($0)) }
-                ),
+                value: $localValue,
                 in: minValue...maxValue,
                 step: stepValue
             )
+            .controlSize(.large)
+            .onChange(of: localValue) { _, newValue in
+                let intValue = Int(newValue.rounded())
+                if intValue != value {
+                    onChange(intValue)
+                }
+            }
+            .onChange(of: value) { _, newValue in
+                let next = Double(newValue)
+                if abs(next - localValue) > 0.001 {
+                    localValue = next
+                }
+            }
             if showValue {
                 Text("\(value)")
-                    .font(.caption2)
+                    .font(.footnote)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 64)
+        .frame(maxWidth: .infinity, minHeight: minHeight)
         .padding(8)
         .background(Color.gray.opacity(0.15))
         .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -483,6 +552,28 @@ struct PadSliderView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.gray.opacity(0.2), lineWidth: 1)
         )
+        .onAppear {
+            localValue = Double(value)
+        }
+    }
+}
+
+struct LoadingOverlayView: View {
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.2)
+                .ignoresSafeArea()
+            VStack(spacing: 12) {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                Text("Loading mappings…")
+                    .font(.headline)
+            }
+            .padding(20)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+        .transition(.opacity)
     }
 }
 
