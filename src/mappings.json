@@ -1175,7 +1175,368 @@
       ]
     },
     "drumStack": {
-      "label": "Drum Stack (Ch10)",
+      "label": "DrumKid Controls (Ch10)",
+      "gridSize": [
+        8,
+        2
+      ],
+      "pads": [
+        {
+          "id": "drumkid_cc16_chance",
+          "label": "Chance (CC16)",
+          "row": 0,
+          "col": 0,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 16,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc17_zoom",
+          "label": "Zoom (CC17)",
+          "row": 0,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 17,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc18_range",
+          "label": "Range (CC18)",
+          "row": 0,
+          "col": 2,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 18,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc19_midpoint",
+          "label": "Midpoint (CC19)",
+          "row": 0,
+          "col": 3,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 19,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc20_pitch",
+          "label": "Pitch (CC20)",
+          "row": 0,
+          "col": 4,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 20,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc21_crush",
+          "label": "Crush (CC21)",
+          "row": 0,
+          "col": 5,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 21,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc22_crop",
+          "label": "Crop (CC22)",
+          "row": 0,
+          "col": 6,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 22,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc23_drop",
+          "label": "Drop (CC23)",
+          "row": 0,
+          "col": 7,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 23,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc24_drone",
+          "label": "Drone (CC24)",
+          "row": 1,
+          "col": 0,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 24,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc25_modulate",
+          "label": "Modulate (CC25)",
+          "row": 1,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 25,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc26_tuning",
+          "label": "Tuning (CC26)",
+          "row": 1,
+          "col": 2,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 26,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc27_note",
+          "label": "Note (CC27)",
+          "row": 1,
+          "col": 3,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 27,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC27 is 'Note' but regular note commands are preferred."
+        },
+        {
+          "id": "drumkid_cc28_beat",
+          "label": "Beat (CC28)",
+          "row": 1,
+          "col": 4,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 28,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc29_beats_bar",
+          "label": "Beats/Bar (CC29)",
+          "row": 1,
+          "col": 5,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 29,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc30_swing",
+          "label": "Swing (CC30)",
+          "row": 1,
+          "col": 6,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 30,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+        },
+        {
+          "id": "drumkid_cc31_tempo",
+          "label": "Tempo (CC31)",
+          "row": 1,
+          "col": 7,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 31,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC31 (Tempo) ignored when DrumKid is synced to external clock."
+        }
+      ]
+    },
+    "drumStackNotes": {
+      "label": "Drum Stack Notes (Ch10)",
       "gridSize": [
         12,
         8
@@ -1273,361 +1634,9 @@
           "notes": "Global velocity for note pads in this profile."
         },
         {
-          "id": "drumkid_cc16_chance",
-          "label": "Chance (CC16)",
-          "row": 1,
-          "col": 0,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 16,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc17_zoom",
-          "label": "Zoom (CC17)",
-          "row": 1,
-          "col": 1,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 17,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc18_range",
-          "label": "Range (CC18)",
-          "row": 1,
-          "col": 2,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 18,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc19_midpoint",
-          "label": "Midpoint (CC19)",
-          "row": 1,
-          "col": 3,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 19,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc20_pitch",
-          "label": "Pitch (CC20)",
-          "row": 1,
-          "col": 4,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 20,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc21_crush",
-          "label": "Crush (CC21)",
-          "row": 1,
-          "col": 5,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 21,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc22_crop",
-          "label": "Crop (CC22)",
-          "row": 1,
-          "col": 6,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 22,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc23_drop",
-          "label": "Drop (CC23)",
-          "row": 1,
-          "col": 7,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 23,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc24_drone",
-          "label": "Drone (CC24)",
-          "row": 2,
-          "col": 0,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 24,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc25_modulate",
-          "label": "Modulate (CC25)",
-          "row": 2,
-          "col": 1,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 25,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc26_tuning",
-          "label": "Tuning (CC26)",
-          "row": 2,
-          "col": 2,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 26,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc27_note",
-          "label": "Note (CC27)",
-          "row": 2,
-          "col": 3,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 27,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC27 is 'Note' but regular note commands are preferred."
-        },
-        {
-          "id": "drumkid_cc28_beat",
-          "label": "Beat (CC28)",
-          "row": 2,
-          "col": 4,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 28,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc29_beats_bar",
-          "label": "Beats/Bar (CC29)",
-          "row": 2,
-          "col": 5,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 29,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc30_swing",
-          "label": "Swing (CC30)",
-          "row": 2,
-          "col": 6,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 30,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
-        },
-        {
-          "id": "drumkid_cc31_tempo",
-          "label": "Tempo (CC31)",
-          "row": 2,
-          "col": 7,
-          "midi": {
-            "type": "cc",
-            "channel": 10,
-            "cc": 31,
-            "onValue": 127,
-            "offValue": 0
-          },
-          "ui": {
-            "type": "slider",
-            "min": 0,
-            "max": 127,
-            "step": 1,
-            "initial": 0,
-            "showValue": true
-          },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC31 (Tempo) ignored when DrumKid is synced to external clock."
-        },
-        {
           "id": "drumkid_kick_vel",
           "label": "Kick Vel",
-          "row": 3,
+          "row": 1,
           "col": 0,
           "ui": {
             "type": "slider",
@@ -1644,7 +1653,7 @@
         {
           "id": "drumkid_click_vel",
           "label": "Click Vel",
-          "row": 3,
+          "row": 1,
           "col": 1,
           "ui": {
             "type": "slider",
@@ -1661,7 +1670,7 @@
         {
           "id": "drumkid_snare_vel",
           "label": "Snare Vel",
-          "row": 3,
+          "row": 1,
           "col": 2,
           "ui": {
             "type": "slider",
@@ -1678,7 +1687,7 @@
         {
           "id": "drumkid_hat_closed_vel",
           "label": "Hat Closed Vel",
-          "row": 3,
+          "row": 1,
           "col": 3,
           "ui": {
             "type": "slider",
@@ -1695,7 +1704,7 @@
         {
           "id": "drumkid_tom_vel",
           "label": "Tom Vel",
-          "row": 3,
+          "row": 1,
           "col": 4,
           "ui": {
             "type": "slider",
