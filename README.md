@@ -29,6 +29,7 @@ surface that consumes those mappings and sends real-time signals.
 
 - **Atlas interop snapshot:** [`atlas/interop.yaml`](atlas/interop.yaml)
 - **Field card (fast ops + failure modes):** [`docs/FIELD_CARD.md`](docs/FIELD_CARD.md)
+- **Control reference (what is being controlled, and why):** [`docs/03_control-reference.md`](docs/03_control-reference.md)
 
 ## Quick start
 
