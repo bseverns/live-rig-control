@@ -16,9 +16,38 @@ public struct Pad: Codable {
     public let row: Int?
     public let col: Int?
     public let toggle: Bool?
+    public let mode: String?
     public let midi: MidiMapping?
     public let osc: OscMapping?
     public let ui: UiMapping?
+    public let group: GroupMapping?
+}
+
+public struct GroupMapping: Codable {
+    public let id: String
+    public let mode: String?
+    public let exclusive: Bool?
+
+    public init(from decoder: Decoder) throws {
+        let singleValue = try decoder.singleValueContainer()
+        if let id = try? singleValue.decode(String.self) {
+            self.id = id
+            self.mode = "exclusive"
+            self.exclusive = true
+            return
+        }
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        mode = try container.decodeIfPresent(String.self, forKey: .mode)
+        exclusive = try container.decodeIfPresent(Bool.self, forKey: .exclusive)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case mode
+        case exclusive
+    }
 }
 
 public struct MidiMapping: Codable {
@@ -115,6 +144,10 @@ public struct MappingValidator {
 
                 if pad.midi == nil && pad.osc == nil && pad.ui == nil {
                     result.warnings.append("[\(profileId)] pad \(pad.id) has no midi/osc/ui mapping.")
+                }
+
+                if let group = pad.group, group.id.isEmpty {
+                    result.errors.append("[\(profileId)] pad \(pad.id) group.id missing.")
                 }
 
                 if let ui = pad.ui {

@@ -43,10 +43,12 @@ struct Pad: Codable, Identifiable {
     let row: Int?
     let col: Int?
     let toggle: Bool?
+    let mode: String?
     let midi: MidiMapping?
     let osc: OscMapping?
     let notes: String?
     let ui: UiMapping?
+    let group: GroupMapping?
 
     var isToggle: Bool {
         if ui?.type == "slider" {
@@ -55,7 +57,45 @@ struct Pad: Codable, Identifiable {
         if ui?.role == "patternBank" {
             return true
         }
-        return toggle ?? false
+        if let toggle {
+            return toggle
+        }
+        return mode == "toggle"
+    }
+}
+
+struct GroupMapping: Codable {
+    let id: String
+    let mode: String?
+    let exclusive: Bool?
+
+    init(id: String, mode: String? = nil, exclusive: Bool? = nil) {
+        self.id = id
+        self.mode = mode
+        self.exclusive = exclusive
+    }
+
+    init(from decoder: Decoder) throws {
+        let singleValue = try decoder.singleValueContainer()
+        if let id = try? singleValue.decode(String.self) {
+            self.init(id: id, mode: "exclusive", exclusive: true)
+            return
+        }
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        mode = try container.decodeIfPresent(String.self, forKey: .mode)
+        exclusive = try container.decodeIfPresent(Bool.self, forKey: .exclusive)
+    }
+
+    var isExclusive: Bool {
+        mode == "exclusive" || exclusive == true
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case mode
+        case exclusive
     }
 }
 

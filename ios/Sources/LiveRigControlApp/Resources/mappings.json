@@ -2794,6 +2794,264 @@
         }
       ]
     },
+    "seedbox": {
+      "label": "SeedBox (MN42 CC)",
+      "gridSize": [
+        4,
+        3
+      ],
+      "pads": [
+        {
+          "id": "seedbox_mode_local",
+          "label": "Local Clock",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 15,
+            "onValue": 0,
+            "offValue": 0
+          },
+          "group": {
+            "id": "seedbox_mode",
+            "mode": "exclusive",
+            "exclusive": true
+          },
+          "notes": "SeedBox mode preset: internal clock, no transport latch."
+        },
+        {
+          "id": "seedbox_mode_follow",
+          "label": "Follow Clock",
+          "row": 0,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 15,
+            "onValue": 1,
+            "offValue": 0
+          },
+          "group": {
+            "id": "seedbox_mode",
+            "mode": "exclusive",
+            "exclusive": true
+          },
+          "notes": "SeedBox mode preset: follow external clock."
+        },
+        {
+          "id": "seedbox_mode_follow_latch",
+          "label": "Follow+Latch",
+          "row": 0,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 15,
+            "onValue": 9,
+            "offValue": 0
+          },
+          "group": {
+            "id": "seedbox_mode",
+            "mode": "exclusive",
+            "exclusive": true
+          },
+          "notes": "SeedBox mode preset: follow external clock and latch transport."
+        },
+        {
+          "id": "seedbox_focus_seed",
+          "label": "Focus Seed",
+          "row": 0,
+          "col": 3,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 21
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MN42 param map CC21: divide 0-127 across the active SeedBox seed count."
+        },
+        {
+          "id": "seedbox_seed_pitch",
+          "label": "Pitch",
+          "row": 1,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 22
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MN42 param map CC22: maps 0-127 to roughly -24 to +24 semitones."
+        },
+        {
+          "id": "seedbox_seed_density",
+          "label": "Density",
+          "row": 1,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 23
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MN42 param map CC23: seed density macro."
+        },
+        {
+          "id": "seedbox_seed_probability",
+          "label": "Probability",
+          "row": 1,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 24
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 96,
+            "showValue": true
+          },
+          "notes": "MN42 param map CC24: seed probability macro."
+        },
+        {
+          "id": "seedbox_seed_jitter",
+          "label": "Jitter",
+          "row": 1,
+          "col": 3,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 25
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MN42 param map CC25: seed timing jitter macro."
+        },
+        {
+          "id": "seedbox_seed_tone",
+          "label": "Tone",
+          "row": 2,
+          "col": 0,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 26
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MN42 param map CC26: seed tone macro."
+        },
+        {
+          "id": "seedbox_seed_spread",
+          "label": "Spread",
+          "row": 2,
+          "col": 1,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 27
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MN42 param map CC27: seed stereo spread macro."
+        },
+        {
+          "id": "seedbox_seed_mutate",
+          "label": "Mutate",
+          "row": 2,
+          "col": 2,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 28
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MN42 param map CC28: seed mutation depth macro."
+        },
+        {
+          "id": "seedbox_quantize",
+          "label": "Quantize",
+          "row": 2,
+          "col": 3,
+          "toggle": true,
+          "midi": {
+            "type": "cc",
+            "channel": 1,
+            "cc": 18
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "SeedBox quantize control CC18. Value encoding follows the SeedBox MN42 map."
+        }
+      ]
+    },
     "mn42Slots": {
       "label": "MOARkNOBS-42 Slots (OSC Bridge)",
       "gridSize": [

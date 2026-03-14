@@ -99,8 +99,6 @@ final class MappingStore: ObservableObject {
     func selectProfile(_ id: String) {
         selectedProfileId = id
         UserDefaults.standard.set(id, forKey: Self.selectedProfileKey)
-        padStates = [:]
-        sliderValues = [:]
         syncPatternBankState()
     }
 
@@ -112,6 +110,10 @@ final class MappingStore: ObservableObject {
         }
         let isOn = padStates[pad.id] ?? false
         let nextState = !isOn
+
+        if nextState, let profile = selectedProfile {
+            enforceExclusiveGroup(for: pad, in: profile)
+        }
         padStates[pad.id] = nextState
 
         logs.add("Pad \(pad.id) \(nextState ? "on" : "off")")
@@ -297,6 +299,20 @@ final class MappingStore: ObservableObject {
         guard let bank = pad.ui?.bank else { return }
         setProfilePatternBank(bank, for: selectedProfileId)
         syncPatternBankState()
+    }
+
+    private func enforceExclusiveGroup(for pad: Pad, in profile: Profile) {
+        guard let group = pad.group, group.isExclusive else { return }
+
+        for other in profile.pads {
+            guard other.id != pad.id else { continue }
+            guard other.isToggle else { continue }
+            guard let otherGroup = other.group, otherGroup.id == group.id else { continue }
+
+            padStates[other.id] = false
+            sendMidiIfNeeded(for: other, state: false)
+            sendOscIfNeeded(for: other, state: false)
+        }
     }
 
     private func syncPatternBankState() {
