@@ -26,7 +26,13 @@ function makeOscUrl() {
   const host = window.location.hostname || "localhost";
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
   const port = 9001; // default OSC bridge WebSocket port
-  return `${protocol}://${host}:${port}`;
+  const url = new URL(`${protocol}://${host}:${port}`);
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("osc_token") || window.localStorage.getItem("oscBridgeToken");
+  if (token) {
+    url.searchParams.set("token", token);
+  }
+  return url.toString();
 }
 
 async function main() {

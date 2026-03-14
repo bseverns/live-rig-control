@@ -58,4 +58,12 @@ surface that consumes those mappings and sends real-time signals.
 5. Click pads in the grid. They send MIDI according to `src/mappings.json`. If
    the OSC bridge is running, OSC messages will also be emitted.
 
+## OSC bridge hardening defaults
+
+- The bridge now binds to `127.0.0.1` by default, not all interfaces.
+- Allowed browser origins default to `http://localhost:8080` and `http://127.0.0.1:8080`.
+- You can require a shared token with `BRIDGE_TOKEN`; the browser can pass it via
+  `?osc_token=...` in the page URL or `localStorage.oscBridgeToken`.
+- Bridge env examples live in [`server/.env.example`](server/.env.example).
+
 See `docs/01_architecture.md` for an overview of how this ties back into the rig.
