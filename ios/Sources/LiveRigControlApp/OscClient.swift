@@ -1,4 +1,5 @@
 import Foundation
+import Network
 
 @MainActor
 final class OscClient: ObservableObject {
@@ -12,26 +13,62 @@ final class OscClient: ObservableObject {
     @Published private(set) var queuedCount: Int = 0
     var onEvent: ((String) -> Void)?
 
+    private enum Endpoint {
+        case websocket(URL)
+        case udp(host: NWEndpoint.Host, port: NWEndpoint.Port, label: String)
+    }
+
+    private enum OutboundMessage {
+        case websocket(URLSessionWebSocketTask.Message)
+        case udp(Data)
+    }
+
+    private var session: URLSession?
     private var webSocketTask: URLSessionWebSocketTask?
+    private var udpConnection: NWConnection?
+    private let udpQueue = DispatchQueue(label: "LiveRigControlApp.OscClient.UDP")
     private var reconnectTask: Task<Void, Never>?
     private var allowReconnect = false
-    private var pendingMessages: [URLSessionWebSocketTask.Message] = []
+    private var currentEndpoint: Endpoint?
+    private var pendingMessages: [OutboundMessage] = []
     private let maxPendingMessages = 200
 
     func connect(host: String) async {
-        guard let url = makeOscUrl(host: host) else { return }
-        if webSocketTask != nil { return }
+        guard let resolved = resolveEndpoint(host: host) else { return }
+        if state != .disconnected, lastHost == resolved.normalizedHost {
+            return
+        }
 
+        reconnectTask?.cancel()
+        reconnectTask = nil
         allowReconnect = true
+        lastHost = resolved.normalizedHost
+        currentEndpoint = resolved.endpoint
+        cleanupTransport()
         state = .connecting
-        onEvent?("OSC connecting to \(url.host ?? host):\(url.port ?? 9001)")
-        let session = URLSession(configuration: .default)
-        webSocketTask = session.webSocketTask(with: url)
-        webSocketTask?.resume()
-        state = .connected
-        onEvent?("OSC connected")
-        receiveLoop()
-        flushPending()
+
+        switch resolved.endpoint {
+        case .websocket(let url):
+            onEvent?("OSC connecting to \(url.host ?? resolved.normalizedHost):\(url.port ?? 9001)")
+            let session = URLSession(configuration: .default)
+            self.session = session
+            webSocketTask = session.webSocketTask(with: url)
+            webSocketTask?.resume()
+            state = .connected
+            onEvent?("OSC connected")
+            receiveLoop()
+            flushPending()
+        case .udp(let endpointHost, let port, let label):
+            onEvent?("OSC connecting to \(label)")
+            let connection = NWConnection(host: endpointHost, port: port, using: .udp)
+            udpConnection = connection
+            connection.stateUpdateHandler = { [weak self] newState in
+                Task { @MainActor in
+                    self?.handleUdpState(newState, label: label)
+                }
+            }
+            connection.start(queue: udpQueue)
+        }
     }
 
     func disconnect() {
@@ -40,37 +77,27 @@ final class OscClient: ObservableObject {
         allowReconnect = false
         pendingMessages.removeAll()
         queuedCount = 0
-        webSocketTask?.cancel(with: .normalClosure, reason: nil)
-        webSocketTask = nil
+        currentEndpoint = nil
+        cleanupTransport()
         state = .disconnected
         onEvent?("OSC disconnected")
     }
 
     func send(pad: Pad, state: String) {
         guard let osc = pad.osc else { return }
+        let args = osc.resolvedArgs(forState: state, value: nil)
+        guard let message = makeOutboundMessage(address: osc.address, args: args, state: state) else { return }
+        sendMessage(message)
+    }
 
-        let payload: [String: Any] = [
-            "address": osc.address,
-            "args": osc.args?.map { $0.jsonValue } ?? [],
-            "state": state
-        ]
-
-        guard let data = try? JSONSerialization.data(withJSONObject: payload) else {
-            onEvent?("OSC payload encode failed")
-            return
-        }
-
-        let message = URLSessionWebSocketTask.Message.data(data)
+    func send(pad: Pad, value: Int) {
+        guard let osc = pad.osc else { return }
+        let args = osc.resolvedArgs(forState: nil, value: value)
+        guard let message = makeOutboundMessage(address: osc.address, args: args, state: nil) else { return }
         sendMessage(message)
     }
 
     private var lastHost: String = ""
-
-    private func makeOscUrl(host: String) -> URL? {
-        let resolvedHost = host.isEmpty ? "localhost" : host
-        lastHost = resolvedHost
-        return URL(string: "ws://\(resolvedHost):9001")
-    }
 
     private func receiveLoop() {
         webSocketTask?.receive { [weak self] result in
@@ -82,9 +109,7 @@ final class OscClient: ObservableObject {
                 }
             case .failure:
                 Task { @MainActor in
-                    self.state = .disconnected
-                    self.onEvent?("OSC receive failed; reconnecting")
-                    self.scheduleReconnect(host: self.lastHost)
+                    self.handleTransportFailure(message: "OSC receive failed; reconnecting")
                 }
             }
         }
@@ -104,25 +129,44 @@ final class OscClient: ObservableObject {
         }
     }
 
-    private func sendMessage(_ message: URLSessionWebSocketTask.Message) {
-        guard state == .connected, let socket = webSocketTask else {
-            enqueue(message)
-            return
-        }
+    private func sendMessage(_ message: OutboundMessage) {
+        switch message {
+        case .websocket(let socketMessage):
+            guard state == .connected, let socket = webSocketTask else {
+                enqueue(message)
+                return
+            }
 
-        socket.send(message) { [weak self] error in
-            guard let self = self else { return }
-            if error != nil {
-                Task { @MainActor in
-                    self.state = .disconnected
-                    self.onEvent?("OSC send failed; reconnecting")
-                    self.scheduleReconnect(host: self.lastHost)
+            socket.send(socketMessage) { [weak self] error in
+                guard let self = self else { return }
+                if error != nil {
+                    Task { @MainActor in
+                        self.enqueue(message)
+                        self.handleTransportFailure(message: "OSC send failed; reconnecting")
+                    }
                 }
             }
+        case .udp(let data):
+            guard state == .connected, let connection = udpConnection else {
+                enqueue(message)
+                return
+            }
+
+            connection.send(content: data, completion: .contentProcessed { [weak self] error in
+                guard let self = self else { return }
+                if let error {
+                    Task { @MainActor in
+                        self.enqueue(message)
+                        self.handleTransportFailure(
+                            message: "OSC UDP send failed: \(error.localizedDescription); reconnecting"
+                        )
+                    }
+                }
+            })
         }
     }
 
-    private func enqueue(_ message: URLSessionWebSocketTask.Message) {
+    private func enqueue(_ message: OutboundMessage) {
         if pendingMessages.count >= maxPendingMessages {
             pendingMessages.removeFirst()
         }
@@ -132,7 +176,7 @@ final class OscClient: ObservableObject {
     }
 
     private func flushPending() {
-        guard state == .connected, let _ = webSocketTask else { return }
+        guard state == .connected else { return }
         let queued = pendingMessages
         pendingMessages.removeAll()
         queuedCount = 0
@@ -140,9 +184,185 @@ final class OscClient: ObservableObject {
             sendMessage(message)
         }
     }
+
+    private func handleTransportFailure(message: String) {
+        cleanupTransport()
+        state = .disconnected
+        onEvent?(message)
+        scheduleReconnect(host: lastHost)
+    }
+
+    private func handleUdpState(_ newState: NWConnection.State, label: String) {
+        switch newState {
+        case .ready:
+            state = .connected
+            onEvent?("OSC connected (\(label))")
+            flushPending()
+        case .failed(let error):
+            handleTransportFailure(message: "OSC UDP failed: \(error.localizedDescription); reconnecting")
+        case .cancelled:
+            if state != .disconnected {
+                state = .disconnected
+            }
+        default:
+            break
+        }
+    }
+
+    private func cleanupTransport() {
+        webSocketTask?.cancel(with: .goingAway, reason: nil)
+        webSocketTask = nil
+        session?.invalidateAndCancel()
+        session = nil
+        udpConnection?.stateUpdateHandler = nil
+        udpConnection?.cancel()
+        udpConnection = nil
+    }
+
+    private func makeOutboundMessage(address: String, args: [CodableValue], state: String?) -> OutboundMessage? {
+        let endpoint = currentEndpoint ?? resolveEndpoint(host: lastHost)?.endpoint
+        switch endpoint {
+        case .websocket, .none:
+            let payload: [String: Any] = [
+                "address": address,
+                "args": args.map(\.jsonValue),
+                "state": state ?? "value"
+            ]
+            guard let data = try? JSONSerialization.data(withJSONObject: payload) else {
+                onEvent?("OSC payload encode failed")
+                return nil
+            }
+            return .websocket(.data(data))
+        case .udp:
+            return .udp(OscPacketEncoder.encode(address: address, args: args))
+        }
+    }
+
+    private func resolveEndpoint(host: String) -> (endpoint: Endpoint, normalizedHost: String)? {
+        let trimmed = host.trimmingCharacters(in: .whitespacesAndNewlines)
+        let value = trimmed.isEmpty ? "localhost" : trimmed
+
+        if value.contains("://"), let components = URLComponents(string: value),
+           let scheme = components.scheme?.lowercased(), let endpointHost = components.host {
+            switch scheme {
+            case "ws", "wss":
+                let port = components.port ?? 9001
+                let normalized = "\(scheme)://\(endpointHost):\(port)"
+                return (Endpoint.websocket(URL(string: normalized)!), normalized)
+            case "udp", "osc":
+                let portValue = components.port ?? 9000
+                guard let port = NWEndpoint.Port(rawValue: UInt16(portValue)) else { return nil }
+                let normalized = "udp://\(endpointHost):\(portValue)"
+                return (
+                    Endpoint.udp(host: .init(endpointHost), port: port, label: normalized),
+                    normalized
+                )
+            default:
+                return nil
+            }
+        }
+
+        guard let url = URL(string: "ws://\(value):9001") else { return nil }
+        return (.websocket(url), value)
+    }
+}
+
+private enum OscPacketEncoder {
+    static func encode(address: String, args: [CodableValue]) -> Data {
+        var data = Data()
+        appendPaddedString(address, to: &data)
+
+        let typeTags = "," + args.map(typeTag(for:)).joined()
+        appendPaddedString(typeTags, to: &data)
+
+        for arg in args {
+            appendValue(arg, to: &data)
+        }
+
+        return data
+    }
+
+    private static func typeTag(for arg: CodableValue) -> String {
+        switch arg {
+        case .string:
+            return "s"
+        case .int:
+            return "i"
+        case .double:
+            return "f"
+        case .bool(let value):
+            return value ? "T" : "F"
+        }
+    }
+
+    private static func appendValue(_ value: CodableValue, to data: inout Data) {
+        switch value {
+        case .string(let string):
+            appendPaddedString(string, to: &data)
+        case .int(let intValue):
+            var bigEndian = Int32(clamping: intValue).bigEndian
+            withUnsafeBytes(of: &bigEndian) { bytes in
+                data.append(contentsOf: bytes)
+            }
+        case .double(let doubleValue):
+            var bits = Float(doubleValue).bitPattern.bigEndian
+            withUnsafeBytes(of: &bits) { bytes in
+                data.append(contentsOf: bytes)
+            }
+        case .bool:
+            break
+        }
+    }
+
+    private static func appendPaddedString(_ string: String, to data: inout Data) {
+        var bytes = Array(string.utf8)
+        bytes.append(0)
+        while bytes.count % 4 != 0 {
+            bytes.append(0)
+        }
+        data.append(contentsOf: bytes)
+    }
+}
+
+private extension OscMapping {
+    func resolvedArgs(forState state: String?, value: Int?) -> [CodableValue] {
+        let source: [CodableValue]
+        if let state {
+            switch state {
+            case "on":
+                source = onArgs ?? args ?? []
+            case "off":
+                source = offArgs ?? args ?? []
+            default:
+                source = args ?? []
+            }
+        } else {
+            source = args ?? []
+        }
+        return source.map { $0.resolved(value: value, state: state) }
+    }
 }
 
 extension CodableValue {
+    fileprivate func resolved(value: Int?, state: String?) -> CodableValue {
+        guard case .string(let raw) = self else { return self }
+        if raw == "$value", let value {
+            return .int(value)
+        }
+        if raw == "$state", let state {
+            return .string(state)
+        }
+
+        var resolved = raw
+        if let value {
+            resolved = resolved.replacingOccurrences(of: "$value", with: String(value))
+        }
+        if let state {
+            resolved = resolved.replacingOccurrences(of: "$state", with: state)
+        }
+        return .string(resolved)
+    }
+
     var jsonValue: Any {
         switch self {
         case .string(let value): return value

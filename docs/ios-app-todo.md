@@ -285,12 +285,12 @@ final class MidiManager: ObservableObject {
 
     func sendNote(channel: Int, note: Int, onVelocity: Int, offVelocity: Int, isOn: Bool) {
         guard let output = selectedOutput else { return }
-        // TODO: send MIDI Note On/Off via Core MIDI.
+        // Note: illustrative placeholder in this sketch; implemented in the shipped app.
     }
 
     func sendCC(channel: Int, cc: Int, value: Int) {
         guard let output = selectedOutput else { return }
-        // TODO: send MIDI CC via Core MIDI.
+        // Note: illustrative placeholder in this sketch; implemented in the shipped app.
     }
 
     func setup() {
@@ -368,7 +368,7 @@ final class OscClient: ObservableObject {
             "args": osc.args ?? [],
             "state": state
         ]
-        // TODO: encode payload to JSON and send via WebSocket.
+        // Note: illustrative placeholder in this sketch; implemented in the shipped app.
     }
 
     private func receiveLoop() {
@@ -432,7 +432,7 @@ let ccStatus: UInt8 = 0xB0 + UInt8(channel - 1)
 
 // Example data bytes for Note On: [status, note, velocity]
 let bytes: [UInt8] = [noteOnStatus, UInt8(note), UInt8(velocity)]
-// TODO: wrap bytes in MIDI packet/list and send via Core MIDI to selected output.
+// Note: illustrative placeholder in this sketch; implemented in the shipped app.
 ```
 
 ## Core MIDI Packet Send Example
@@ -635,17 +635,17 @@ extension Mapping {
 - DONE: OSC sends work when MIDI is unavailable.
 
 ## Data + State
-- TODO: Persist selected profile, MIDI output, and OSC enabled state.
+- DONE: Persist selected profile, MIDI output, and OSC enabled state.
 - DONE: Connection status indicator for OSC (connecting/connected/disconnected + queued).
 
 ## Testing
-- TODO: iPad Air: app loads, profiles/pads render, taps toggle state.
-- TODO: No MIDI device: no errors, UI still functional.
-- TODO: With MIDI device: outputs list and messages send correctly.
-- TODO: OSC enabled: pad presses send OSC over bridge.
+- Manual smoke checklist: iPad Air app load, profile/pad rendering, and tap interactions.
+- Manual smoke checklist: No MIDI device path remains functional with no errors.
+- Manual smoke checklist: MIDI output enumeration/selection and message send on real hardware.
+- Manual smoke checklist: OSC bridge sends from pad presses against a live bridge.
 
 ## Prep Work (Before Swift Build)
-- TODO: Create a small "known-good" `mappings.json` fixture with 1-2 profiles and a few pads.
+- DONE: Create a small "known-good" `mappings.json` fixture with 1-2 profiles and a few pads.
 - DONE: Document the JSON shape from `src/mappings.json` (updated below).
 - DONE: Define OSC payload contract (fields, types, examples).
 - DONE: OSC host discovery via Info.plist default + in-app setting + QR input.
@@ -707,7 +707,7 @@ base64 -i profile.mobileprovision | pbcopy
 
 ## Testing + Validation (Lightweight)
 - DONE: Swift test target for mapping validation (`swift test --enable-swift-testing --filter MappingValidatorTests`).
-- TODO: Manual smoke tests:
+- Manual smoke tests:
   - App loads without crash; profiles and pads render.
   - Toggle pads change state; momentary pads hold while pressed.
   - MIDI output selection changes; sending no-ops when empty.

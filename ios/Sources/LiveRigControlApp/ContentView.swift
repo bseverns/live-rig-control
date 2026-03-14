@@ -128,7 +128,7 @@ struct ConnectionBarView: View {
                     Text("OSC Host")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                    TextField("192.168.1.10", text: $store.oscHost)
+                    TextField("192.168.1.10 or udp://192.168.1.10:9000", text: $store.oscHost)
                         .oscHostInputModifiers()
                         .onSubmit {
                             Task {

@@ -78,6 +78,8 @@ struct MidiMapping: Codable {
 struct OscMapping: Codable {
     let address: String
     let args: [CodableValue]?
+    let onArgs: [CodableValue]?
+    let offArgs: [CodableValue]?
 }
 
 struct UiMapping: Codable {

@@ -2793,6 +2793,897 @@
           "notes": "MIDI realtime Stop (FC)."
         }
       ]
+    },
+    "mn42Slots": {
+      "label": "MOARkNOBS-42 Slots (OSC Bridge)",
+      "gridSize": [
+        7,
+        6
+      ],
+      "pads": [
+        {
+          "id": "mn42_slot_01",
+          "label": "S01",
+          "row": 0,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":0,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_02",
+          "label": "S02",
+          "row": 0,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":1,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_03",
+          "label": "S03",
+          "row": 0,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":2,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_04",
+          "label": "S04",
+          "row": 0,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":3,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_05",
+          "label": "S05",
+          "row": 0,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":4,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_06",
+          "label": "S06",
+          "row": 0,
+          "col": 5,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":5,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_07",
+          "label": "S07",
+          "row": 0,
+          "col": 6,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":6,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_08",
+          "label": "S08",
+          "row": 1,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":7,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_09",
+          "label": "S09",
+          "row": 1,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":8,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_10",
+          "label": "S10",
+          "row": 1,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":9,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_11",
+          "label": "S11",
+          "row": 1,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":10,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_12",
+          "label": "S12",
+          "row": 1,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":11,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_13",
+          "label": "S13",
+          "row": 1,
+          "col": 5,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":12,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_14",
+          "label": "S14",
+          "row": 1,
+          "col": 6,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":13,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_15",
+          "label": "S15",
+          "row": 2,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":14,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_16",
+          "label": "S16",
+          "row": 2,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":15,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_17",
+          "label": "S17",
+          "row": 2,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":16,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_18",
+          "label": "S18",
+          "row": 2,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":17,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_19",
+          "label": "S19",
+          "row": 2,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":18,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_20",
+          "label": "S20",
+          "row": 2,
+          "col": 5,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":19,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_21",
+          "label": "S21",
+          "row": 2,
+          "col": 6,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":20,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_22",
+          "label": "S22",
+          "row": 3,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":21,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_23",
+          "label": "S23",
+          "row": 3,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":22,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_24",
+          "label": "S24",
+          "row": 3,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":23,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_25",
+          "label": "S25",
+          "row": 3,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":24,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_26",
+          "label": "S26",
+          "row": 3,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":25,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_27",
+          "label": "S27",
+          "row": 3,
+          "col": 5,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":26,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_28",
+          "label": "S28",
+          "row": 3,
+          "col": 6,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":27,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_29",
+          "label": "S29",
+          "row": 4,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":28,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_30",
+          "label": "S30",
+          "row": 4,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":29,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_31",
+          "label": "S31",
+          "row": 4,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":30,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_32",
+          "label": "S32",
+          "row": 4,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":31,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_33",
+          "label": "S33",
+          "row": 4,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":32,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_34",
+          "label": "S34",
+          "row": 4,
+          "col": 5,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":33,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_35",
+          "label": "S35",
+          "row": 4,
+          "col": 6,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":34,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_36",
+          "label": "S36",
+          "row": 5,
+          "col": 0,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":35,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_37",
+          "label": "S37",
+          "row": 5,
+          "col": 1,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":36,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_38",
+          "label": "S38",
+          "row": 5,
+          "col": 2,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":37,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_39",
+          "label": "S39",
+          "row": 5,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":38,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_40",
+          "label": "S40",
+          "row": 5,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":39,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_41",
+          "label": "S41",
+          "row": 5,
+          "col": 5,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":40,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        },
+        {
+          "id": "mn42_slot_42",
+          "label": "S42",
+          "row": 5,
+          "col": 6,
+          "toggle": true,
+          "osc": {
+            "address": "/mn42/cmd",
+            "args": [
+              "{\"cmd\":\"SET_POT\",\"slot\":41,\"value\":$value}"
+            ]
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          }
+        }
+      ]
     }
   }
 }
