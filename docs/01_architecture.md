@@ -28,3 +28,5 @@ The goal is to keep device/channel/scene knowledge encoded in `live-rig`
 while `live-rig-control` focuses on the performer-facing interface.
 
 For mapping structure rationale, see `docs/mappings-rationale.md`.
+For a verbose walkthrough of the control domains and why they are split the way
+they are, see `docs/03_control-reference.md`.
