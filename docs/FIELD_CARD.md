@@ -14,12 +14,12 @@ Built to mirror the rig mapping docs while staying fast, legible, and stage-proo
 | Interface | Default | Protocol | What it does |
 | --- | --- | --- | --- |
 | Static UI | `http://localhost:8080` | HTTP | Serves the control surface UI. |
-| OSC bridge | `ws://<host>:9001` | WebSocket | Ships OSC payloads when enabled. |
+| OSC bridge | `ws://127.0.0.1:9001` | WebSocket | Ships OSC payloads when enabled; localhost-only by default. |
 | MIDI out | Device-specific | WebMIDI | Sends notes/CCs per `src/mappings.json`. |
 
 ## Common failures + fixes
 1. **No MIDI outputs listed** → Use Chrome/Edge with WebMIDI enabled and reconnect devices.
-2. **OSC toggle does nothing** → Start the OSC bridge at port `9001` and confirm the WS URL.
+2. **OSC toggle does nothing** → Start the OSC bridge at port `9001`, confirm the WS URL, and if auth is enabled provide `?osc_token=...`.
 3. **Pads do nothing / wrong target** → Confirm `src/mappings.json` matches your rig mappings.
 
 ## When not to use this system

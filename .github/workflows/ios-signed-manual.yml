@@ -3,12 +3,17 @@ name: iOS Signed Build (Manual)
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build-signed:
     runs-on: macos-14
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Swift version
         run: swift --version
@@ -19,15 +24,22 @@ jobs:
           CERT_PASSWORD: ${{ secrets.IOS_SIGNING_CERT_PASSWORD }}
           PROVISION_PROFILE: ${{ secrets.IOS_PROVISION_PROFILE }}
         run: |
+          set -euo pipefail
           if [ -z "$CERT_P12" ] || [ -z "$CERT_PASSWORD" ] || [ -z "$PROVISION_PROFILE" ]; then
             echo "Missing signing secrets. Configure IOS_SIGNING_CERT_P12, IOS_SIGNING_CERT_PASSWORD, IOS_PROVISION_PROFILE." >&2
             exit 1
           fi
+          KEYCHAIN_PASSWORD="$(uuidgen)"
+          cleanup() {
+            rm -f /tmp/cert.p12 /tmp/profile.mobileprovision
+            security delete-keychain build.keychain >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
           echo "$CERT_P12" | base64 --decode > /tmp/cert.p12
           echo "$PROVISION_PROFILE" | base64 --decode > /tmp/profile.mobileprovision
-          security create-keychain -p "" build.keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security default-keychain -s build.keychain
-          security unlock-keychain -p "" build.keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
           security import /tmp/cert.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
