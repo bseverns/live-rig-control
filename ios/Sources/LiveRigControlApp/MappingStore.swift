@@ -191,6 +191,9 @@ final class MappingStore: ObservableObject {
         if let midiMapping = pad.midi {
             sendSliderValue(for: pad, midiMapping: midiMapping, value: clamped)
         }
+        if pad.osc != nil {
+            sendOscValueIfNeeded(for: pad, value: clamped)
+        }
     }
 
     func setOscEnabled(_ enabled: Bool) async {
@@ -342,35 +345,55 @@ final class MappingStore: ObservableObject {
         osc.send(pad: pad, state: state ? "on" : "off")
     }
 
+    private func sendOscValueIfNeeded(for pad: Pad, value: Int) {
+        guard oscEnabled, pad.osc != nil else { return }
+        osc.send(pad: pad, value: value)
+    }
+
     private func validateOscHost(_ host: String) -> String? {
         if host.isEmpty {
             return nil
         }
-        if host.contains("://") {
-            return "Enter a host only (no protocol)."
-        }
         if host.contains(where: { $0.isWhitespace }) {
-            return "Host cannot contain spaces."
+            return "OSC endpoint cannot contain spaces."
+        }
+        if host.contains("://") {
+            guard let components = URLComponents(string: host),
+                  let scheme = components.scheme?.lowercased() else {
+                return "Use a plain host or ws:// / udp:// endpoint."
+            }
+            if ["ws", "wss", "udp", "osc"].contains(scheme) == false {
+                return "Supported OSC endpoint schemes: ws, wss, udp, osc."
+            }
+            guard components.host?.isEmpty == false else {
+                return "OSC endpoint must include a host."
+            }
+            if let path = components.percentEncodedPath.removingPercentEncoding,
+               path.isEmpty == false, path != "/" {
+                return "OSC endpoint cannot include a path."
+            }
+            return nil
         }
         if host.contains("/") {
-            return "Host cannot include paths."
-        }
-        if host.contains(":") {
-            return "Host cannot include a port."
+            return "Host cannot include paths. Use udp://host:port for OSC UDP."
         }
         return nil
     }
 
     private func sanitizeOscHost(_ host: String) -> String {
-        var value = host
-        if let schemeRange = value.range(of: "://") {
-            value = String(value[schemeRange.upperBound...])
+        let trimmed = host.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.contains("://") else {
+            return trimmed.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
         }
-        if let slashIndex = value.firstIndex(of: "/") {
-            value = String(value[..<slashIndex])
+        guard let components = URLComponents(string: trimmed),
+              let scheme = components.scheme?.lowercased(),
+              let endpointHost = components.host,
+              endpointHost.isEmpty == false else {
+            return trimmed
         }
-        if let colonIndex = value.firstIndex(of: ":") {
-            value = String(value[..<colonIndex])
+        var value = "\(scheme)://\(endpointHost)"
+        if let port = components.port {
+            value += ":\(port)"
         }
         return value
     }
@@ -378,6 +401,13 @@ final class MappingStore: ObservableObject {
     private func extractHost(from payload: String) -> String {
         if let components = URLComponents(string: payload),
            let host = components.host {
+            if let scheme = components.scheme {
+                var value = "\(scheme.lowercased())://\(host)"
+                if let port = components.port {
+                    value += ":\(port)"
+                }
+                return value
+            }
             return host
         }
         return payload
