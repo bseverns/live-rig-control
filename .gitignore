@@ -13,8 +13,16 @@ dist/
 build/
 ios/.build/
 ios/.swiftpm/
-ios/*.xcodeproj/project.xcworkspace/xcuserdata/
-ios/*.xcodeproj/xcuserdata/
+.vscode/.DS_Store
+
+# Xcode user state / local workspace data
+**/*.xcodeproj/project.xcworkspace/xcuserdata/
+**/*.xcodeproj/project.xcworkspace/xcuserdata/**
+**/*.xcodeproj/xcuserdata/
+**/*.xcodeproj/xcuserdata/**
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
 *.xcresult
 *.profdata
 *.profraw
