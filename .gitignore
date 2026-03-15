@@ -3,6 +3,11 @@
 .env.local
 .env.*.local
 node_modules/
+.vscode/
+.idea/
+.fleet/
+.zed/
+.cursor/
 *.p12
 *.mobileprovision
 *.keychain
@@ -13,7 +18,6 @@ dist/
 build/
 ios/.build/
 ios/.swiftpm/
-.vscode/.DS_Store
 
 # Xcode user state / local workspace data
 **/*.xcodeproj/project.xcworkspace/xcuserdata/
