@@ -19,12 +19,22 @@ final class MidiManager: ObservableObject {
 
     func setup() {
         configureAudioSession()
+        #if targetEnvironment(simulator)
+        outputs = []
+        selectedOutputId = ""
+        onEvent?("MIDI unavailable in iOS Simulator")
+        #else
         MIDIClientCreate("LiveRigControl" as CFString, midiNotify, UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque()), &client)
         MIDIOutputPortCreate(client, "Out" as CFString, &outPort)
         refreshOutputs()
+        #endif
     }
 
     func refreshOutputs() {
+        #if targetEnvironment(simulator)
+        outputs = []
+        selectedOutputId = ""
+        #else
         var results: [MidiOutput] = []
         let count = MIDIGetNumberOfDestinations()
 
@@ -41,6 +51,7 @@ final class MidiManager: ObservableObject {
             selectedOutputId = outputs.first?.id ?? ""
         }
         onEvent?("MIDI outputs: \(outputs.count)")
+        #endif
     }
 
     func sendNote(channel: Int, note: Int, onVelocity: Int, offVelocity: Int, isOn: Bool) {
@@ -106,6 +117,9 @@ final class MidiManager: ObservableObject {
     }
 
     func sendPacket(bytes: [UInt8]) {
+        #if targetEnvironment(simulator)
+        onEvent?("MIDI send ignored in simulator")
+        #else
         guard let output = outputs.first(where: { $0.id == selectedOutputId }) else {
             onEvent?("MIDI no output selected")
             return
@@ -126,6 +140,7 @@ final class MidiManager: ObservableObject {
             )
             _ = MIDISend(outPort, endpoint, &packetList)
         }
+        #endif
     }
 
     deinit {

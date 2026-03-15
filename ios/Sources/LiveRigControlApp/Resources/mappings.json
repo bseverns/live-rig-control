@@ -2,7 +2,7 @@
   "interopVersion": "1.0.0",
   "profiles": {
     "videoScenes": {
-      "label": "Video Scenes (Ch12)",
+      "label": "Scenes",
       "gridSize": [
         8,
         8
@@ -101,10 +101,12 @@
             "exclusive": true
           }
         }
-      ]
+      ],
+      "section": "show",
+      "order": 30
     },
     "nwWrldFeed": {
-      "label": "nw_wrld Feed (OSC)",
+      "label": "Video Feed",
       "gridSize": [
         8,
         8
@@ -358,10 +360,12 @@
             ]
           }
         }
-      ]
+      ],
+      "section": "video",
+      "order": 10
     },
     "nwWrldInput": {
-      "label": "nw_wrld Input (MIDI)",
+      "label": "Video Input",
       "gridSize": [
         8,
         4
@@ -731,7 +735,9 @@
             "offVelocity": 0
           }
         }
-      ]
+      ],
+      "section": "video",
+      "order": 20
     },
     "patterns": {
       "label": "Patterns",
@@ -754,10 +760,12 @@
             "offVelocity": 0
           }
         }
-      ]
+      ],
+      "section": "show",
+      "order": 20
     },
     "pcm30Macros": {
-      "label": "PCM-30 Macros (Ch11)",
+      "label": "FX Macros",
       "gridSize": [
         8,
         3
@@ -1172,10 +1180,12 @@
             "exclusive": true
           }
         }
-      ]
+      ],
+      "section": "sound",
+      "order": 20
     },
     "drumStack": {
-      "label": "DrumKid Controls (Ch10)",
+      "label": "Drum Controls",
       "gridSize": [
         8,
         2
@@ -1533,10 +1543,12 @@
           },
           "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC31 (Tempo) ignored when DrumKid is synced to external clock."
         }
-      ]
+      ],
+      "section": "sound",
+      "order": 40
     },
     "drumStackNotes": {
-      "label": "Drum Stack Notes (Ch10)",
+      "label": "Drum Pads",
       "gridSize": [
         12,
         8
@@ -2258,10 +2270,12 @@
           },
           "notes": "DR-550 factory pad map: Bank D pad 10."
         }
-      ]
+      ],
+      "section": "sound",
+      "order": 30
     },
     "electribe": {
-      "label": "Electribe 2S (Ch11)",
+      "label": "Synth",
       "gridSize": [
         8,
         4
@@ -2744,7 +2758,9 @@
           },
           "notes": "Electribe 2S panel control on/off (0=Off, 127=On)."
         }
-      ]
+      ],
+      "section": "sound",
+      "order": 50
     },
     "transport": {
       "label": "Transport",
@@ -2792,10 +2808,12 @@
           },
           "notes": "MIDI realtime Stop (FC)."
         }
-      ]
+      ],
+      "section": "show",
+      "order": 10
     },
     "seedbox": {
-      "label": "SeedBox (MN42 CC)",
+      "label": "Seeds",
       "gridSize": [
         4,
         3
@@ -3050,10 +3068,12 @@
           },
           "notes": "SeedBox quantize control CC18. Value encoding follows the SeedBox MN42 map."
         }
-      ]
+      ],
+      "section": "sound",
+      "order": 10
     },
     "mn42Slots": {
-      "label": "MOARkNOBS-42 Slots (OSC Bridge)",
+      "label": "Controller Slots",
       "gridSize": [
         7,
         6
@@ -3941,7 +3961,9 @@
             "showValue": true
           }
         }
-      ]
+      ],
+      "section": "setup",
+      "order": 10
     }
   }
 }

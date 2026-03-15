@@ -5,35 +5,99 @@ struct Mapping: Codable {
 
     func normalizedProfiles() -> [Profile] {
         profiles.map { key, value in
-            Profile(id: key, label: value.label, gridSize: value.gridSize, pads: value.pads)
+            Profile(
+                id: key,
+                label: value.label,
+                section: value.section,
+                order: value.order,
+                gridSize: value.gridSize,
+                pads: value.pads
+            )
         }
-        .sorted { $0.id < $1.id }
+        .sorted {
+            if $0.performerSection.rank != $1.performerSection.rank {
+                return $0.performerSection.rank < $1.performerSection.rank
+            }
+            if $0.sortOrder != $1.sortOrder {
+                return $0.sortOrder < $1.sortOrder
+            }
+            return ($0.label ?? $0.id) < ($1.label ?? $1.id)
+        }
+    }
+}
+
+enum PerformerSection: String, CaseIterable, Identifiable {
+    case show
+    case sound
+    case video
+    case setup
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .show:
+            return "Show"
+        case .sound:
+            return "Sound"
+        case .video:
+            return "Video"
+        case .setup:
+            return "Setup"
+        }
+    }
+
+    var rank: Int {
+        switch self {
+        case .show:
+            return 0
+        case .sound:
+            return 1
+        case .video:
+            return 2
+        case .setup:
+            return 3
+        }
     }
 }
 
 struct Profile: Codable, Identifiable {
     let id: String
     let label: String?
+    let section: String?
+    let order: Int?
     let gridSize: [Int]?
     let pads: [Pad]
 
-    init(id: String, label: String?, gridSize: [Int]?, pads: [Pad]) {
+    init(id: String, label: String?, section: String?, order: Int?, gridSize: [Int]?, pads: [Pad]) {
         self.id = id
         self.label = label
+        self.section = section
+        self.order = order
         self.gridSize = gridSize
         self.pads = pads
     }
 
     enum CodingKeys: String, CodingKey {
-        case label, gridSize, pads
+        case label, section, order, gridSize, pads
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         label = try container.decodeIfPresent(String.self, forKey: .label)
+        section = try container.decodeIfPresent(String.self, forKey: .section)
+        order = try container.decodeIfPresent(Int.self, forKey: .order)
         gridSize = try container.decodeIfPresent([Int].self, forKey: .gridSize)
         pads = try container.decode([Pad].self, forKey: .pads)
         id = ""
+    }
+
+    var performerSection: PerformerSection {
+        PerformerSection(rawValue: section?.lowercased() ?? "") ?? .show
+    }
+
+    var sortOrder: Int {
+        order ?? 999
     }
 }
 
@@ -78,14 +142,16 @@ struct GroupMapping: Codable {
     init(from decoder: Decoder) throws {
         let singleValue = try decoder.singleValueContainer()
         if let id = try? singleValue.decode(String.self) {
-            self.init(id: id, mode: "exclusive", exclusive: true)
+            self.id = id
+            self.mode = "exclusive"
+            self.exclusive = true
             return
         }
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(String.self, forKey: .id)
-        mode = try container.decodeIfPresent(String.self, forKey: .mode)
-        exclusive = try container.decodeIfPresent(Bool.self, forKey: .exclusive)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.mode = try container.decodeIfPresent(String.self, forKey: .mode)
+        self.exclusive = try container.decodeIfPresent(Bool.self, forKey: .exclusive)
     }
 
     var isExclusive: Bool {

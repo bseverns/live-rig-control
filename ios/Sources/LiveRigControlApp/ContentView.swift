@@ -18,20 +18,30 @@ struct HapticFeedback {
 
 struct ContentView: View {
     @StateObject private var store = MappingStore()
+    @State private var showingConnections = false
+    @State private var showingLogs = false
+    @State private var selectedSection: PerformerSection?
 
     var body: some View {
         ZStack {
-            VStack(spacing: 12) {
-                Text("Live Rig Control")
-                    .font(.title2)
-                    .bold()
+            VStack(spacing: 16) {
+                HeaderPanelView(
+                    store: store,
+                    midi: store.midi,
+                    osc: store.osc,
+                    selectedProfileName: store.selectedProfile?.label ?? store.selectedProfile?.id,
+                    onShowConnections: { showingConnections = true },
+                    onShowLogs: { showingLogs = true }
+                )
 
-                ConnectionBarView(store: store, midi: store.midi, osc: store.osc)
-
-                LogPanelView(logs: store.logs)
+                SectionBarView(
+                    sections: availableSections,
+                    selectedSection: currentSection,
+                    onSelect: selectSection
+                )
 
                 ProfileBarView(
-                    profiles: store.profiles,
+                    profiles: profilesInCurrentSection,
                     selectedId: store.selectedProfileId,
                     issues: store.profileIssues,
                     onSelect: store.selectProfile
@@ -43,15 +53,28 @@ struct ContentView: View {
                 )
 
                 if let profile = store.selectedProfile {
-                    PadGridContainer(
-                        profile: profile,
-                        padStates: store.padStates,
-                        sliderValue: store.sliderValue,
-                        onSliderChange: store.handleSliderChange,
-                        onPadTap: store.handlePadTap,
-                        onPadPress: store.handlePadPress,
-                        onPadRelease: store.handlePadRelease
-                    )
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Text(profile.label ?? profile.id)
+                                .font(.title3)
+                                .bold()
+                            Spacer()
+                            Text("\(profile.pads.count) controls")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        ProfileSurfaceView(
+                            profile: profile,
+                            padStates: store.padStates,
+                            sliderValue: store.sliderValue,
+                            onSliderChange: store.handleSliderChange,
+                            onPadTap: store.handlePadTap,
+                            onPadPress: store.handlePadPress,
+                            onPadRelease: store.handlePadRelease
+                        )
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 } else {
                     Text("No profile loaded")
                         .foregroundStyle(.secondary)
@@ -68,6 +91,327 @@ struct ContentView: View {
         .task {
             await store.loadMappings()
         }
+        .onChange(of: store.selectedProfileId) { _, _ in
+            selectedSection = store.selectedProfile?.performerSection
+        }
+        .sheet(isPresented: $showingConnections) {
+            NavigationStack {
+                ScrollView {
+                    ConnectionBarView(store: store, midi: store.midi, osc: store.osc)
+                        .padding()
+                }
+                .navigationTitle("Connections")
+                .navigationBarTitleDisplayMode(.inline)
+            }
+        }
+        .sheet(isPresented: $showingLogs) {
+            NavigationStack {
+                LogPanelView(logs: store.logs, maxHeight: nil)
+                    .padding()
+                    .navigationTitle("Log")
+                    .navigationBarTitleDisplayMode(.inline)
+            }
+        }
+    }
+
+    private var availableSections: [PerformerSection] {
+        let sectionSet = Set(store.profiles.map(\.performerSection))
+        return PerformerSection.allCases.filter(sectionSet.contains)
+    }
+
+    private var currentSection: PerformerSection {
+        if let selectedSection, availableSections.contains(selectedSection) {
+            return selectedSection
+        }
+        if let selected = store.selectedProfile {
+            return selected.performerSection
+        }
+        return availableSections.first ?? .show
+    }
+
+    private var profilesInCurrentSection: [Profile] {
+        store.profiles.filter { $0.performerSection == currentSection }
+    }
+
+    private func selectSection(_ section: PerformerSection) {
+        selectedSection = section
+        guard let first = store.profiles.first(where: { $0.performerSection == section }) else {
+            return
+        }
+        if store.selectedProfile?.performerSection != section {
+            store.selectProfile(first.id)
+        }
+    }
+}
+
+private enum ProfileLayoutKind {
+    case performanceDeck
+    case parameterBoard
+    case mappedGrid
+}
+
+private extension Profile {
+    var sortedPadsForDisplay: [Pad] {
+        pads.sorted {
+            let lhsRow = $0.row ?? .max
+            let rhsRow = $1.row ?? .max
+            if lhsRow != rhsRow { return lhsRow < rhsRow }
+
+            let lhsCol = $0.col ?? .max
+            let rhsCol = $1.col ?? .max
+            if lhsCol != rhsCol { return lhsCol < rhsCol }
+
+            return $0.id < $1.id
+        }
+    }
+
+    var layoutKind: ProfileLayoutKind {
+        switch id {
+        case "transport", "videoScenes", "patterns":
+            return .performanceDeck
+        case "seedbox", "pcm30Macros", "drumStack", "electribe", "mn42Slots":
+            return .parameterBoard
+        default:
+            return .mappedGrid
+        }
+    }
+}
+
+struct ProfileSurfaceView: View {
+    let profile: Profile
+    let padStates: [String: Bool]
+    let sliderValue: (Pad) -> Int
+    let onSliderChange: (Pad, Int) -> Void
+    let onPadTap: (Pad) -> Void
+    let onPadPress: (Pad) -> Void
+    let onPadRelease: (Pad) -> Void
+
+    var body: some View {
+        switch profile.layoutKind {
+        case .performanceDeck:
+            PerformanceDeckView(
+                profile: profile,
+                padStates: padStates,
+                onPadTap: onPadTap,
+                onPadPress: onPadPress,
+                onPadRelease: onPadRelease
+            )
+        case .parameterBoard:
+            ParameterBoardView(
+                profile: profile,
+                padStates: padStates,
+                sliderValue: sliderValue,
+                onSliderChange: onSliderChange,
+                onPadTap: onPadTap,
+                onPadPress: onPadPress,
+                onPadRelease: onPadRelease
+            )
+        case .mappedGrid:
+            PadGridContainer(
+                profile: profile,
+                padStates: padStates,
+                sliderValue: sliderValue,
+                onSliderChange: onSliderChange,
+                onPadTap: onPadTap,
+                onPadPress: onPadPress,
+                onPadRelease: onPadRelease
+            )
+        }
+    }
+}
+
+struct PerformanceDeckView: View {
+    let profile: Profile
+    let padStates: [String: Bool]
+    let onPadTap: (Pad) -> Void
+    let onPadPress: (Pad) -> Void
+    let onPadRelease: (Pad) -> Void
+
+    var body: some View {
+        GeometryReader { proxy in
+            let pads = profile.sortedPadsForDisplay
+            let columns = min(max(pads.count, 1), 4)
+            let spacing: CGFloat = 16
+            let availableWidth = max(proxy.size.width, 320)
+            let rawWidth = (availableWidth - spacing * CGFloat(columns - 1)) / CGFloat(columns)
+            let cardWidth = min(max(rawWidth, 180), 260)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: spacing) {
+                    ForEach(pads) { pad in
+                        PadView(
+                            pad: pad,
+                            isOn: padStates[pad.id] ?? false,
+                            onTap: { onPadTap(pad) },
+                            onPress: { onPadPress(pad) },
+                            onRelease: { onPadRelease(pad) },
+                            minHeight: 190
+                        )
+                        .frame(width: cardWidth)
+                    }
+                }
+                .frame(maxWidth: .infinity, minHeight: 220, alignment: .center)
+                .padding(.vertical, 8)
+            }
+        }
+    }
+}
+
+struct ParameterBoardView: View {
+    let profile: Profile
+    let padStates: [String: Bool]
+    let sliderValue: (Pad) -> Int
+    let onSliderChange: (Pad, Int) -> Void
+    let onPadTap: (Pad) -> Void
+    let onPadPress: (Pad) -> Void
+    let onPadRelease: (Pad) -> Void
+
+    var body: some View {
+        GeometryReader { proxy in
+            let width = max(proxy.size.width, 320)
+            let minCardWidth: CGFloat = profile.id == "mn42Slots" ? 120 : 180
+            let columns = [
+                GridItem(.adaptive(minimum: minCardWidth, maximum: 240), spacing: 14)
+            ]
+
+            ScrollView {
+                LazyVGrid(columns: columns, alignment: .leading, spacing: 14) {
+                    ForEach(profile.sortedPadsForDisplay) { pad in
+                        if pad.ui?.type == "slider" {
+                            PadSliderView(
+                                pad: pad,
+                                value: sliderValue(pad),
+                                onChange: { onSliderChange(pad, $0) },
+                                minHeight: width > 900 ? 150 : 170
+                            )
+                        } else {
+                            PadView(
+                                pad: pad,
+                                isOn: padStates[pad.id] ?? false,
+                                onTap: { onPadTap(pad) },
+                                onPress: { onPadPress(pad) },
+                                onRelease: { onPadRelease(pad) },
+                                minHeight: 150
+                            )
+                        }
+                    }
+                }
+                .padding(.vertical, 8)
+            }
+        }
+    }
+}
+
+struct HeaderPanelView: View {
+    @ObservedObject var store: MappingStore
+    @ObservedObject var midi: MidiManager
+    @ObservedObject var osc: OscClient
+    let selectedProfileName: String?
+    let onShowConnections: () -> Void
+    let onShowLogs: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Live Rig Control")
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+
+                    if let selectedProfileName {
+                        Text(selectedProfileName)
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Spacer(minLength: 16)
+
+                HStack(spacing: 10) {
+                    StatusPill(
+                        title: "MIDI",
+                        detail: midi.outputs.first(where: { $0.id == midi.selectedOutputId })?.name ?? "Not Connected",
+                        tint: midi.outputs.isEmpty ? .gray : .green
+                    )
+                    StatusPill(
+                        title: "OSC",
+                        detail: oscLabel,
+                        tint: oscTint
+                    )
+                }
+            }
+
+            HStack(spacing: 10) {
+                Button("Connections", action: onShowConnections)
+                    .buttonStyle(.borderedProminent)
+
+                Button("Logs", action: onShowLogs)
+                    .buttonStyle(.bordered)
+
+                Spacer()
+
+                if store.oscEnabled || !midi.outputs.isEmpty {
+                    Text("Control surface ready")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("Set up MIDI or OSC, then select a profile.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding(18)
+        .background(Color.gray.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+    }
+
+    private var oscLabel: String {
+        switch osc.state {
+        case .connected:
+            return "Connected"
+        case .connecting:
+            return "Connecting"
+        case .disconnected:
+            return "Disconnected"
+        }
+    }
+
+    private var oscTint: Color {
+        switch osc.state {
+        case .connected:
+            return .green
+        case .connecting:
+            return .yellow
+        case .disconnected:
+            return .gray
+        }
+    }
+}
+
+struct StatusPill: View {
+    let title: String
+    let detail: String
+    let tint: Color
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(tint)
+                    .frame(width: 8, height: 8)
+                Text(title)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Text(detail)
+                .font(.subheadline.weight(.semibold))
+                .lineLimit(1)
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .background(.white.opacity(0.7))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
 
@@ -247,6 +591,12 @@ struct ConnectionBarView: View {
 
 struct LogPanelView: View {
     @ObservedObject var logs: LogStore
+    let maxHeight: CGFloat?
+
+    init(logs: LogStore, maxHeight: CGFloat? = 140) {
+        self.logs = logs
+        self.maxHeight = maxHeight
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -272,7 +622,7 @@ struct LogPanelView: View {
                         }
                     }
                 }
-                .frame(maxHeight: 140)
+                .frame(maxHeight: maxHeight)
                 .background(Color.gray.opacity(0.08))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             } else {
@@ -290,6 +640,31 @@ struct LogPanelView: View {
     }
 }
 
+struct SectionBarView: View {
+    let sections: [PerformerSection]
+    let selectedSection: PerformerSection
+    let onSelect: (PerformerSection) -> Void
+
+    var body: some View {
+        HStack(spacing: 10) {
+            ForEach(sections) { section in
+                Button {
+                    onSelect(section)
+                } label: {
+                    Text(section.title)
+                        .font(.headline)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 16)
+                        .frame(maxWidth: .infinity)
+                        .background(selectedSection == section ? Color.primary : Color.gray.opacity(0.12))
+                        .foregroundStyle(selectedSection == section ? .white : .primary)
+                        .clipShape(Capsule())
+                }
+            }
+        }
+    }
+}
+
 struct ProfileBarView: View {
     let profiles: [Profile]
     let selectedId: String?
@@ -297,31 +672,48 @@ struct ProfileBarView: View {
     let onSelect: (String) -> Void
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(profiles) { profile in
-                    Button {
-                        onSelect(profile.id)
-                    } label: {
-                        HStack(spacing: 6) {
-                            Text(profile.label ?? profile.id)
-                                .font(.headline)
-                            if let list = issues[profile.id], !list.isEmpty {
-                                Text("!")
-                                    .font(.caption)
-                                    .padding(.horizontal, 6)
-                                    .padding(.vertical, 2)
-                                    .background(Color.yellow.opacity(0.9))
-                                    .foregroundStyle(.black)
-                                    .clipShape(RoundedRectangle(cornerRadius: 6))
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(profiles) { profile in
+                        Button {
+                            onSelect(profile.id)
+                        } label: {
+                            HStack(spacing: 6) {
+                                Text(profile.label ?? profile.id)
+                                    .font(.headline)
+                                    .lineLimit(1)
+                                if let list = issues[profile.id], !list.isEmpty {
+                                    Text("!")
+                                        .font(.caption)
+                                        .padding(.horizontal, 6)
+                                        .padding(.vertical, 2)
+                                        .background(Color.yellow.opacity(0.9))
+                                        .foregroundStyle(.black)
+                                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                                }
                             }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 12)
+                            .background(profile.id == selectedId ? .blue : .gray.opacity(0.14))
+                            .foregroundStyle(profile.id == selectedId ? .white : .primary)
+                            .clipShape(Capsule())
                         }
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 12)
-                        .background(profile.id == selectedId ? .blue : .gray.opacity(0.2))
-                        .foregroundStyle(profile.id == selectedId ? .white : .primary)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .id(profile.id)
                     }
+                }
+                .padding(.horizontal, 2)
+            }
+            .onAppear {
+                guard let selectedId else { return }
+                DispatchQueue.main.async {
+                    proxy.scrollTo(selectedId, anchor: .center)
+                }
+            }
+            .onChange(of: selectedId) { _, next in
+                guard let next else { return }
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    proxy.scrollTo(next, anchor: .center)
                 }
             }
         }
