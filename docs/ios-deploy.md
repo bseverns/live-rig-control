@@ -29,13 +29,15 @@ for signing and installation.
 1. Open `ios/Package.swift` in Xcode.
 2. Select the `LiveRigControlApp` scheme.
 3. Choose an iPad device or simulator.
-4. Set your Team in Signing & Capabilities.
-5. Build and run once so provisioning and signing are established.
+4. Set a unique bundle identifier for the app target and test target.
+5. Set your Team in Signing & Capabilities.
+6. Build and run once so provisioning and signing are established.
 
 ### Xcode checklist
 
 - Confirm the correct app identifier is set.
 - Confirm the correct Team is selected.
+- Confirm you have replaced the placeholder bundle IDs before shipping a build.
 - Confirm `Info.plist` is attached to the target.
 - Confirm Local Network capability/usage strings are present.
 - Confirm Camera usage string is present for QR scanning.

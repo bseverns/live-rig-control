@@ -1,8 +1,8 @@
 # live-rig-control
 
-Performer-facing control surface for the hybrid audio–video live rig documented
-in the companion `live-rig` repo. This repo is the
-place where the **touch UI, MIDI/OSC dispatch, and mapping-driven UX** live.
+Performer-facing control surface for the hybrid audio-video live rig documented
+in the companion `live-rig` repo. This repo is the place where the **touch UI,
+MIDI/OSC dispatch, and mapping-driven UX** live.
 
 ## What this repo is trying to do
 
@@ -15,9 +15,9 @@ consistent behavior across:
 - **iPadOS app (in progress):** SwiftUI mirror of the web UX using Core MIDI.
 - **OSC bridge:** optional WebSocket bridge that forwards OSC messages.
 
-The canonical system mapping, device roles, and channel plans live in
-the companion `live-rig` repo. This repo is the controller
-surface that consumes those mappings and sends real-time signals.
+The canonical system mapping, device roles, and channel plans live in the
+companion `live-rig` repo. This repo is the controller surface that consumes
+those mappings and sends real-time signals.
 
 ## Current state
 
