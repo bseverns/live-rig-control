@@ -38,7 +38,7 @@ those mappings and sends real-time signals.
 1. Clone this repo:
 
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/bseverns/live-rig-control.git
    cd live-rig-control
    ```
 
