@@ -7,22 +7,109 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Live Rig Control</h1>
-    <div id="profile-bar"></div>
-    <div id="connection-bar">
-      <select id="midi-output-select"></select>
-      <button id="refresh-midi">Refresh MIDI</button>
-      <label>
-        <input type="checkbox" id="osc-enabled" />
-        OSC bridge
-      </label>
-    </div>
-  </header>
+  <div class="app-shell">
+    <header class="header-panel">
+      <div class="header-main">
+        <div>
+          <h1>Live Rig Control</h1>
+          <p id="selected-profile-name" class="selected-profile-name">Loading mappings…</p>
+        </div>
 
-  <main>
-    <div id="grid"></div>
-  </main>
+        <div class="status-pills">
+          <div class="status-pill">
+            <div class="status-pill-title">
+              <span class="status-dot midi"></span>
+              <span>MIDI</span>
+            </div>
+            <div id="midi-pill-detail" class="status-pill-detail">Not Connected</div>
+          </div>
+
+          <div class="status-pill">
+            <div class="status-pill-title">
+              <span id="osc-pill-dot" class="status-dot osc disconnected"></span>
+              <span>OSC</span>
+            </div>
+            <div id="osc-pill-detail" class="status-pill-detail">Disconnected</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="connections-toggle" class="action-button active" type="button">Connections</button>
+        <button id="logs-toggle" class="action-button" type="button">Logs</button>
+        <p id="app-readiness" class="readiness-copy">Loading control surface…</p>
+      </div>
+    </header>
+
+    <section id="connections-panel" class="panel-card">
+      <div class="panel-heading">
+        <h2>Connections</h2>
+      </div>
+
+      <div class="connection-grid">
+        <label class="field-block">
+          <span>MIDI Output</span>
+          <select id="midi-output-select"></select>
+        </label>
+
+        <button id="refresh-midi" class="secondary-button" type="button">Refresh MIDI</button>
+
+        <label class="field-block field-wide">
+          <span>OSC Host</span>
+          <input
+            id="osc-host"
+            type="text"
+            inputmode="url"
+            spellcheck="false"
+            autocomplete="off"
+            placeholder="localhost or ws://127.0.0.1:9001"
+          />
+        </label>
+
+        <label class="toggle-row" for="osc-enabled">
+          <input type="checkbox" id="osc-enabled" />
+          <span id="osc-status-dot" class="status-dot osc disconnected"></span>
+          <span>OSC Bridge</span>
+        </label>
+
+        <button id="osc-reconnect" class="secondary-button" type="button">Reconnect</button>
+      </div>
+
+      <p id="midi-selected-label" class="panel-note">No output selected</p>
+      <p id="osc-host-error" class="panel-note panel-error hidden"></p>
+      <p id="osc-host-hint" class="panel-note hidden"></p>
+      <p id="osc-status-text" class="panel-note">OSC disconnected</p>
+    </section>
+
+    <section id="logs-panel" class="panel-card hidden">
+      <div class="panel-heading">
+        <h2>Log</h2>
+        <div class="panel-controls">
+          <label class="toggle-row compact" for="log-enabled">
+            <input type="checkbox" id="log-enabled" />
+            <span>Debug</span>
+          </label>
+          <button id="clear-logs" class="secondary-button" type="button">Clear</button>
+        </div>
+      </div>
+      <div id="log-entries" class="log-entries"></div>
+    </section>
+
+    <nav id="section-bar" class="section-bar" aria-label="Performer sections"></nav>
+    <nav id="profile-bar" class="profile-bar" aria-label="Profiles"></nav>
+    <section id="profile-warnings" class="warnings-card hidden"></section>
+
+    <main class="surface-card">
+      <div class="surface-heading">
+        <div>
+          <h2 id="surface-title">Loading…</h2>
+          <p id="surface-meta" class="surface-meta"></p>
+        </div>
+      </div>
+      <div id="surface" class="surface"></div>
+      <p id="empty-state" class="empty-state hidden">No profile loaded.</p>
+    </main>
+  </div>
 
   <script type="module" src="../src/app.js"></script>
 </body>
