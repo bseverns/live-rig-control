@@ -40,3 +40,6 @@ bin/
 *.ipa
 *.dSYM
 *.app
+
+# Python cache
+__pycache__/

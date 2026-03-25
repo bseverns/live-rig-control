@@ -17,7 +17,9 @@ notes in the `live-rig` repository.
 
 - Ch 10: Drum and sequencer stack (DrumKid + DR‑550 + SQ‑64 rhythm lane).
 - Ch 11: PCM‑30 insert controls and Electribe 2S controls.
-- Ch 12: Video scene selection.
+- MSVP scenes: OSC-first semantic triggers.
+- Ch 10: MSVP macro shaping lane.
+- Ch 15: MSVP analysis shaping lane.
 - Ch 1–2: NW World input lanes.
 
 Rationale:
@@ -26,7 +28,10 @@ Rationale:
   keeps rhythm signals predictable.
 - Ch 11 keeps insert controls and Electribe parameters aligned on the same
   target device channel, so insert changes always hit the expected rig node.
-- Ch 12 isolates video scene changes to avoid cross‑talk with music controls.
+- MSVP scene triggers stay OSC-first so the semantic cue is explicit and does
+  not double-fire alongside a fallback note path.
+- Ch 10 carries MSVP macro shaping because it is a compact performance lane.
+- Ch 15 keeps MSVP analysis bias separate from macro base intent.
 - Ch 1–2 are reserved for NW World input, which often travels a different
   processing path.
 
@@ -38,7 +43,8 @@ Rationale:
   sound shaping on one page, with pattern selection as fast access.
 - `pcm30Macros` keeps minimal insert controls separate from the Electribe
   CC page so “macro” moves do not crowd parameter sliders.
-- `videoScenes` is isolated to reduce accidental scene triggers.
+- `msvp` is isolated so scene cues, macro shaping, and analysis shaping stay on
+  one explicit page instead of being spread across generic video controls.
 - `transport` is isolated so Start/Stop never fires during parameter edits.
 - `patterns` and `nwWrldInput` remain compact utility pages.
 

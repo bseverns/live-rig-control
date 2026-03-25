@@ -8,16 +8,16 @@ Recommended practice:
 - For each show or major revision, create or update a markdown mapping in
   `live-rig` (e.g. `08_midi-mapping-YYYY-MM-DD-SHOWNAME.md`).
 - Mirror the relevant parts of that mapping in `src/mappings.json` under
-  a dedicated profile (e.g. `videoScenes`, `patterns`, `fxMacros`).
+  a dedicated profile (e.g. `msvp`, `patterns`, `fxMacros`).
 - Use stable `id` values for pads so that changes to labels or notes
   don't break mental or visual associations.
  - For the “why” behind the structure, see `docs/mappings-rationale.md`.
 
 You can also add references here like:
 
-- `videoScenes` profile ↔ `08_midi-mapping-2025-03-15-basement-noise.md`
+- `msvp` profile ↔ shared MSVP interop contract (scenes OSC-first; macro Ch 10; analysis Ch 15)
 - `patterns` profile ↔ `08_midi-mapping-2025-04-01-gallery-set.md`
-- `pcm30Macros` profile ↔ `08_midi-mapping-2025-03-15-basement-noise.md` (PCM-30 macros on Ch 11; Ch 10 reserved for drum/sequencer stack; video scenes on Ch 12)
+- `pcm30Macros` profile ↔ `08_midi-mapping-2025-03-15-basement-noise.md` (PCM-30 macros on Ch 11; MSVP macro lane now uses Ch 10; MSVP analysis uses Ch 15)
 - `drumStack` profile ↔ DrumKid default MIDI map (notes + CC 16–31) + DR-550 factory pads (Bank A–D), all on Ch 10 (includes global + per-pad velocity sliders)
 - `electribe` profile ↔ Electribe 2S CC map + pattern select (Ch 11) with bank A/B toggles + quick scenes (Bank B uses patterns 1–121)
 - `transport` profile ↔ MIDI Start/Continue/Stop controls for external sync setups
@@ -29,7 +29,7 @@ so changes stay intentional and interoperable.
 
 ## Channel Plan (From `src/mappings.json`)
 
-- `videoScenes`: Ch 12 (kept separate from instrument control so scene changes never collide with performance CCs)
+- `msvp`: Scenes over OSC, macro lane on Ch 10, analysis lane on Ch 15
 - `pcm30Macros`: Ch 11 (PCM-30 insert controls aimed at the Electribe 2S global channel)
 - `electribe`: Ch 11 (shares the PCM-30 channel so inserts and Electribe controls land on the same target)
 - `drumStack`: Ch 10 (standard drum channel; includes DrumKid + DR-550 pads and DrumKid CC)

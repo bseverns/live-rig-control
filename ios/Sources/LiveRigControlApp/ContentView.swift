@@ -167,9 +167,9 @@ private extension Profile {
 
     var layoutKind: ProfileLayoutKind {
         switch id {
-        case "transport", "videoScenes", "patterns":
+        case "transport", "patterns":
             return .performanceDeck
-        case "seedbox", "pcm30Macros", "drumStack", "electribe", "mn42Slots":
+        case "msvp", "seedbox", "pcm30Macros", "drumStack", "electribe", "mn42Slots":
             return .parameterBoard
         default:
             return .mappedGrid

@@ -1,26 +1,19 @@
 {
   "interopVersion": "1.0.0",
   "profiles": {
-    "videoScenes": {
-      "label": "Scenes",
+    "msvp": {
+      "label": "MSVP",
       "gridSize": [
         8,
-        8
+        3
       ],
       "pads": [
         {
           "id": "vid_scene_intro",
-          "label": "Intro",
+          "label": "Scene Intro",
           "row": 0,
           "col": 0,
           "toggle": true,
-          "midi": {
-            "type": "note",
-            "channel": 12,
-            "note": 60,
-            "onVelocity": 100,
-            "offVelocity": 0
-          },
           "osc": {
             "address": "/video/scene/intro",
             "args": [
@@ -34,24 +27,18 @@
             ]
           },
           "group": {
-            "id": "video_scene",
+            "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "notes": "MSVP scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 60 on the MSVP endpoint."
         },
         {
           "id": "vid_scene_crash",
-          "label": "Crash",
+          "label": "Scene Crash",
           "row": 0,
           "col": 1,
           "toggle": true,
-          "midi": {
-            "type": "note",
-            "channel": 12,
-            "note": 61,
-            "onVelocity": 100,
-            "offVelocity": 0
-          },
           "osc": {
             "address": "/video/scene/crash",
             "args": [
@@ -65,24 +52,18 @@
             ]
           },
           "group": {
-            "id": "video_scene",
+            "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "notes": "MSVP scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 61 on the MSVP endpoint."
         },
         {
           "id": "vid_scene_soft",
-          "label": "Soft",
+          "label": "Scene Soft",
           "row": 0,
           "col": 2,
           "toggle": true,
-          "midi": {
-            "type": "note",
-            "channel": 12,
-            "note": 62,
-            "onVelocity": 100,
-            "offVelocity": 0
-          },
           "osc": {
             "address": "/video/scene/soft",
             "args": [
@@ -96,14 +77,323 @@
             ]
           },
           "group": {
-            "id": "video_scene",
+            "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "notes": "MSVP scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 62 on the MSVP endpoint."
+        },
+        {
+          "id": "msvp_macro_lines_per_frame",
+          "label": "Macro Density (CC1)",
+          "row": 1,
+          "col": 0,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 1,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MSVP macro lane. Canonical param linesPerFrame, OSC equivalent /msvp/macro/linesPerFrame."
+        },
+        {
+          "id": "msvp_macro_max_line_size",
+          "label": "Macro Line Size (CC2)",
+          "row": 1,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 2,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MSVP macro lane. Canonical param maxLineSize, OSC equivalent /msvp/macro/maxLineSize."
+        },
+        {
+          "id": "msvp_macro_opacity_min",
+          "label": "Macro Opacity Floor (CC3)",
+          "row": 1,
+          "col": 2,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 3,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MSVP macro lane. Canonical param opacityMin, OSC equivalent /msvp/macro/opacityMin."
+        },
+        {
+          "id": "msvp_macro_effect_interval_beats",
+          "label": "Macro FX Interval (CC4)",
+          "row": 1,
+          "col": 3,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 4,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MSVP macro lane. Canonical param effectIntervalBeats, OSC equivalent /msvp/macro/effectIntervalBeats."
+        },
+        {
+          "id": "msvp_macro_effect_duration_beats",
+          "label": "Macro FX Duration (CC5)",
+          "row": 1,
+          "col": 4,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 5,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MSVP macro lane. Canonical param effectDurationBeats, OSC equivalent /msvp/macro/effectDurationBeats."
+        },
+        {
+          "id": "msvp_macro_bpm_smoothing",
+          "label": "Macro BPM Smooth (CC6)",
+          "row": 1,
+          "col": 5,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 6,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MSVP macro lane. Canonical param bpmSmoothing, OSC equivalent /msvp/macro/bpmSmoothing."
+        },
+        {
+          "id": "msvp_macro_effect_bias",
+          "label": "Macro FX Bias (CC7)",
+          "row": 1,
+          "col": 6,
+          "midi": {
+            "type": "cc",
+            "channel": 10,
+            "cc": 7,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 0,
+            "showValue": true
+          },
+          "notes": "MSVP macro lane. Canonical param effectBias, OSC equivalent /msvp/macro/effectBias."
+        },
+        {
+          "id": "msvp_analysis_lines_per_frame",
+          "label": "Analysis Density Bias (CC1)",
+          "row": 2,
+          "col": 0,
+          "midi": {
+            "type": "cc",
+            "channel": 15,
+            "cc": 1,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MSVP analysis lane. Canonical param linesPerFrame, OSC equivalent /msvp/analysis/linesPerFrame."
+        },
+        {
+          "id": "msvp_analysis_max_line_size",
+          "label": "Analysis Line Size Bias (CC2)",
+          "row": 2,
+          "col": 1,
+          "midi": {
+            "type": "cc",
+            "channel": 15,
+            "cc": 2,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MSVP analysis lane. Canonical param maxLineSize, OSC equivalent /msvp/analysis/maxLineSize."
+        },
+        {
+          "id": "msvp_analysis_opacity_min",
+          "label": "Analysis Opacity Bias (CC3)",
+          "row": 2,
+          "col": 2,
+          "midi": {
+            "type": "cc",
+            "channel": 15,
+            "cc": 3,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MSVP analysis lane. Canonical param opacityMin, OSC equivalent /msvp/analysis/opacityMin."
+        },
+        {
+          "id": "msvp_analysis_effect_interval_beats",
+          "label": "Analysis FX Interval Bias (CC4)",
+          "row": 2,
+          "col": 3,
+          "midi": {
+            "type": "cc",
+            "channel": 15,
+            "cc": 4,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MSVP analysis lane. Canonical param effectIntervalBeats, OSC equivalent /msvp/analysis/effectIntervalBeats."
+        },
+        {
+          "id": "msvp_analysis_effect_duration_beats",
+          "label": "Analysis FX Duration Bias (CC5)",
+          "row": 2,
+          "col": 4,
+          "midi": {
+            "type": "cc",
+            "channel": 15,
+            "cc": 5,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MSVP analysis lane. Canonical param effectDurationBeats, OSC equivalent /msvp/analysis/effectDurationBeats."
+        },
+        {
+          "id": "msvp_analysis_bpm_smoothing",
+          "label": "Analysis BPM Smooth (CC6)",
+          "row": 2,
+          "col": 5,
+          "midi": {
+            "type": "cc",
+            "channel": 15,
+            "cc": 6,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MSVP analysis lane. Canonical param bpmSmoothing, OSC equivalent /msvp/analysis/bpmSmoothing."
+        },
+        {
+          "id": "msvp_analysis_effect_bias",
+          "label": "Analysis FX Bias (CC7)",
+          "row": 2,
+          "col": 6,
+          "midi": {
+            "type": "cc",
+            "channel": 15,
+            "cc": 7,
+            "onValue": 127,
+            "offValue": 0
+          },
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          },
+          "notes": "MSVP analysis lane. Canonical param effectBias, OSC equivalent /msvp/analysis/effectBias."
         }
       ],
-      "section": "show",
-      "order": 30
+      "section": "video",
+      "order": 5
     },
     "nwWrldFeed": {
       "label": "Video Feed",

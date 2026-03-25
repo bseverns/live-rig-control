@@ -1,0 +1,202 @@
+{
+  "contract": {
+    "name": "msvp_live_rig_control",
+    "version": "1.0.0",
+    "format_notes": "Stored as JSON-compatible YAML so the validator can stay dependency-free.",
+    "pair": {
+      "control_surface": "live-rig-control",
+      "visual_endpoint": "MSVP / MidiVideoSyphonBeats"
+    },
+    "intent": "Focused interop contract for MSVP scenes, macro shaping, analysis shaping, and transport ownership.",
+    "controller_surface": {
+      "profile_id": "msvp",
+      "label": "MSVP",
+      "section": "video",
+      "order": 5,
+      "scene_transport": "osc_primary",
+      "scene_midi_fallback_emitted_by_controller": false,
+      "continuous_shaping_transport": "midi_cc"
+    },
+    "stability_rules": [
+      "Scene semantic IDs are stable contract keys and must not be repurposed.",
+      "Scene OSC addresses are the primary semantic vocabulary for cross-repo triggering.",
+      "Scene MIDI notes are the fallback discrete trigger vocabulary for MSVP.",
+      "Continuous shaping lives on MIDI CC first, with OSC mirrors defined for downstream interop and verification.",
+      "Drift is a contract failure and should be caught before show use."
+    ],
+    "transport": {
+      "ownership": {
+        "clock_owner": "external_midi_master",
+        "msvp_role": "follower_only",
+        "msvp_never_generates_clock": true
+      },
+      "primary_guidance": {
+        "clock_transport": "midi_realtime",
+        "continuous_shaping": "midi_cc",
+        "semantic_scene_commands": "osc_primary_midi_note_fallback"
+      },
+      "failure_semantics": {
+        "missing_midi_loopback": "MSVP cannot receive clock or CC input. OSC scenes may still work if the OSC path is alive, but tempo-following and MIDI shaping are down.",
+        "stale_clock": "MSVP freezes on the last derived BPM until MIDI clock resumes.",
+        "contract_mismatch": "Any validator drift means the pair is out of contract and rig-tuned assumptions are unsafe until reconciled.",
+        "unknown_semantic_id": "Ignore the unknown command, report drift, and do not silently alias it to another scene or parameter."
+      }
+    },
+    "controls": {
+      "scene_triggers": {
+        "primary_protocol": "osc",
+        "fallback_protocol": "midi_note",
+        "msvp_receive_channel": 10,
+        "scenes": [
+          {
+            "semantic_id": "vid_scene_intro",
+            "label": "Scene Intro",
+            "osc_address": "/video/scene/intro",
+            "midi_note": 60
+          },
+          {
+            "semantic_id": "vid_scene_crash",
+            "label": "Scene Crash",
+            "osc_address": "/video/scene/crash",
+            "midi_note": 61
+          },
+          {
+            "semantic_id": "vid_scene_soft",
+            "label": "Scene Soft",
+            "osc_address": "/video/scene/soft",
+            "midi_note": 62
+          }
+        ]
+      },
+      "macro_lane": {
+        "primary_protocol": "midi_cc",
+        "osc_equivalent_prefix": "/msvp/macro/",
+        "controller_emits_osc_mirror": false,
+        "channel": 10,
+        "parameters": [
+          {
+            "pad_id": "msvp_macro_lines_per_frame",
+            "label": "Macro Density (CC1)",
+            "cc": 1,
+            "name": "linesPerFrame"
+          },
+          {
+            "pad_id": "msvp_macro_max_line_size",
+            "label": "Macro Line Size (CC2)",
+            "cc": 2,
+            "name": "maxLineSize"
+          },
+          {
+            "pad_id": "msvp_macro_opacity_min",
+            "label": "Macro Opacity Floor (CC3)",
+            "cc": 3,
+            "name": "opacityMin"
+          },
+          {
+            "pad_id": "msvp_macro_effect_interval_beats",
+            "label": "Macro FX Interval (CC4)",
+            "cc": 4,
+            "name": "effectIntervalBeats"
+          },
+          {
+            "pad_id": "msvp_macro_effect_duration_beats",
+            "label": "Macro FX Duration (CC5)",
+            "cc": 5,
+            "name": "effectDurationBeats"
+          },
+          {
+            "pad_id": "msvp_macro_bpm_smoothing",
+            "label": "Macro BPM Smooth (CC6)",
+            "cc": 6,
+            "name": "bpmSmoothing"
+          },
+          {
+            "pad_id": "msvp_macro_effect_bias",
+            "label": "Macro FX Bias (CC7)",
+            "cc": 7,
+            "name": "effectBias"
+          }
+        ]
+      },
+      "analysis_lane": {
+        "primary_protocol": "midi_cc",
+        "osc_equivalent_prefix": "/msvp/analysis/",
+        "controller_emits_osc_mirror": false,
+        "channel": 15,
+        "parameters": [
+          {
+            "pad_id": "msvp_analysis_lines_per_frame",
+            "label": "Analysis Density Bias (CC1)",
+            "cc": 1,
+            "name": "linesPerFrame"
+          },
+          {
+            "pad_id": "msvp_analysis_max_line_size",
+            "label": "Analysis Line Size Bias (CC2)",
+            "cc": 2,
+            "name": "maxLineSize"
+          },
+          {
+            "pad_id": "msvp_analysis_opacity_min",
+            "label": "Analysis Opacity Bias (CC3)",
+            "cc": 3,
+            "name": "opacityMin"
+          },
+          {
+            "pad_id": "msvp_analysis_effect_interval_beats",
+            "label": "Analysis FX Interval Bias (CC4)",
+            "cc": 4,
+            "name": "effectIntervalBeats"
+          },
+          {
+            "pad_id": "msvp_analysis_effect_duration_beats",
+            "label": "Analysis FX Duration Bias (CC5)",
+            "cc": 5,
+            "name": "effectDurationBeats"
+          },
+          {
+            "pad_id": "msvp_analysis_bpm_smoothing",
+            "label": "Analysis BPM Smooth (CC6)",
+            "cc": 6,
+            "name": "bpmSmoothing"
+          },
+          {
+            "pad_id": "msvp_analysis_effect_bias",
+            "label": "Analysis FX Bias (CC7)",
+            "cc": 7,
+            "name": "effectBias"
+          }
+        ]
+      }
+    },
+    "verification_targets": {
+      "live_rig_control": {
+        "default_path": "src/mappings.json",
+        "checks": [
+          "explicit msvp profile id",
+          "scene semantic IDs and OSC addresses",
+          "scene OSC-only controller emission",
+          "macro lane channel and CC assignments",
+          "analysis lane channel and CC assignments"
+        ]
+      },
+      "msvp": {
+        "default_path": "MSVP/MidiVideoSyphonBeats/data/live_rig_interop.json",
+        "checks": [
+          "scene semantic IDs",
+          "scene OSC addresses",
+          "scene MIDI note assignments",
+          "scene fallback receive channel",
+          "macro lane channel",
+          "analysis lane channel",
+          "macro parameter names and CC assignments",
+          "analysis parameter names and CC assignments"
+        ]
+      }
+    },
+    "todo": [
+      "TODO: live-rig-control does not currently auto-fail over from OSC scene commands to MIDI note fallback; fallback remains contract-defined and operator/manual.",
+      "TODO: the shipped MSVP interop file keeps runtime.rigTunedMode false by default so the repo remains generic out of the box; operator enablement is deployment-specific and not validated here."
+    ]
+  }
+}
