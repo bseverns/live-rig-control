@@ -30,6 +30,8 @@ those mappings and sends real-time signals.
 - **Atlas interop snapshot:** [`atlas/interop.yaml`](atlas/interop.yaml)
 - **Field card (fast ops + failure modes):** [`docs/FIELD_CARD.md`](docs/FIELD_CARD.md)
 - **Control reference (what is being controlled, and why):** [`docs/03_control-reference.md`](docs/03_control-reference.md)
+- **MSVP operator lane:** [`docs/MSVP_CONTROL_SURFACE.md`](docs/MSVP_CONTROL_SURFACE.md)
+- **MSVP smoke test:** [`docs/MSVP_SMOKE_TEST.md`](docs/MSVP_SMOKE_TEST.md)
 - **iOS testing notes:** [`docs/ios-testing.md`](docs/ios-testing.md)
 - **iOS deploy notes:** [`docs/ios-deploy.md`](docs/ios-deploy.md)
 
@@ -70,3 +72,12 @@ those mappings and sends real-time signals.
 - Bridge env examples live in [`server/.env.example`](server/.env.example).
 
 See `docs/01_architecture.md` for an overview of how this ties back into the rig.
+
+## MSVP validation
+
+Validate the controller mapping against the focused MSVP contract mirror and,
+when present, the sibling MSVP checkout:
+
+```bash
+python3 tools/validate_msvp_live_rig_control.py
+```

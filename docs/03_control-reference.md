@@ -52,7 +52,7 @@ Think of the surface as a set of control lanes:
 +------------------+----------------------+--------------------------------------+
 | Drum lane        | MIDI Ch 10           | Fast rhythmic performance controls   |
 | Synth/FX lane    | MIDI Ch 11           | Sound-shaping and insert controls    |
-| Video lane       | MIDI Ch 12 / OSC     | Keep scene changes away from music   |
+| Video lane       | OSC scenes + MIDI CC | Keep scene semantics separate from shaping |
 | Utility lane     | MIDI Ch 1-2 / RT     | Patterns, transport, side inputs     |
 | External bridge  | OSC /mn42/cmd        | Drive MOARkNOBS-42 slot updates      |
 +------------------+----------------------+--------------------------------------+
@@ -67,7 +67,7 @@ The repo currently defines these profiles in `src/mappings.json`:
 
 | Profile ID | Label | Pads | Primary Transport | Why this profile exists |
 | --- | --- | ---: | --- | --- |
-| `videoScenes` | Video Scenes (Ch12) | 3 | MIDI note + OSC | Scene selection is dangerous enough to isolate. |
+| `msvp` | MSVP | 17 | OSC scenes + MIDI CC | Explicit MSVP page for scenes, macro shaping, and analysis shaping. |
 | `nwWrldFeed` | nw_wrld Feed (OSC) | 12 | OSC | Video/software feed state does not belong on instrument channels. |
 | `nwWrldInput` | nw_wrld Input (MIDI) | 26 | MIDI note | A dedicated note-trigger page for NW World input lanes. |
 | `patterns` | Patterns | 1 | MIDI note | Keep pattern changes small and explicit. |
@@ -85,14 +85,15 @@ flowchart TB
     subgraph MIDI["MIDI lanes"]
         CH10[Ch 10\nDrum lane]
         CH11[Ch 11\nSynth + insert lane]
-        CH12[Ch 12\nVideo scene lane]
+        CH10MSVP[Ch 10\nMSVP macro lane]
+        CH15[Ch 15\nMSVP analysis lane]
         CH1[Ch 1\nPatterns / utility]
         CH2[Ch 2\nNW World input lane B]
         RT[MIDI realtime\nStart / Continue / Stop]
     end
 
     subgraph OSC["OSC lanes"]
-        OSCRIG[OSC rig commands\nnw_wrld feed + scenes]
+        OSCRIG[OSC rig commands\nMSVP scenes + nw_wrld feed]
         OSCMN42[/mn42/cmd\nMOARkNOBS-42 bridge]
     end
 ```
@@ -101,33 +102,36 @@ flowchart TB
 
 - `Ch 10` is the drum lane because it is the least surprising place for
   percussive triggering and drum-related CC.
+- `Ch 10` also carries the MSVP macro lane because it is a compact shaping
+  lane, not a transport owner.
 - `Ch 11` groups Electribe and PCM-30 macro controls so one sound-design lane
   lands on one target family.
-- `Ch 12` isolates video scene changes from music controls. A wrong note on the
-  video lane is annoying; a shared lane with synth control is worse.
+- `Ch 15` isolates MSVP analysis bias from macro base intent, which keeps those
+  two continuous roles easy to debug.
 - `Ch 1-2` carry utility/input traffic where the rig can tolerate simpler,
   lower-density mappings.
 - MIDI realtime is broken out because transport messages are global and should
   never share a crowded page with "normal" play gestures.
-- OSC is used where the target is not naturally MIDI-shaped or where the target
-  is another bridge/service instead of an instrument.
+- OSC is used where the target is not naturally MIDI-shaped or where semantic
+  scene commands are clearer than controller-style CC.
 
 ## Profile Walkthrough
 
-### `videoScenes`
+### `msvp`
 
 What it controls:
 
 - Discrete scene triggers such as `Intro`, `Crash`, and `Soft`.
-- Each pad currently carries both a MIDI note on Ch 12 and a matching OSC
-  address so the same gesture can hit multiple systems.
+- A macro row on MIDI Ch 10 for base visual shaping.
+- An analysis row on MIDI Ch 15 for biasing the same parameters on a separate lane.
 
 Why it is separate:
 
-- Scene changes are semantically different from sound shaping.
-- The performer should be able to enter "video mode" intentionally instead of
-  grazing a scene trigger while editing synth parameters.
-- Ch 12 keeps those messages auditable and out of the main instrument lanes.
+- Scene changes are semantically different from continuous shaping.
+- The performer should have one explicit MSVP page instead of inferring that a
+  generic scene page also owns macro and analysis semantics.
+- Scene commands are OSC-primary here to avoid accidental double-triggering.
+- Transport ownership stays elsewhere: this page does not imply that MSVP owns clock.
 
 ### `nwWrldFeed`
 
@@ -238,6 +242,15 @@ Why it must remain isolated:
 - These messages are global, not local.
 - A stray `Stop` can collapse the show in a way a wrong CC usually does not.
 - The profile exists to force intent before sending global sync control.
+
+## Validation
+
+The focused MSVP contract mirror lives in `contracts/msvp_live_rig_control.yaml`.
+Validate the controller mapping and, when available, the sibling MSVP checkout with:
+
+```bash
+python3 tools/validate_msvp_live_rig_control.py
+```
 
 ### `mn42Slots`
 

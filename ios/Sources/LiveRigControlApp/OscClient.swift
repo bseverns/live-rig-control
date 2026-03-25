@@ -63,8 +63,10 @@ final class OscClient: ObservableObject {
             let connection = NWConnection(host: endpointHost, port: port, using: .udp)
             udpConnection = connection
             connection.stateUpdateHandler = { [weak self] newState in
-                Task { @MainActor in
-                    self?.handleUdpState(newState, label: label)
+                guard let self else { return }
+                let state = newState
+                Task { @MainActor [self, state, label] in
+                    self.handleUdpState(state, label: label)
                 }
             }
             connection.start(queue: udpQueue)
