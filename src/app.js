@@ -1,32 +1,793 @@
 import { initMIDI, sendNote, sendCC, sendProgramChange, sendRealtime } from "./midi.js";
-import { connectOscBridge, sendOscMessage } from "./oscClient.js";
+import {
+  connectOscBridge,
+  disconnectOscBridge,
+  sendOscMessage,
+  sendOscValue,
+  subscribeOscStatus
+} from "./oscClient.js";
 
-let currentProfileId = null;
+const SECTION_ORDER = ["show", "sound", "video", "setup"];
+const SECTION_TITLES = {
+  show: "Show",
+  sound: "Sound",
+  video: "Video",
+  setup: "Setup"
+};
+const PERFORMANCE_DECK_PROFILES = new Set(["transport", "patterns"]);
+const PARAMETER_BOARD_PROFILES = new Set([
+  "msvp",
+  "seedbox",
+  "pcm30Macros",
+  "drumStack",
+  "electribe",
+  "mn42Slots"
+]);
+const STORAGE_KEYS = {
+  selectedProfileId: "selected_profile_id",
+  selectedSection: "selected_section",
+  selectedMidiOutputId: "selected_midi_output_id",
+  oscEnabled: "osc_enabled",
+  oscHost: "osc_host",
+  logsEnabled: "log_enabled"
+};
+const SLIDER_SEND_INTERVAL_MS = 20;
+const MAX_LOG_ENTRIES = 200;
+
+let mappings = null;
+let profiles = [];
+let profileIssues = {};
+let currentProfileId = window.localStorage.getItem(STORAGE_KEYS.selectedProfileId);
+let selectedSection = window.localStorage.getItem(STORAGE_KEYS.selectedSection);
+let selectedMidiOutputId = window.localStorage.getItem(STORAGE_KEYS.selectedMidiOutputId);
 let midiAccess = null;
 let midiOutput = null;
 let cachedMidiOutputs = [];
-const padState = new Map(); // id -> { on, lastSent, updatedAt }
-const padElements = new Map(); // id -> HTMLElement
-const profileControls = new Map(); // profileId -> { velocity, patternBank, velocityOverrides }
-let mappings = null;
+let oscEnabled = window.localStorage.getItem(STORAGE_KEYS.oscEnabled) === "true";
+let oscHost = window.localStorage.getItem(STORAGE_KEYS.oscHost) ?? "";
+let oscHostError = null;
+let oscHostHint = "";
+let oscStatus = "disconnected";
+let oscStatusDetail = "";
+let logsEnabled = window.localStorage.getItem(STORAGE_KEYS.logsEnabled) !== "false";
+let showingConnections = true;
+let showingLogs = false;
 
+const logs = [];
+const padState = new Map();
+const padElements = new Map();
+const profileControls = new Map();
+const sliderValues = new Map();
+const lastSliderSend = new Map();
+const pendingSliderValues = new Map();
+const pendingSliderTimers = new Map();
+
+const selectedProfileNameEl = document.getElementById("selected-profile-name");
+const midiPillDetailEl = document.getElementById("midi-pill-detail");
+const oscPillDotEl = document.getElementById("osc-pill-dot");
+const oscPillDetailEl = document.getElementById("osc-pill-detail");
+const appReadinessEl = document.getElementById("app-readiness");
+const connectionsToggleBtn = document.getElementById("connections-toggle");
+const logsToggleBtn = document.getElementById("logs-toggle");
+const connectionsPanel = document.getElementById("connections-panel");
+const logsPanel = document.getElementById("logs-panel");
+const sectionBar = document.getElementById("section-bar");
 const profileBar = document.getElementById("profile-bar");
-const grid = document.getElementById("grid");
+const profileWarnings = document.getElementById("profile-warnings");
+const surfaceTitle = document.getElementById("surface-title");
+const surfaceMeta = document.getElementById("surface-meta");
+const surface = document.getElementById("surface");
+const emptyState = document.getElementById("empty-state");
 const midiSelect = document.getElementById("midi-output-select");
 const refreshMidiBtn = document.getElementById("refresh-midi");
+const midiSelectedLabel = document.getElementById("midi-selected-label");
+const oscHostInput = document.getElementById("osc-host");
 const oscToggle = document.getElementById("osc-enabled");
+const oscStatusDot = document.getElementById("osc-status-dot");
+const oscStatusText = document.getElementById("osc-status-text");
+const oscReconnectBtn = document.getElementById("osc-reconnect");
+const oscHostErrorEl = document.getElementById("osc-host-error");
+const oscHostHintEl = document.getElementById("osc-host-hint");
+const logEnabledToggle = document.getElementById("log-enabled");
+const clearLogsBtn = document.getElementById("clear-logs");
+const logEntriesEl = document.getElementById("log-entries");
 
 async function loadMappings() {
-  const res = await fetch("../src/mappings.json", { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load mappings.json");
-  mappings = await res.json();
+  const response = await fetch("../src/mappings.json", { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error("Failed to load mappings.json");
+  }
+  mappings = await response.json();
+  profiles = normalizeProfiles(mappings);
+  profileIssues = validateProfiles(profiles);
 }
 
-function makeOscUrl() {
-  const host = window.location.hostname || "localhost";
+function normalizeProfiles(mappingDoc) {
+  return Object.entries(mappingDoc?.profiles ?? {})
+    .map(([id, profile]) => ({
+      id,
+      label: profile.label,
+      section: profile.section,
+      order: profile.order,
+      gridSize: profile.gridSize,
+      pads: profile.pads ?? []
+    }))
+    .sort((left, right) => {
+      const leftRank = sectionRank(profileSection(left));
+      const rightRank = sectionRank(profileSection(right));
+      if (leftRank !== rightRank) return leftRank - rightRank;
+
+      const leftOrder = Number.isFinite(left.order) ? left.order : 999;
+      const rightOrder = Number.isFinite(right.order) ? right.order : 999;
+      if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+
+      return profileName(left).localeCompare(profileName(right));
+    });
+}
+
+function sectionRank(section) {
+  const index = SECTION_ORDER.indexOf(section);
+  return index >= 0 ? index : 0;
+}
+
+function profileSection(profile) {
+  const section = typeof profile?.section === "string" ? profile.section.toLowerCase() : "";
+  return SECTION_ORDER.includes(section) ? section : "show";
+}
+
+function profileName(profile) {
+  return profile?.label || profile?.id || "Unknown";
+}
+
+function currentProfile() {
+  return profiles.find((profile) => profile.id === currentProfileId) ?? null;
+}
+
+function currentSectionProfiles() {
+  const section = currentSection();
+  return profiles.filter((profile) => profileSection(profile) === section);
+}
+
+function availableSections() {
+  const used = new Set(profiles.map(profileSection));
+  return SECTION_ORDER.filter((section) => used.has(section));
+}
+
+function currentSection() {
+  const selected = typeof selectedSection === "string" ? selectedSection : "";
+  if (availableSections().includes(selected)) return selected;
+  if (currentProfile()) return profileSection(currentProfile());
+  return availableSections()[0] ?? "show";
+}
+
+function profileLayoutKind(profile) {
+  if (PERFORMANCE_DECK_PROFILES.has(profile.id)) return "performanceDeck";
+  if (PARAMETER_BOARD_PROFILES.has(profile.id)) return "parameterBoard";
+  return "mappedGrid";
+}
+
+function sortedPadsForDisplay(profile) {
+  return [...(profile?.pads ?? [])].sort((left, right) => {
+    const leftRow = Number.isFinite(left.row) ? left.row : Number.MAX_SAFE_INTEGER;
+    const rightRow = Number.isFinite(right.row) ? right.row : Number.MAX_SAFE_INTEGER;
+    if (leftRow !== rightRow) return leftRow - rightRow;
+
+    const leftCol = Number.isFinite(left.col) ? left.col : Number.MAX_SAFE_INTEGER;
+    const rightCol = Number.isFinite(right.col) ? right.col : Number.MAX_SAFE_INTEGER;
+    if (leftCol !== rightCol) return leftCol - rightCol;
+
+    return left.id.localeCompare(right.id);
+  });
+}
+
+function validateProfiles(profileList) {
+  const issues = {};
+  profileList.forEach((profile) => {
+    const messages = [];
+    const cols = Math.max(profile.gridSize?.[0] ?? 8, 1);
+    const rows = Math.max(profile.gridSize?.[1] ?? 8, 1);
+    if (!profile.gridSize) {
+      messages.push("Missing gridSize; defaulting to 8x8.");
+    }
+
+    const occupied = new Set();
+    profile.pads.forEach((pad, index) => {
+      const defaultRow = Math.floor(index / cols);
+      const defaultCol = index % cols;
+      const row = Number.isFinite(pad.row) ? pad.row : defaultRow;
+      const col = Number.isFinite(pad.col) ? pad.col : defaultCol;
+      if (row < 0 || row >= rows || col < 0 || col >= cols) {
+        messages.push(`Pad ${pad.id} out of bounds (${row},${col}) for ${cols}x${rows}.`);
+        return;
+      }
+
+      const key = `${row},${col}`;
+      if (occupied.has(key)) {
+        messages.push(`Pad collision at (${row},${col}).`);
+      } else {
+        occupied.add(key);
+      }
+    });
+
+    issues[profile.id] = messages;
+    if (messages.length > 0) {
+      addLog(`Profile ${profile.id} has ${messages.length} issue(s)`);
+    }
+  });
+  return issues;
+}
+
+function initPadState() {
+  padState.clear();
+  (profiles ?? []).forEach((profile) => {
+    (profile.pads ?? []).forEach((pad) => {
+      padState.set(pad.id, { on: false, lastSent: null, updatedAt: null });
+    });
+  });
+}
+
+function bindUi() {
+  connectionsToggleBtn.addEventListener("click", () => {
+    showingConnections = true;
+    renderPanels();
+  });
+
+  logsToggleBtn.addEventListener("click", () => {
+    showingLogs = !showingLogs;
+    renderPanels();
+  });
+
+  midiSelect.addEventListener("change", () => {
+    const nextId = midiSelect.value;
+    midiOutput = cachedMidiOutputs.find((output) => output.id === nextId) ?? null;
+    selectedMidiOutputId = midiOutput?.id ?? "";
+    window.localStorage.setItem(STORAGE_KEYS.selectedMidiOutputId, selectedMidiOutputId);
+    addLog(midiOutput ? `MIDI output selected: ${midiOutput.name}` : "MIDI output cleared");
+    renderStatus();
+    renderConnections();
+  });
+
+  refreshMidiBtn.addEventListener("click", () => {
+    if (!midiAccess) return;
+    populateMidiOutputs([...midiAccess.outputs.values()]);
+    addLog("MIDI outputs refreshed");
+  });
+
+  oscHostInput.addEventListener("change", handleOscHostCommit);
+  oscHostInput.addEventListener("blur", handleOscHostCommit);
+  oscHostInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleOscHostCommit();
+    }
+  });
+
+  oscToggle.addEventListener("change", () => {
+    oscEnabled = oscToggle.checked;
+    window.localStorage.setItem(STORAGE_KEYS.oscEnabled, String(oscEnabled));
+    if (oscEnabled) {
+      addLog("OSC enabled");
+      connectCurrentOsc();
+    } else {
+      addLog("OSC disabled");
+      disconnectOscBridge();
+      renderStatus();
+      renderConnections();
+    }
+  });
+
+  oscReconnectBtn.addEventListener("click", () => {
+    if (!oscEnabled) {
+      oscEnabled = true;
+      oscToggle.checked = true;
+      window.localStorage.setItem(STORAGE_KEYS.oscEnabled, "true");
+    }
+    connectCurrentOsc();
+  });
+
+  logEnabledToggle.addEventListener("change", () => {
+    logsEnabled = logEnabledToggle.checked;
+    window.localStorage.setItem(STORAGE_KEYS.logsEnabled, String(logsEnabled));
+    renderLogs();
+  });
+
+  clearLogsBtn.addEventListener("click", () => {
+    logs.length = 0;
+    renderLogs();
+  });
+
+  window.addEventListener("resize", () => {
+    const profile = currentProfile();
+    if (profile && profileLayoutKind(profile) === "mappedGrid") {
+      renderSurface(profile);
+    }
+  });
+}
+
+function renderPanels() {
+  connectionsPanel.classList.toggle("hidden", !showingConnections);
+  logsPanel.classList.toggle("hidden", !showingLogs);
+  connectionsToggleBtn.classList.toggle("active", showingConnections);
+  logsToggleBtn.classList.toggle("active", showingLogs);
+}
+
+function renderAll() {
+  renderPanels();
+  renderStatus();
+  renderSections();
+  renderProfiles();
+  renderWarnings();
+  renderConnections();
+  renderLogs();
+
+  const profile = currentProfile();
+  if (!profile) {
+    surface.innerHTML = "";
+    surface.className = "surface";
+    surfaceTitle.textContent = "No profile loaded";
+    surfaceMeta.textContent = "";
+    emptyState.classList.remove("hidden");
+    return;
+  }
+
+  emptyState.classList.add("hidden");
+  renderSurface(profile);
+}
+
+function renderStatus() {
+  const profile = currentProfile();
+  selectedProfileNameEl.textContent = profile ? profileName(profile) : "No profile selected";
+
+  midiPillDetailEl.textContent = midiOutput?.name || "Not Connected";
+
+  const oscLabel = oscEnabled
+    ? (oscStatus === "connected"
+      ? "Connected"
+      : oscStatus === "connecting"
+        ? "Connecting"
+        : "Disconnected")
+    : "Disabled";
+  oscPillDetailEl.textContent = oscLabel;
+
+  oscPillDotEl.className = `status-dot osc ${oscEnabled ? oscStatus : "disconnected"}`;
+  oscStatusDot.className = `status-dot osc ${oscEnabled ? oscStatus : "disconnected"}`;
+
+  if (oscEnabled || cachedMidiOutputs.length > 0) {
+    appReadinessEl.textContent = "Control surface ready";
+  } else {
+    appReadinessEl.textContent = "Set up MIDI or OSC, then select a profile.";
+  }
+}
+
+function renderSections() {
+  const section = currentSection();
+  selectedSection = section;
+  window.localStorage.setItem(STORAGE_KEYS.selectedSection, section);
+  sectionBar.innerHTML = "";
+
+  availableSections().forEach((entry) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `section-chip${entry === section ? " active" : ""}`;
+    button.textContent = SECTION_TITLES[entry] ?? entry;
+    button.addEventListener("click", () => selectSection(entry));
+    sectionBar.appendChild(button);
+  });
+}
+
+function renderProfiles() {
+  profileBar.innerHTML = "";
+  currentSectionProfiles().forEach((profile) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `profile-chip${profile.id === currentProfileId ? " active" : ""}`;
+    button.dataset.profileId = profile.id;
+
+    const label = document.createElement("span");
+    label.textContent = profileName(profile);
+    button.appendChild(label);
+
+    const issues = profileIssues[profile.id] ?? [];
+    if (issues.length > 0) {
+      const badge = document.createElement("span");
+      badge.className = "warning-badge";
+      badge.textContent = "!";
+      button.appendChild(badge);
+    }
+
+    button.addEventListener("click", () => switchProfile(profile.id));
+    profileBar.appendChild(button);
+  });
+}
+
+function renderWarnings() {
+  const issues = currentProfileId ? (profileIssues[currentProfileId] ?? []) : [];
+  if (issues.length === 0) {
+    profileWarnings.classList.add("hidden");
+    profileWarnings.innerHTML = "";
+    return;
+  }
+
+  profileWarnings.classList.remove("hidden");
+  profileWarnings.innerHTML = `
+    <h3>Profile warnings</h3>
+    <ul>${issues.slice(0, 3).map((issue) => `<li>${escapeHtml(issue)}</li>`).join("")}</ul>
+  `;
+}
+
+function renderConnections() {
+  oscHostInput.value = oscHost;
+  oscToggle.checked = oscEnabled;
+
+  if (!midiAccess) {
+    ensureMidiPlaceholder("WebMIDI unavailable");
+    midiSelectedLabel.textContent = "WebMIDI unavailable";
+    refreshMidiBtn.disabled = true;
+    midiSelect.disabled = true;
+  } else if (cachedMidiOutputs.length === 0) {
+    ensureMidiPlaceholder("No MIDI outputs");
+    midiSelectedLabel.textContent = "No output selected";
+    refreshMidiBtn.disabled = false;
+    midiSelect.disabled = false;
+  } else if (midiOutput) {
+    midiSelectedLabel.textContent = `Selected: ${midiOutput.name}`;
+    refreshMidiBtn.disabled = false;
+    midiSelect.disabled = false;
+  } else {
+    midiSelectedLabel.textContent = "No output selected";
+    refreshMidiBtn.disabled = false;
+    midiSelect.disabled = false;
+  }
+
+  oscHostErrorEl.textContent = oscHostError || "";
+  oscHostErrorEl.classList.toggle("hidden", !oscHostError);
+
+  oscHostHintEl.textContent = oscHostHint || "";
+  oscHostHintEl.classList.toggle("hidden", !oscHostHint);
+
+  if (!oscEnabled) {
+    oscStatusText.textContent = "OSC disabled";
+  } else if (oscStatus === "connecting") {
+    oscStatusText.textContent = "OSC connecting...";
+  } else if (oscStatus === "connected") {
+    oscStatusText.textContent = "OSC connected";
+  } else {
+    oscStatusText.textContent = oscStatusDetail || "OSC disconnected";
+  }
+
+  oscReconnectBtn.disabled = Boolean(oscHostError) || oscStatus === "connecting";
+}
+
+function renderLogs() {
+  logEnabledToggle.checked = logsEnabled;
+  if (!logsEnabled) {
+    logEntriesEl.innerHTML = '<div class="log-entry">Debug logging disabled</div>';
+    return;
+  }
+
+  if (logs.length === 0) {
+    logEntriesEl.innerHTML = '<div class="log-entry">No log entries yet</div>';
+    return;
+  }
+
+  logEntriesEl.innerHTML = logs
+    .map((entry) => `<div class="log-entry">${escapeHtml(entry.timestamp)}  ${escapeHtml(entry.message)}</div>`)
+    .join("");
+  logEntriesEl.scrollTop = logEntriesEl.scrollHeight;
+}
+
+function renderSurface(profile) {
+  surface.innerHTML = "";
+  padElements.clear();
+  surfaceTitle.textContent = profileName(profile);
+  surfaceMeta.textContent = `${profile.pads.length} controls • ${SECTION_TITLES[profileSection(profile)] ?? "Show"}`;
+
+  const layout = profileLayoutKind(profile);
+  if (layout === "performanceDeck") {
+    surface.className = "surface performance-deck";
+    const track = document.createElement("div");
+    track.className = "performance-deck-track";
+    sortedPadsForDisplay(profile).forEach((pad) => {
+      track.appendChild(createPadElement(pad));
+    });
+    surface.appendChild(track);
+    return;
+  }
+
+  if (layout === "parameterBoard") {
+    surface.className = "surface parameter-board";
+    sortedPadsForDisplay(profile).forEach((pad) => {
+      surface.appendChild(createPadElement(pad));
+    });
+    return;
+  }
+
+  surface.className = "surface mapped-grid";
+  const cols = Math.max(profile.gridSize?.[0] ?? 8, 1);
+  const rows = Math.max(profile.gridSize?.[1] ?? 8, 1);
+  const spacing = 10;
+  const visibleCols = Math.min(cols, 8);
+  const availableWidth = Math.max(surface.clientWidth || window.innerWidth - 80, 360);
+  const cellSize = Math.max(92, Math.floor((availableWidth - spacing * (visibleCols - 1)) / visibleCols));
+
+  const grid = document.createElement("div");
+  grid.className = "mapped-grid-inner";
+  grid.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
+  grid.style.gridAutoRows = `${cellSize}px`;
+
+  buildPadMatrix(profile.pads, rows, cols).forEach((row) => {
+    row.forEach((pad) => {
+      if (pad) {
+        const element = createPadElement(pad);
+        if (pad.ui?.type === "slider") {
+          element.style.minHeight = `${Math.max(104, Math.floor(cellSize * 1.15))}px`;
+        } else {
+          element.style.minHeight = `${cellSize}px`;
+        }
+        grid.appendChild(element);
+      } else {
+        const empty = document.createElement("div");
+        empty.className = "grid-slot-empty";
+        empty.style.minHeight = `${cellSize}px`;
+        grid.appendChild(empty);
+      }
+    });
+  });
+
+  surface.appendChild(grid);
+}
+
+function createPadElement(pad) {
+  if (pad.ui?.type === "slider") {
+    return createSliderPad(pad);
+  }
+  return createButtonPad(pad);
+}
+
+function createButtonPad(pad) {
+  const element = document.createElement("button");
+  const isOn = getPadState(pad.id).on;
+  element.type = "button";
+  element.className = `pad-card button-pad ${isOn ? "on" : "off"}`;
+  element.dataset.padId = pad.id;
+  element.innerHTML = `<span class="pad-label">${escapeHtml(pad.label || pad.id)}</span>`;
+  padElements.set(pad.id, element);
+
+  if (pad.ui?.role === "patternBank") {
+    element.addEventListener("click", () => handlePatternBankClick(pad));
+    return element;
+  }
+
+  if (isTogglePad(pad)) {
+    element.addEventListener("click", () => handleTogglePad(pad));
+    return element;
+  }
+
+  let pressed = false;
+  const press = () => {
+    if (pressed) return;
+    pressed = true;
+    element.classList.add("pressed");
+    handleMomentaryPadPress(pad);
+  };
+  const release = () => {
+    if (!pressed) return;
+    pressed = false;
+    element.classList.remove("pressed");
+    handleMomentaryPadRelease(pad);
+  };
+
+  element.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    element.setPointerCapture?.(event.pointerId);
+    press();
+  });
+  element.addEventListener("pointerup", release);
+  element.addEventListener("pointercancel", release);
+  element.addEventListener("pointerleave", release);
+  return element;
+}
+
+function createSliderPad(pad) {
+  const ui = getUiConfig(pad);
+  const value = sliderValueForPad(pad);
+  const element = document.createElement("div");
+  element.className = "pad-card slider-pad";
+  element.dataset.padId = pad.id;
+
+  const label = document.createElement("div");
+  label.className = "pad-label";
+  label.textContent = pad.label || pad.id;
+
+  const slider = document.createElement("input");
+  slider.type = "range";
+  slider.min = String(ui.min);
+  slider.max = String(ui.max);
+  slider.step = String(ui.step);
+  slider.value = String(value);
+
+  const valueEl = document.createElement("div");
+  valueEl.className = "pad-value";
+  valueEl.textContent = String(value);
+  valueEl.classList.toggle("hidden", !ui.showValue);
+
+  slider.addEventListener("input", () => {
+    const nextValue = Number(slider.value);
+    valueEl.textContent = String(nextValue);
+    handleSliderChange(pad, nextValue);
+  });
+
+  element.append(label, slider, valueEl);
+  return element;
+}
+
+function selectSection(section) {
+  selectedSection = section;
+  window.localStorage.setItem(STORAGE_KEYS.selectedSection, section);
+  const current = currentProfile();
+  if (!current || profileSection(current) !== section) {
+    const first = profiles.find((profile) => profileSection(profile) === section);
+    if (first) {
+      switchProfile(first.id);
+      return;
+    }
+  }
+  renderAll();
+}
+
+function switchProfile(profileId) {
+  const next = profiles.find((profile) => profile.id === profileId);
+  if (!next) return;
+  currentProfileId = profileId;
+  selectedSection = profileSection(next);
+  window.localStorage.setItem(STORAGE_KEYS.selectedProfileId, profileId);
+  window.localStorage.setItem(STORAGE_KEYS.selectedSection, selectedSection);
+  syncPatternBankState();
+  renderAll();
+}
+
+function chooseInitialProfile() {
+  const preferred = profiles.find((profile) => profile.id === currentProfileId);
+  const section = availableSections().includes(selectedSection) ? selectedSection : null;
+  const firstInSection = section
+    ? profiles.find((profile) => profileSection(profile) === section)
+    : null;
+  const firstProfile = preferred || firstInSection || profiles[0] || null;
+
+  if (!firstProfile) {
+    currentProfileId = null;
+    selectedSection = null;
+    return;
+  }
+
+  currentProfileId = firstProfile.id;
+  selectedSection = profileSection(firstProfile);
+  window.localStorage.setItem(STORAGE_KEYS.selectedProfileId, currentProfileId);
+  window.localStorage.setItem(STORAGE_KEYS.selectedSection, selectedSection);
+  syncPatternBankState();
+}
+
+function populateMidiOutputs(outputs) {
+  cachedMidiOutputs = outputs;
+  const previous = selectedMidiOutputId || midiOutput?.id || midiSelect.value;
+  midiSelect.innerHTML = "";
+
+  if (outputs.length === 0) {
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = "No MIDI outputs";
+    midiSelect.appendChild(option);
+    midiOutput = null;
+    selectedMidiOutputId = "";
+    renderStatus();
+    renderConnections();
+    return;
+  }
+
+  outputs.forEach((output, index) => {
+    const option = document.createElement("option");
+    option.value = output.id;
+    option.textContent = output.name || `Output ${index + 1}`;
+    midiSelect.appendChild(option);
+  });
+
+  midiOutput = outputs.find((output) => output.id === previous) ?? outputs[0] ?? null;
+  selectedMidiOutputId = midiOutput?.id ?? "";
+  midiSelect.value = selectedMidiOutputId;
+  window.localStorage.setItem(STORAGE_KEYS.selectedMidiOutputId, selectedMidiOutputId);
+  renderStatus();
+  renderConnections();
+}
+
+function handleOscHostCommit() {
+  const raw = oscHostInput.value.trim();
+  const sanitized = sanitizeOscHost(raw);
+  oscHost = sanitized;
+  oscHostHint = sanitized !== raw && sanitized !== "" ? `Host normalized to ${sanitized}` : "";
+  oscHostError = validateOscHost(sanitized);
+  window.localStorage.setItem(STORAGE_KEYS.oscHost, oscHost);
+
+  if (oscHostError) {
+    addLog("OSC host invalid");
+    renderConnections();
+    return;
+  }
+
+  addLog(`OSC host set to ${oscHost || "localhost"}`);
+  renderConnections();
+  if (oscEnabled) {
+    connectCurrentOsc();
+  }
+}
+
+function validateOscHost(host) {
+  if (!host) return null;
+  if (/\s/.test(host)) {
+    return "OSC endpoint cannot contain spaces.";
+  }
+
+  if (host.includes("://")) {
+    let parsed;
+    try {
+      parsed = new URL(host);
+    } catch {
+      return "Use a plain host or ws:// / wss:// endpoint.";
+    }
+
+    const scheme = parsed.protocol.replace(":", "").toLowerCase();
+    if (!["ws", "wss"].includes(scheme)) {
+      return "Web app OSC endpoint must use ws:// or wss://.";
+    }
+    if (!parsed.hostname) {
+      return "OSC endpoint must include a host.";
+    }
+    if (parsed.pathname && parsed.pathname !== "/") {
+      return "OSC endpoint cannot include a path.";
+    }
+    return null;
+  }
+
+  if (host.includes("/")) {
+    return "Host cannot include paths.";
+  }
+  return null;
+}
+
+function sanitizeOscHost(host) {
+  const trimmed = host.trim();
+  if (!trimmed) return "";
+  if (!trimmed.includes("://")) {
+    return trimmed.replace(/\/+$/, "");
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    if (!parsed.hostname) return trimmed;
+    const scheme = parsed.protocol.replace(":", "").toLowerCase();
+    const port = parsed.port ? `:${parsed.port}` : "";
+    return `${scheme}://${parsed.hostname}${port}`;
+  } catch {
+    return trimmed;
+  }
+}
+
+function makeOscUrl(host) {
+  if (host && host.includes("://")) {
+    const url = new URL(host);
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("osc_token") || window.localStorage.getItem("oscBridgeToken");
+    if (token) {
+      url.searchParams.set("token", token);
+    }
+    return url.toString();
+  }
+
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-  const port = 9001; // default OSC bridge WebSocket port
-  const url = new URL(`${protocol}://${host}:${port}`);
+  const hostname = host || window.location.hostname || "localhost";
+  const url = new URL(`${protocol}://${hostname}`);
+  if (!url.port) {
+    url.port = "9001";
+  }
   const params = new URLSearchParams(window.location.search);
   const token = params.get("osc_token") || window.localStorage.getItem("oscBridgeToken");
   if (token) {
@@ -35,205 +796,45 @@ function makeOscUrl() {
   return url.toString();
 }
 
-async function main() {
-  await loadMappings();
-  initPadState();
-  midiAccess = await initMIDI(populateMidiOutputs);
-  if (!midiAccess) {
-    disableMidiUi("WebMIDI unavailable");
+function ensureMidiPlaceholder(message) {
+  if (midiSelect.options.length > 0) return;
+  const option = document.createElement("option");
+  option.value = "";
+  option.textContent = message;
+  midiSelect.appendChild(option);
+}
+
+function connectCurrentOsc() {
+  if (oscHostError) {
+    renderConnections();
+    return;
   }
-  buildProfileBar();
 
-  const firstProfile = Object.keys(mappings.profiles)[0];
-  if (firstProfile) {
-    switchProfile(firstProfile);
+  try {
+    const url = makeOscUrl(oscHost);
+    connectOscBridge(url);
+  } catch (error) {
+    oscStatus = "disconnected";
+    oscStatusDetail = error instanceof Error ? error.message : "OSC bridge failed";
+    renderStatus();
+    renderConnections();
   }
-
-  midiSelect.addEventListener("change", () => {
-    const id = midiSelect.value;
-    midiOutput = cachedMidiOutputs.find((o) => o.id === id) || null;
-  });
-
-  refreshMidiBtn.addEventListener("click", () => {
-    if (!midiAccess) return;
-    populateMidiOutputs([...midiAccess.outputs.values()]);
-  });
-
-  oscToggle.addEventListener("change", (e) => {
-    if (e.target.checked) {
-      connectOscBridge(makeOscUrl());
-    }
-  });
 }
 
-function disableMidiUi(message) {
-  midiOutput = null;
-  cachedMidiOutputs = [];
-  midiSelect.innerHTML = "";
-  const opt = document.createElement("option");
-  opt.textContent = message;
-  opt.value = "";
-  midiSelect.appendChild(opt);
-  midiSelect.disabled = true;
-  refreshMidiBtn.disabled = true;
-}
-
-function populateMidiOutputs(outputs) {
-  cachedMidiOutputs = outputs;
-  const previousSelection = midiSelect.value || midiOutput?.id;
-  midiSelect.innerHTML = "";
-  midiSelect.disabled = false;
-  refreshMidiBtn.disabled = false;
-  outputs.forEach((out, idx) => {
-    const opt = document.createElement("option");
-    opt.value = out.id;
-    opt.textContent = out.name || `Output ${idx + 1}`;
-    midiSelect.appendChild(opt);
-  });
-
-  const matching = cachedMidiOutputs.find((out) => out.id === previousSelection);
-  const first = cachedMidiOutputs[0];
-  const nextOutput = matching || first || null;
-
-  midiOutput = nextOutput;
-  midiSelect.value = nextOutput?.id ?? "";
-}
-
-function buildProfileBar() {
-  Object.entries(mappings.profiles).forEach(([id, profile]) => {
-    const btn = document.createElement("button");
-    btn.textContent = profile.label || id;
-    btn.dataset.profileId = id;
-    btn.addEventListener("click", () => switchProfile(id));
-    profileBar.appendChild(btn);
-  });
-}
-
-function switchProfile(profileId) {
-  currentProfileId = profileId;
-  [...profileBar.children].forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.profileId === profileId);
-  });
-
-  const profile = mappings.profiles[profileId];
-  if (!profile) return;
-
-  const [cols, rows] = profile.gridSize || [8, 8];
-  grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-  grid.style.gridTemplateRows = `repeat(${rows}, minmax(64px, 1fr))`;
-  grid.innerHTML = "";
-  padElements.clear();
-
-  profile.pads.forEach((pad, idx) => {
-    const ui = getUiConfig(pad);
-    const isSlider = ui.type === "slider"
-      && (ui.role === "velocity" || ui.role === "velocityOverride" || ui.role === "pattern"
-        || pad.midi?.type === "cc" || pad.midi?.type === "program");
-    const isPatternBank = ui.role === "patternBank";
-    const div = document.createElement("div");
-    div.className = isSlider ? "pad slider" : "pad off";
-    div.dataset.padId = pad.id;
-
-    const defaultRow = Math.floor(idx / cols);
-    const defaultCol = idx % cols;
-    const row = Number.isFinite(pad.row) ? pad.row : defaultRow;
-    const col = Number.isFinite(pad.col) ? pad.col : defaultCol;
-    div.style.gridRow = row + 1;
-    div.style.gridColumn = col + 1;
-
-    if (!padState.has(pad.id)) {
-      padState.set(pad.id, { on: false, lastSent: null, updatedAt: null });
-    }
-    padElements.set(pad.id, div);
-
-    const label = document.createElement("div");
-    label.className = "pad-label";
-    label.textContent = pad.label || pad.id;
-    div.appendChild(label);
-
-    if (isSlider) {
-      const slider = document.createElement("input");
-      slider.type = "range";
-      slider.min = String(ui.min);
-      slider.max = String(ui.max);
-      slider.step = String(ui.step);
-
-      const prevMidiValue = getPadState(pad.id)?.lastSent?.midi?.value;
-      const prevUiValue = getPadState(pad.id)?.lastSent?.ui?.value;
-      const profileVelocity = getProfileVelocity(currentProfileId);
-      let startValue = Number.isFinite(prevMidiValue) ? prevMidiValue : ui.initial;
-      if (ui.role === "velocity") {
-        startValue = Number.isFinite(prevUiValue) ? prevUiValue : profileVelocity;
-      } else if (ui.role === "velocityOverride") {
-        const override = getProfileVelocityOverride(currentProfileId, ui.target);
-        startValue = Number.isFinite(override) ? override : profileVelocity;
-      } else if (ui.role === "pattern") {
-        startValue = Number.isFinite(prevUiValue) ? prevUiValue : ui.initial;
-      }
-      slider.value = String(startValue);
-
-      const valueEl = document.createElement("div");
-      valueEl.className = "pad-value";
-      valueEl.textContent = String(startValue);
-
-      slider.addEventListener("input", () => {
-        const value = Number(slider.value);
-        valueEl.textContent = slider.value;
-        if (ui.role === "velocity") {
-          setProfileVelocity(currentProfileId, value);
-          recordSent(pad.id, { ui: { role: "velocity", value } });
-          return;
-        }
-        if (ui.role === "velocityOverride") {
-          setProfileVelocityOverride(currentProfileId, ui.target, value);
-          recordSent(pad.id, { ui: { role: "velocityOverride", value, target: ui.target } });
-          return;
-        }
-        if (ui.role === "pattern") {
-          sendProgramValue(pad, value);
-          recordSent(pad.id, { ui: { role: "pattern", value } });
-          return;
-        }
-        if (pad.midi?.type === "program") {
-          sendProgramValue(pad, value);
-          return;
-        }
-        sendCcValue(pad, value);
-      });
-
-      div.appendChild(slider);
-      if (ui.showValue) {
-        div.appendChild(valueEl);
-      }
-    } else if (isPatternBank) {
-      const bank = getProfilePatternBank(currentProfileId);
-      const isOn = Number.isFinite(ui.bank) && ui.bank === bank;
-      div.classList.toggle("on", isOn);
-      div.classList.toggle("off", !isOn);
-      div.addEventListener("click", () => handlePatternBankClick(pad));
-    } else {
-      const initialOn = getPadState(pad.id).on;
-      div.classList.toggle("on", initialOn);
-      div.classList.toggle("off", !initialOn);
-      div.addEventListener("click", () => handlePadClick(pad, div));
-    }
-    grid.appendChild(div);
-  });
-}
-
-function initPadState() {
-  padState.clear();
-  for (const profile of Object.values(mappings.profiles ?? {})) {
-    for (const pad of profile.pads ?? []) {
-      padState.set(pad.id, { on: false, lastSent: null, updatedAt: null });
-    }
+function addLog(message) {
+  const timestamp = new Date().toLocaleTimeString("en-US", { hour12: false });
+  logs.push({ timestamp, message });
+  if (logs.length > MAX_LOG_ENTRIES) {
+    logs.splice(0, logs.length - MAX_LOG_ENTRIES);
   }
+  renderLogs();
 }
 
 function isTogglePad(pad) {
+  if (pad.ui?.type === "slider") return false;
+  if (pad.ui?.role === "patternBank") return true;
   if (typeof pad.toggle === "boolean") return pad.toggle;
-  if (pad.mode) return pad.mode === "toggle";
-  return false;
+  return pad.mode === "toggle";
 }
 
 function getGroupInfo(pad) {
@@ -251,28 +852,97 @@ function getPadState(id) {
   return padState.get(id) ?? { on: false, lastSent: null, updatedAt: null };
 }
 
-function setPadState(id, next) {
-  padState.set(id, next);
+function setPadState(id, nextState) {
+  padState.set(id, nextState);
 }
 
 function setPadUi(id, on) {
-  const el = padElements.get(id);
-  if (!el) return;
-  if (el.classList.contains("slider")) return;
-  el.classList.toggle("on", on);
-  el.classList.toggle("off", !on);
+  const element = padElements.get(id);
+  if (!element) return;
+  if (!element.classList.contains("button-pad")) return;
+  element.classList.toggle("on", on);
+  element.classList.toggle("off", !on);
 }
 
 function recordSent(id, payload) {
-  const prev = getPadState(id);
-  const lastSent = {
-    ...(prev.lastSent ?? {}),
-    ...payload
-  };
+  const previous = getPadState(id);
   setPadState(id, {
-    on: prev.on,
-    lastSent,
+    on: previous.on,
+    lastSent: { ...(previous.lastSent ?? {}), ...payload },
     updatedAt: new Date().toISOString()
+  });
+}
+
+function handleTogglePad(pad) {
+  const current = getPadState(pad.id).on;
+  const nextOn = !current;
+  if (nextOn) {
+    const profile = currentProfile();
+    if (profile) {
+      enforceExclusiveGroup(pad, profile);
+    }
+  }
+
+  setPadState(pad.id, {
+    on: nextOn,
+    lastSent: getPadState(pad.id).lastSent,
+    updatedAt: new Date().toISOString()
+  });
+  setPadUi(pad.id, nextOn);
+  addLog(`Pad ${pad.id} ${nextOn ? "on" : "off"}`);
+  sendOutputs(pad, nextOn ? "on" : "off");
+}
+
+function handleMomentaryPadPress(pad) {
+  if (getPadState(pad.id).on) return;
+  setPadState(pad.id, {
+    on: true,
+    lastSent: getPadState(pad.id).lastSent,
+    updatedAt: new Date().toISOString()
+  });
+  setPadUi(pad.id, true);
+  addLog(`Pad ${pad.id} on`);
+  sendOutputs(pad, "on");
+}
+
+function handleMomentaryPadRelease(pad) {
+  if (!getPadState(pad.id).on) return;
+  setPadState(pad.id, {
+    on: false,
+    lastSent: getPadState(pad.id).lastSent,
+    updatedAt: new Date().toISOString()
+  });
+  setPadUi(pad.id, false);
+  addLog(`Pad ${pad.id} off`);
+  sendOutputs(pad, "off");
+}
+
+function handlePatternBankClick(pad) {
+  const ui = getUiConfig(pad);
+  if (ui.role !== "patternBank") return;
+  const bank = Number.isFinite(ui.bank) ? ui.bank : 0;
+  setProfilePatternBank(currentProfileId, bank);
+  syncPatternBankState();
+  renderSurface(currentProfile());
+}
+
+function enforceExclusiveGroup(pad, profile) {
+  const group = getGroupInfo(pad);
+  if (!group?.exclusive) return;
+
+  profile.pads.forEach((other) => {
+    if (other.id === pad.id) return;
+    const otherGroup = getGroupInfo(other);
+    if (!otherGroup || otherGroup.id !== group.id) return;
+    if (!isTogglePad(other)) return;
+
+    setPadState(other.id, {
+      on: false,
+      lastSent: getPadState(other.id).lastSent,
+      updatedAt: new Date().toISOString()
+    });
+    setPadUi(other.id, false);
+    sendOutputs(other, "off");
   });
 }
 
@@ -283,72 +953,164 @@ function getUiConfig(pad) {
   const step = Number.isFinite(ui.step) ? ui.step : 1;
   const fallbackInitial = Number.isFinite(pad.midi?.offValue) ? pad.midi.offValue : min;
   const initial = Number.isFinite(ui.initial) ? ui.initial : fallbackInitial;
-  const showValue = ui.showValue !== false;
-  const role = ui.role ?? null;
-  const target = typeof ui.target === "string" ? ui.target : null;
-  const bank = Number.isFinite(ui.bank) ? ui.bank : null;
   return {
     type: ui.type ?? "button",
+    role: ui.role ?? null,
+    target: typeof ui.target === "string" ? ui.target : null,
+    bank: Number.isFinite(ui.bank) ? ui.bank : null,
     min,
     max,
     step,
     initial: Math.min(Math.max(initial, min), max),
-    showValue,
-    role,
-    target,
-    bank
+    showValue: ui.showValue !== false
   };
 }
 
 function getProfileControls(profileId) {
-  let entry = profileControls.get(profileId);
-  if (!entry) {
-    entry = { velocity: 100, patternBank: 0, velocityOverrides: new Map() };
-    profileControls.set(profileId, entry);
+  const key = profileId ?? "_";
+  if (!profileControls.has(key)) {
+    profileControls.set(key, {
+      velocity: 100,
+      patternBank: 0,
+      velocityOverrides: new Map()
+    });
   }
-  return entry;
+  return profileControls.get(key);
 }
 
 function getProfileVelocity(profileId) {
-  const entry = getProfileControls(profileId);
-  return entry.velocity;
+  return getProfileControls(profileId).velocity;
 }
 
 function setProfileVelocity(profileId, value) {
-  const entry = getProfileControls(profileId);
-  entry.velocity = value;
-  profileControls.set(profileId, entry);
+  getProfileControls(profileId).velocity = value;
 }
 
 function getProfilePatternBank(profileId) {
-  const entry = getProfileControls(profileId);
-  return entry.patternBank;
+  return getProfileControls(profileId).patternBank;
 }
 
 function setProfilePatternBank(profileId, value) {
-  const entry = getProfileControls(profileId);
-  entry.patternBank = value;
-  profileControls.set(profileId, entry);
+  getProfileControls(profileId).patternBank = value;
 }
 
 function getProfileVelocityOverride(profileId, padId) {
   if (!padId) return null;
-  const entry = getProfileControls(profileId);
-  return entry.velocityOverrides.get(padId);
+  return getProfileControls(profileId).velocityOverrides.get(padId) ?? null;
 }
 
 function setProfileVelocityOverride(profileId, padId, value) {
   if (!padId) return;
-  const entry = getProfileControls(profileId);
-  entry.velocityOverrides.set(padId, value);
+  getProfileControls(profileId).velocityOverrides.set(padId, value);
 }
 
-function sendCcValue(pad, value) {
-  if (!pad.midi || pad.midi.type !== "cc") return;
+function syncPatternBankState() {
+  const profile = currentProfile();
+  if (!profile) return;
+  const bank = getProfilePatternBank(currentProfileId);
+  profile.pads.forEach((pad) => {
+    if (pad.ui?.role !== "patternBank") return;
+    const isOn = pad.ui?.bank === bank;
+    setPadState(pad.id, {
+      on: isOn,
+      lastSent: getPadState(pad.id).lastSent,
+      updatedAt: new Date().toISOString()
+    });
+  });
+}
+
+function sliderValueForPad(pad) {
+  if (pad.ui?.role === "velocity") {
+    return getProfileVelocity(currentProfileId);
+  }
+  if (pad.ui?.role === "velocityOverride") {
+    const target = pad.ui?.target;
+    const override = target ? getProfileVelocityOverride(currentProfileId, target) : null;
+    if (Number.isFinite(override)) return override;
+    return getProfileVelocity(currentProfileId);
+  }
+  if (sliderValues.has(pad.id)) {
+    return sliderValues.get(pad.id);
+  }
+  return getUiConfig(pad).initial;
+}
+
+function handleSliderChange(pad, value) {
   const ui = getUiConfig(pad);
-  const clamped = Math.min(Math.max(value, ui.min), ui.max);
-  sendCC(midiOutput, pad.midi.channel, pad.midi.cc, clamped);
-  recordSent(pad.id, { midi: { type: "cc", value: clamped } });
+  let clamped = Math.min(Math.max(value, ui.min), ui.max);
+
+  if (ui.role === "velocity") {
+    setProfileVelocity(currentProfileId, clamped);
+    sliderValues.set(pad.id, clamped);
+    recordSent(pad.id, { ui: { role: "velocity", value: clamped } });
+    return;
+  }
+
+  if (ui.role === "velocityOverride") {
+    if (ui.target) {
+      setProfileVelocityOverride(currentProfileId, ui.target, clamped);
+    }
+    sliderValues.set(pad.id, clamped);
+    recordSent(pad.id, { ui: { role: "velocityOverride", value: clamped, target: ui.target } });
+    return;
+  }
+
+  if (ui.role === "pattern") {
+    if (getProfilePatternBank(currentProfileId) === 1) {
+      clamped = Math.min(clamped, 121);
+    }
+    sliderValues.set(pad.id, clamped);
+    sendProgramValue(pad, clamped);
+    recordSent(pad.id, { ui: { role: "pattern", value: clamped } });
+    return;
+  }
+
+  sliderValues.set(pad.id, clamped);
+  if (oscEnabled && pad.osc) {
+    sendOscValue(pad, clamped);
+    addLog(`OSC ${pad.osc.address} = ${clamped}`);
+    recordSent(pad.id, { osc: { address: pad.osc.address, value: clamped } });
+  }
+  if (pad.midi) {
+    sendSliderValue(pad, clamped);
+  }
+}
+
+function sendSliderValue(pad, value) {
+  const now = performance.now();
+  const last = lastSliderSend.get(pad.id) ?? 0;
+  const elapsed = now - last;
+  if (elapsed >= SLIDER_SEND_INTERVAL_MS) {
+    lastSliderSend.set(pad.id, now);
+    sendMidiForSlider(pad, value);
+    return;
+  }
+
+  pendingSliderValues.set(pad.id, value);
+  if (pendingSliderTimers.has(pad.id)) return;
+  const delay = Math.max(SLIDER_SEND_INTERVAL_MS - elapsed, 0);
+  const timer = window.setTimeout(() => {
+    pendingSliderTimers.delete(pad.id);
+    const pendingValue = pendingSliderValues.get(pad.id);
+    if (!Number.isFinite(pendingValue)) return;
+    pendingSliderValues.delete(pad.id);
+    lastSliderSend.set(pad.id, performance.now());
+    sendMidiForSlider(pad, pendingValue);
+  }, delay);
+  pendingSliderTimers.set(pad.id, timer);
+}
+
+function sendMidiForSlider(pad, value) {
+  if (!pad.midi) return;
+  if (pad.midi.type === "cc") {
+    sendCC(midiOutput, pad.midi.channel, pad.midi.cc, value);
+    addLog(`MIDI CC ${pad.midi.cc} ch ${pad.midi.channel} = ${value}`);
+    recordSent(pad.id, { midi: { type: "cc", value } });
+    return;
+  }
+  if (pad.midi.type === "program") {
+    sendProgramValue(pad, value);
+  }
 }
 
 function sendProgramValue(pad, value) {
@@ -361,43 +1123,17 @@ function sendProgramValue(pad, value) {
   let bankLsb = pad.midi.bankLsb;
 
   if (pad.midi.programBankMode === "electribePattern") {
-    const patternBank = ui.role === "pattern" ? getProfilePatternBank(currentProfileId) : null;
-    if (Number.isFinite(patternBank)) {
-      bankMsb = 0;
-      bankLsb = patternBank;
-      program = patternBank === 1 ? Math.min(clamped, 121) : clamped;
-    } else if (clamped <= 127) {
-      bankMsb = 0;
-      bankLsb = 0;
-      program = clamped;
-    } else {
-      bankMsb = 0;
-      bankLsb = 1;
-      program = clamped - 127;
+    const patternBank = getProfilePatternBank(currentProfileId);
+    bankMsb = 0;
+    bankLsb = patternBank;
+    if (patternBank === 1) {
+      program = Math.min(clamped, 121);
     }
   }
 
   sendProgramChange(midiOutput, pad.midi.channel, program, bankMsb, bankLsb);
+  addLog(`MIDI Program ch ${pad.midi.channel} = ${program}`);
   recordSent(pad.id, { midi: { type: "program", value: clamped } });
-}
-
-function handlePatternBankClick(pad) {
-  const ui = getUiConfig(pad);
-  if (ui.role !== "patternBank") return;
-  const bank = Number.isFinite(ui.bank) ? ui.bank : 0;
-  setProfilePatternBank(currentProfileId, bank);
-  const profile = mappings.profiles[currentProfileId];
-  for (const other of profile?.pads ?? []) {
-    const otherUi = getUiConfig(other);
-    if (otherUi.role !== "patternBank") continue;
-    const isOn = Number.isFinite(otherUi.bank) && otherUi.bank === bank;
-    setPadState(other.id, {
-      on: isOn,
-      lastSent: getPadState(other.id).lastSent,
-      updatedAt: new Date().toISOString()
-    });
-    setPadUi(other.id, isOn);
-  }
 }
 
 function sendOutputs(pad, state, { force = false } = {}) {
@@ -415,131 +1151,130 @@ function sendOutputs(pad, state, { force = false } = {}) {
         pad.midi.offVelocity ?? 0,
         state === "on"
       );
+      addLog(`MIDI note ${pad.midi.note} ch ${pad.midi.channel} ${state}`);
       recordSent(pad.id, { midi: { type: "note", state } });
     } else if (pad.midi.type === "cc") {
-      const val = state === "on"
-        ? pad.midi.onValue ?? 127
-        : pad.midi.offValue ?? 0;
-      sendCC(midiOutput, pad.midi.channel, pad.midi.cc, val);
+      const value = state === "on" ? (pad.midi.onValue ?? 127) : (pad.midi.offValue ?? 0);
+      sendCC(midiOutput, pad.midi.channel, pad.midi.cc, value);
+      addLog(`MIDI CC ${pad.midi.cc} ch ${pad.midi.channel} = ${value}`);
       recordSent(pad.id, { midi: { type: "cc", state } });
-    } else if (pad.midi.type === "program") {
-      if (state === "on") {
-        if (pad.midi.programBankMode === "electribePattern") {
-          const program = pad.midi.program ?? 1;
-          const bank = Number.isFinite(getProfilePatternBank(currentProfileId))
-            ? getProfilePatternBank(currentProfileId)
-            : pad.midi.bankLsb;
-          const bankMsb = pad.midi.bankMsb ?? 0;
-          const bankLsb = Number.isFinite(bank) ? bank : pad.midi.bankLsb;
-          const safeProgram = bankLsb === 1 ? Math.min(program, 121) : program;
-          sendProgramChange(midiOutput, pad.midi.channel, safeProgram, bankMsb, bankLsb);
-        } else {
-          sendProgramChange(
-            midiOutput,
-            pad.midi.channel,
-            pad.midi.program,
-            pad.midi.bankMsb,
-            pad.midi.bankLsb
-          );
-        }
-        recordSent(pad.id, { midi: { type: "program", state } });
-      }
-    } else if (pad.midi.type === "realtime") {
-      if (state === "on") {
-        sendRealtime(midiOutput, pad.midi.realtime);
-        recordSent(pad.id, { midi: { type: "realtime", state } });
-      }
+    } else if (pad.midi.type === "program" && state === "on") {
+      sendProgramValue(pad, pad.midi.program ?? 1);
+    } else if (pad.midi.type === "realtime" && state === "on") {
+      sendRealtime(midiOutput, pad.midi.realtime);
+      addLog(`MIDI realtime ${pad.midi.realtime}`);
+      recordSent(pad.id, { midi: { type: "realtime", state } });
     }
   }
 
-  if ((oscToggle.checked || force) && pad.osc) {
+  if ((oscEnabled || force) && pad.osc) {
     sendOscMessage(pad, state);
+    addLog(`OSC ${pad.osc.address} ${state}`);
     recordSent(pad.id, { osc: { address: pad.osc.address, state } });
-  }
-}
-
-function enforceExclusiveGroup(pad, profile) {
-  const group = getGroupInfo(pad);
-  if (!group?.exclusive) return;
-  for (const other of profile.pads) {
-    if (other.id === pad.id) continue;
-    const otherGroup = getGroupInfo(other);
-    if (!otherGroup || otherGroup.id !== group.id) continue;
-    if (!isTogglePad(other)) continue;
-    setPadState(other.id, { on: false, lastSent: getPadState(other.id).lastSent, updatedAt: new Date().toISOString() });
-    setPadUi(other.id, false);
-    sendOutputs(other, "off");
-  }
-}
-
-function handlePadClick(pad, element) {
-  const current = getPadState(pad.id).on;
-  const togglePad = isTogglePad(pad);
-  const nextOn = togglePad ? !current : true;
-  const state = nextOn ? "on" : "off";
-
-  const profile = mappings.profiles[currentProfileId];
-  if (nextOn && profile) {
-    enforceExclusiveGroup(pad, profile);
-  }
-
-  setPadState(pad.id, {
-    on: nextOn,
-    lastSent: getPadState(pad.id).lastSent,
-    updatedAt: new Date().toISOString()
-  });
-  setPadUi(pad.id, nextOn);
-  sendOutputs(pad, state);
-
-  if (!togglePad) {
-    setPadState(pad.id, {
-      on: false,
-      lastSent: getPadState(pad.id).lastSent,
-      updatedAt: new Date().toISOString()
-    });
-    setPadUi(pad.id, false);
   }
 }
 
 function dumpState() {
   const snapshot = {};
-  for (const [id, entry] of padState.entries()) {
-    snapshot[id] = entry;
-  }
+  padState.forEach((value, key) => {
+    snapshot[key] = value;
+  });
   console.log("Pad state snapshot:", snapshot);
   return snapshot;
 }
 
 function safeBlackout() {
-  const allPads = [];
-  for (const profile of Object.values(mappings.profiles ?? {})) {
-    for (const pad of profile.pads ?? []) {
-      allPads.push(pad);
-    }
-  }
-
+  const allPads = profiles.flatMap((profile) => profile.pads ?? []);
   const blackoutPads = allPads.filter((pad) => pad.osc?.address === "/nw_wrld/feed/blackout" || pad.id === "nw_feed_blackout");
-  const overlayOrFxPads = allPads.filter((pad) =>
+  const overlayPads = allPads.filter((pad) =>
     pad.id?.startsWith("nw_overlay_") ||
     pad.id?.startsWith("nw_fx_") ||
     pad.osc?.address?.includes("/overlay/") ||
     pad.osc?.address?.includes("/fx/")
   );
 
-  for (const pad of overlayOrFxPads) {
-    setPadState(pad.id, { on: false, lastSent: getPadState(pad.id).lastSent, updatedAt: new Date().toISOString() });
+  overlayPads.forEach((pad) => {
+    setPadState(pad.id, {
+      on: false,
+      lastSent: getPadState(pad.id).lastSent,
+      updatedAt: new Date().toISOString()
+    });
     setPadUi(pad.id, false);
     sendOutputs(pad, "off", { force: true });
-  }
+  });
 
-  for (const pad of blackoutPads) {
-    setPadState(pad.id, { on: true, lastSent: getPadState(pad.id).lastSent, updatedAt: new Date().toISOString() });
+  blackoutPads.forEach((pad) => {
+    setPadState(pad.id, {
+      on: true,
+      lastSent: getPadState(pad.id).lastSent,
+      updatedAt: new Date().toISOString()
+    });
     setPadUi(pad.id, true);
     sendOutputs(pad, "on", { force: true });
+  });
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function buildPadMatrix(pads, rows, cols) {
+  const matrix = Array.from({ length: rows }, () => Array.from({ length: cols }, () => null));
+  pads.forEach((pad, index) => {
+    const defaultRow = Math.floor(index / cols);
+    const defaultCol = index % cols;
+    const row = Number.isFinite(pad.row) ? pad.row : defaultRow;
+    const col = Number.isFinite(pad.col) ? pad.col : defaultCol;
+    if (row < 0 || row >= rows || col < 0 || col >= cols) return;
+    if (!matrix[row][col]) {
+      matrix[row][col] = pad;
+    }
+  });
+  return matrix;
+}
+
+async function main() {
+  try {
+    await loadMappings();
+    initPadState();
+    bindUi();
+
+    oscHostInput.value = oscHost;
+    logEnabledToggle.checked = logsEnabled;
+
+    subscribeOscStatus(({ status, detail = "" }) => {
+      oscStatus = status;
+      oscStatusDetail = detail;
+      renderStatus();
+      renderConnections();
+    });
+
+    midiAccess = await initMIDI(populateMidiOutputs);
+    if (!midiAccess) {
+      addLog("WebMIDI unavailable");
+    }
+
+    chooseInitialProfile();
+    renderAll();
+    addLog("Loaded mappings.json");
+
+    if (oscEnabled) {
+      oscHostError = validateOscHost(oscHost);
+      connectCurrentOsc();
+    }
+  } catch (error) {
+    console.error(error);
+    surfaceTitle.textContent = "Failed to load mappings";
+    surfaceMeta.textContent = error instanceof Error ? error.message : "Unknown error";
+    emptyState.classList.remove("hidden");
   }
 }
 
 window.dumpState = dumpState;
 window.safeBlackout = safeBlackout;
 
-main().catch(console.error);
+main();
