@@ -9,6 +9,8 @@ notes in the `live-rig` repository.
 - Keep performer intent obvious on the surface.
 - Separate high‑risk controls (transport, scene changes) from dense
   performance pages.
+- Keep adjunct hardware decks narrow and legible; do not let them silently
+  become transport owners.
 - Prefer continuous controls for continuous parameters (sliders for CC).
 - Use stable `id` values so automation, OSC, and muscle memory survive edits.
 - Make the channel plan explicit and easy to audit.
@@ -47,6 +49,9 @@ Rationale:
   one explicit page instead of being spread across generic video controls.
 - `transport` is isolated so Start/Stop never fires during parameter edits.
 - `patterns` and `nwWrldInput` remain compact utility pages.
+- Standalone hardware mirrors such as the Maschine MK1 deck can live as
+  adjacent artifacts when the stable IDs matter before the runtime is ready to
+  render them as active profiles.
 
 ## Variable Controls And Sliders
 

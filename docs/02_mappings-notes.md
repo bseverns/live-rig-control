@@ -9,6 +9,9 @@ Recommended practice:
   `live-rig` (e.g. `08_midi-mapping-YYYY-MM-DD-SHOWNAME.md`).
 - Mirror the relevant parts of that mapping in `src/mappings.json` under
   a dedicated profile (e.g. `msvp`, `patterns`, `fxMacros`).
+- If a hardware mirror needs stable IDs before runtime support exists, add an
+  adjacent artifact in `src/` and mark it as spec-only rather than forcing it
+  into the active runtime profile list.
 - Use stable `id` values for pads so that changes to labels or notes
   don't break mental or visual associations.
  - For the “why” behind the structure, see `docs/mappings-rationale.md`.
@@ -16,6 +19,7 @@ Recommended practice:
 You can also add references here like:
 
 - `msvp` profile ↔ shared MSVP interop contract (scenes OSC-first; macro Ch 10; analysis Ch 15)
+- `maschine_mk1_profile.json` ↔ dedicated Maschine MK1 scene/event deck (OSC-first safe/scene cues; hybrid audiovisual event row; spec-only for now)
 - `patterns` profile ↔ `08_midi-mapping-2025-04-01-gallery-set.md`
 - `pcm30Macros` profile ↔ `08_midi-mapping-2025-03-15-basement-noise.md` (PCM-30 macros on Ch 11; MSVP macro lane now uses Ch 10; MSVP analysis uses Ch 15)
 - `drumStack` profile ↔ DrumKid default MIDI map (notes + CC 16–31) + DR-550 factory pads (Bank A–D), all on Ch 10 (includes global + per-pad velocity sliders)
@@ -47,6 +51,8 @@ the mapping stays auditable.
   dedicated profiles to keep quick access and reduce misfires.
 - Transport stays isolated to avoid accidental Start/Stop when switching
   between performance profiles.
+- Standalone hardware artifacts can document a narrow mirror deck when stable
+  IDs matter before the runtime UI is ready to render that controller.
 
 ## Variable Controls (Why Sliders)
 

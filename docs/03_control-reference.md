@@ -19,6 +19,8 @@ fires messages into other systems.
 - Some pages are intentionally isolated because they are high-risk.
 - One page (`mn42Slots`) targets a separate controller bridge rather than the
   main live rig.
+- The repo can also carry adjacent hardware deck artifacts when a controller
+  needs stable semantics before it is safe to load into the main runtime UI.
 
 ## Signal Overview
 
@@ -63,7 +65,7 @@ cross-talk and reduce catastrophic mistakes.
 
 ## Why The Surface Is Split Into Profiles
 
-The repo currently defines these profiles in `src/mappings.json`:
+The repo currently defines these runtime profiles in `src/mappings.json`:
 
 | Profile ID | Label | Pads | Primary Transport | Why this profile exists |
 | --- | --- | ---: | --- | --- |
@@ -77,6 +79,12 @@ The repo currently defines these profiles in `src/mappings.json`:
 | `electribe` | Electribe 2S (Ch11) | 25 | MIDI CC + Program | Full sound-design and pattern-selection page. |
 | `transport` | Transport | 3 | MIDI realtime | High-risk global sync control, isolated on purpose. |
 | `mn42Slots` | MOARkNOBS-42 Slots (OSC Bridge) | 42 | OSC | External controller bridge lane, separate from the main rig. |
+
+The repo also carries one adjacent hardware profile artifact:
+
+| Artifact | Role | Runtime status | Why it exists |
+| --- | --- | --- | --- |
+| `src/maschine_mk1_profile.json` | Maschine MK1 4x4 scene/event deck | Spec only, not loaded by the current UI | Preserve stable IDs, transport intent, and failure boundaries before hardware integration is implemented. |
 
 ## Channel And Transport Plan
 
@@ -242,6 +250,25 @@ Why it must remain isolated:
 - These messages are global, not local.
 - A stray `Stop` can collapse the show in a way a wrong CC usually does not.
 - The profile exists to force intent before sending global sync control.
+
+### Maschine MK1 (standalone hardware deck)
+
+What it controls:
+
+- A narrow 4x4 deck for safe/show-state actions, named scenes, audiovisual
+  event strikes, and section/utility cues.
+- OSC-first semantic actions on the top row, second row, and most of the
+  bottom row.
+- Hybrid MIDI+OSC event strikes on the third row plus `TEXTURE_TOGGLE`.
+
+Why it is documented separately:
+
+- It is complementary to the web/iPad control surface, not a replacement.
+- The deck is optimized for discrete gestures, not continuous shaping or deep
+  parameter editing.
+- It must stay separate from global transport ownership.
+- Keeping it in `src/maschine_mk1_profile.json` preserves stable IDs and
+  routing intent without forcing speculative runtime behavior into the main UI.
 
 ## Validation
 

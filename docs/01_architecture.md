@@ -11,8 +11,10 @@ Surface Pro and talk to the hybrid live rig defined in the `live-rig` repo.
   - Optionally connects via WebSocket to the OSC bridge.
 
 - **Mappings Layer**
-  - `src/mappings.json` defines profiles (pages) and pads.
+  - `src/mappings.json` defines runtime profiles (pages) and pads.
   - Each pad has semantic IDs and can emit MIDI and/or OSC.
+  - Adjacent artifacts such as `src/maschine_mk1_profile.json` can document
+    hardware mirror decks without making them active web/iPad pages.
 
 - **OSC Bridge (optional)**
   - `server/osc-bridge.js` runs on the same machine as the browser or on a
@@ -26,6 +28,11 @@ Surface Pro and talk to the hybrid live rig defined in the `live-rig` repo.
 
 The goal is to keep device/channel/scene knowledge encoded in `live-rig`
 while `live-rig-control` focuses on the performer-facing interface.
+
+That same rule applies when a subset of the system is mirrored onto dedicated
+hardware. The Maschine MK1 profile is documented here as a narrow scene/event
+deck, but `live-rig-control` remains the canonical mapping layer and the
+Maschine deck does not become a transport owner.
 
 For mapping structure rationale, see `docs/mappings-rationale.md`.
 For a verbose walkthrough of the control domains and why they are split the way

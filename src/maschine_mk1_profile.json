@@ -1,0 +1,361 @@
+{
+  "profileId": "maschine_mk1_hybrid_deck",
+  "label": "Maschine MK1 Hybrid Deck",
+  "status": "draft-spec",
+  "runtimeIntegration": {
+    "loadedByLiveRigControl": false,
+    "notes": "Documentation and mapping groundwork only. The current web/iPad runtime continues to load src/mappings.json."
+  },
+  "device": {
+    "vendor": "Native Instruments",
+    "model": "Maschine MK1",
+    "role": "Dedicated 4x4 hardware scene/event controller",
+    "ownership": "Mirror-only hardware node. Not a transport owner, not a continuous shaping surface, and not a deep-edit controller."
+  },
+  "grid": {
+    "rows": 4,
+    "cols": 4,
+    "padOrder": "top-left to bottom-right",
+    "padCount": 16
+  },
+  "sourceOfTruth": {
+    "canonicalMappingLayer": "live-rig-control",
+    "relatedDocs": [
+      "docs/MASCHINE_MK1_PROFILE.md",
+      "docs/03_control-reference.md"
+    ],
+    "placeholderPolicy": "Null OSC/MIDI values are unresolved transport details and must be confirmed against the live-rig mapping before activation."
+  },
+  "transportModel": {
+    "summary": "OSC-first for semantic scene/state actions. Hybrid MIDI+OSC for audiovisual event strikes and texture toggle.",
+    "oscFirstIds": [
+      "masch.safe.blackout",
+      "masch.safe.clean",
+      "masch.safe.soft_reset",
+      "masch.safe.freeze",
+      "masch.scene.intro",
+      "masch.scene.crash",
+      "masch.scene.drift",
+      "masch.scene.harsh",
+      "masch.section.a",
+      "masch.section.b",
+      "masch.override.manual"
+    ],
+    "hybridIds": [
+      "masch.event.noise_burst",
+      "masch.event.voice_shard",
+      "masch.event.low_hit",
+      "masch.event.high_hit",
+      "masch.texture.toggle"
+    ],
+    "constraints": [
+      "Do not treat Maschine MK1 as a master transport surface.",
+      "Do not collapse semantic scene/state commands into MIDI-only behavior.",
+      "Do not move continuous shaping away from Edirol or analysis bias away from frZone."
+    ]
+  },
+  "pads": [
+    {
+      "padNumber": 1,
+      "row": 1,
+      "col": 1,
+      "id": "masch.safe.blackout",
+      "label": "BLACKOUT",
+      "transport": "osc_first",
+      "targetLane": "safe_show_state",
+      "risk": "critical",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for BLACKOUT."
+      },
+      "midi": null,
+      "rationale": "Immediate high-legibility rescue action. Keep it on the top-left corner for blind reach."
+    },
+    {
+      "padNumber": 2,
+      "row": 1,
+      "col": 2,
+      "id": "masch.safe.clean",
+      "label": "SAFE CLEAN",
+      "transport": "osc_first",
+      "targetLane": "safe_show_state",
+      "risk": "high",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for SAFE CLEAN."
+      },
+      "midi": null,
+      "rationale": "Return to a trusted clean state without handing transport ownership to the hardware deck."
+    },
+    {
+      "padNumber": 3,
+      "row": 1,
+      "col": 3,
+      "id": "masch.safe.soft_reset",
+      "label": "SOFT RESET",
+      "transport": "osc_first",
+      "targetLane": "safe_show_state",
+      "risk": "high",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for SOFT RESET."
+      },
+      "midi": null,
+      "rationale": "Controlled recovery cue for clearing drift or accumulation without using transport stop/start."
+    },
+    {
+      "padNumber": 4,
+      "row": 1,
+      "col": 4,
+      "id": "masch.safe.freeze",
+      "label": "FREEZE_HOLD",
+      "transport": "osc_first",
+      "targetLane": "safe_show_state",
+      "risk": "high",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for FREEZE_HOLD."
+      },
+      "midi": null,
+      "rationale": "Stabilize the current state long enough to inspect or recover the rig."
+    },
+    {
+      "padNumber": 5,
+      "row": 2,
+      "col": 1,
+      "id": "masch.scene.intro",
+      "label": "INTRO",
+      "transport": "osc_first",
+      "targetLane": "named_scene",
+      "risk": "high",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for INTRO."
+      },
+      "midi": null,
+      "rationale": "Named world-state recall should stay semantic and legible rather than looking like an arbitrary note trigger."
+    },
+    {
+      "padNumber": 6,
+      "row": 2,
+      "col": 2,
+      "id": "masch.scene.crash",
+      "label": "CRASH",
+      "transport": "osc_first",
+      "targetLane": "named_scene",
+      "risk": "high",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for CRASH."
+      },
+      "midi": null,
+      "rationale": "A full world-change cue belongs on the semantic OSC lane, not inside continuous parameter control."
+    },
+    {
+      "padNumber": 7,
+      "row": 2,
+      "col": 3,
+      "id": "masch.scene.drift",
+      "label": "DRIFT",
+      "transport": "osc_first",
+      "targetLane": "named_scene",
+      "risk": "high",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for DRIFT."
+      },
+      "midi": null,
+      "rationale": "Scene selection is a world-definition move, so it stays separate from event strikes and shaping."
+    },
+    {
+      "padNumber": 8,
+      "row": 2,
+      "col": 4,
+      "id": "masch.scene.harsh",
+      "label": "HARSH",
+      "transport": "osc_first",
+      "targetLane": "named_scene",
+      "risk": "high",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for HARSH."
+      },
+      "midi": null,
+      "rationale": "Keep the harsher scene family on an explicit, discrete scene row so the blast radius stays readable."
+    },
+    {
+      "padNumber": 9,
+      "row": 3,
+      "col": 1,
+      "id": "masch.event.noise_burst",
+      "label": "NOISE_BURST",
+      "transport": "hybrid_midi_osc",
+      "targetLane": "hybrid_event",
+      "risk": "medium",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for NOISE_BURST."
+      },
+      "midi": {
+        "type": "note",
+        "channel": null,
+        "note": null,
+        "status": "placeholder",
+        "todo": "Confirm the MIDI note/channel emitted by the eventual Maschine bridge or translator."
+      },
+      "rationale": "One press should be able to strike both the audio and visual lane when the event is intentionally coupled."
+    },
+    {
+      "padNumber": 10,
+      "row": 3,
+      "col": 2,
+      "id": "masch.event.voice_shard",
+      "label": "VOICE_SHARD",
+      "transport": "hybrid_midi_osc",
+      "targetLane": "hybrid_event",
+      "risk": "medium",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for VOICE_SHARD."
+      },
+      "midi": {
+        "type": "note",
+        "channel": null,
+        "note": null,
+        "status": "placeholder",
+        "todo": "Confirm the MIDI note/channel emitted by the eventual Maschine bridge or translator."
+      },
+      "rationale": "Hybrid voice-fragment events belong on the strike row, not mixed into scene recall or safety controls."
+    },
+    {
+      "padNumber": 11,
+      "row": 3,
+      "col": 3,
+      "id": "masch.event.low_hit",
+      "label": "LOW_HIT",
+      "transport": "hybrid_midi_osc",
+      "targetLane": "hybrid_event",
+      "risk": "medium",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for LOW_HIT."
+      },
+      "midi": {
+        "type": "note",
+        "channel": null,
+        "note": null,
+        "status": "placeholder",
+        "todo": "Confirm the MIDI note/channel emitted by the eventual Maschine bridge or translator."
+      },
+      "rationale": "Low-impact strikes should stay fast and physical while still preserving a semantic mirror on the OSC side."
+    },
+    {
+      "padNumber": 12,
+      "row": 3,
+      "col": 4,
+      "id": "masch.event.high_hit",
+      "label": "HIGH_HIT",
+      "transport": "hybrid_midi_osc",
+      "targetLane": "hybrid_event",
+      "risk": "medium",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for HIGH_HIT."
+      },
+      "midi": {
+        "type": "note",
+        "channel": null,
+        "note": null,
+        "status": "placeholder",
+        "todo": "Confirm the MIDI note/channel emitted by the eventual Maschine bridge or translator."
+      },
+      "rationale": "Keep bright accent strikes adjacent to the other event pads so the event row remains coherent under pressure."
+    },
+    {
+      "padNumber": 13,
+      "row": 4,
+      "col": 1,
+      "id": "masch.section.a",
+      "label": "SECTION_A",
+      "transport": "osc_first",
+      "targetLane": "section_utility",
+      "risk": "medium",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for SECTION_A."
+      },
+      "midi": null,
+      "rationale": "Form-steering cues should stay explicit and separate from global transport ownership."
+    },
+    {
+      "padNumber": 14,
+      "row": 4,
+      "col": 2,
+      "id": "masch.section.b",
+      "label": "SECTION_B",
+      "transport": "osc_first",
+      "targetLane": "section_utility",
+      "risk": "medium",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for SECTION_B."
+      },
+      "midi": null,
+      "rationale": "Second section cue keeps structural steering available without loading transport controls onto the deck."
+    },
+    {
+      "padNumber": 15,
+      "row": 4,
+      "col": 3,
+      "id": "masch.texture.toggle",
+      "label": "TEXTURE_TOGGLE",
+      "transport": "hybrid_midi_osc",
+      "targetLane": "section_utility",
+      "risk": "medium",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for TEXTURE_TOGGLE."
+      },
+      "midi": {
+        "type": "note",
+        "channel": null,
+        "note": null,
+        "status": "placeholder",
+        "todo": "Confirm the MIDI note/channel emitted by the eventual Maschine bridge or translator."
+      },
+      "rationale": "Texture toggling is a discrete form cue with coupled audio/video impact, so the hybrid path is intentional."
+    },
+    {
+      "padNumber": 16,
+      "row": 4,
+      "col": 4,
+      "id": "masch.override.manual",
+      "label": "MANUAL_OVERRIDE",
+      "transport": "osc_first",
+      "targetLane": "section_utility",
+      "risk": "high",
+      "osc": {
+        "address": null,
+        "status": "placeholder",
+        "todo": "Confirm canonical live-rig OSC address for MANUAL_OVERRIDE."
+      },
+      "midi": null,
+      "rationale": "Manual override changes operator posture, so it stays discrete, semantic, and isolated from the event row."
+    }
+  ]
+}
