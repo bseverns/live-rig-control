@@ -26,12 +26,12 @@
               0
             ]
           },
+          "notes": "Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 60 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
           "group": {
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          },
-          "notes": "MSVP scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 60 on the MSVP endpoint."
+          }
         },
         {
           "id": "vid_scene_crash",
@@ -51,12 +51,12 @@
               0
             ]
           },
+          "notes": "Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 61 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
           "group": {
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          },
-          "notes": "MSVP scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 61 on the MSVP endpoint."
+          }
         },
         {
           "id": "vid_scene_soft",
@@ -76,12 +76,57 @@
               0
             ]
           },
+          "notes": "Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 62 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
           "group": {
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
+          }
+        },
+        {
+          "id": "vid_scene_clean_camera",
+          "label": "Clean Camera",
+          "row": 0,
+          "col": 3,
+          "toggle": true,
+          "osc": {
+            "address": "/video/scene/clean_camera",
+            "args": [
+              1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
+            ]
           },
-          "notes": "MSVP scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 62 on the MSVP endpoint."
+          "notes": "Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 64 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
+          "group": {
+            "id": "msvp_scene",
+            "mode": "exclusive",
+            "exclusive": true
+          }
+        },
+        {
+          "id": "vid_state_blackout",
+          "label": "Blackout",
+          "row": 0,
+          "col": 4,
+          "toggle": true,
+          "osc": {
+            "address": "/rig/state/blackout",
+            "args": [
+              1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
+            ]
+          },
+          "notes": "Shared blackout state. OSC primary in live-rig-control; canonical MIDI fallback note is 63 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror."
         },
         {
           "id": "msvp_macro_lines_per_frame",

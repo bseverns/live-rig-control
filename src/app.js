@@ -1185,7 +1185,12 @@ function dumpState() {
 
 function safeBlackout() {
   const allPads = profiles.flatMap((profile) => profile.pads ?? []);
-  const blackoutPads = allPads.filter((pad) => pad.osc?.address === "/nw_wrld/feed/blackout" || pad.id === "nw_feed_blackout");
+  const blackoutPads = allPads.filter((pad) =>
+    pad.osc?.address === "/rig/state/blackout" ||
+    pad.id === "vid_state_blackout" ||
+    pad.osc?.address === "/nw_wrld/feed/blackout" ||
+    pad.id === "nw_feed_blackout"
+  );
   const overlayPads = allPads.filter((pad) =>
     pad.id?.startsWith("nw_overlay_") ||
     pad.id?.startsWith("nw_fx_") ||

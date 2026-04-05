@@ -77,7 +77,8 @@ On a real iPad build:
 ## Notes
 
 - The app bundles its mappings from `ios/Sources/LiveRigControlApp/Resources/mappings.json`.
-- The canonical editable mapping source remains `src/mappings.json`.
+- Shared semantic controls are regenerated from the committed mirror `atlas/live-rig.default.json`; refresh it from the sibling `live-rig` repo with `python3 tools/sync_live_rig_authority.py --refresh-from-sibling` when needed.
+- The web runtime map remains `src/mappings.json`, and the iPad bundle copy should match it.
 - If testing fails because of local Swift/Xcode mismatch, record the exact
   `swift --version`, `xcodebuild -version`, and SDK used rather than treating
   it as an app regression.

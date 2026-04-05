@@ -69,7 +69,7 @@ The repo currently defines these runtime profiles in `src/mappings.json`:
 
 | Profile ID | Label | Pads | Primary Transport | Why this profile exists |
 | --- | --- | ---: | --- | --- |
-| `msvp` | MSVP | 17 | OSC scenes + MIDI CC | Explicit MSVP page for scenes, macro shaping, and analysis shaping. |
+| `msvp` | MSVP | 19 | OSC scenes + MIDI CC | Explicit MSVP page for shared semantic scene/state controls, macro shaping, and analysis shaping. |
 | `nwWrldFeed` | nw_wrld Feed (OSC) | 12 | OSC | Video/software feed state does not belong on instrument channels. |
 | `nwWrldInput` | nw_wrld Input (MIDI) | 26 | MIDI note | A dedicated note-trigger page for NW World input lanes. |
 | `patterns` | Patterns | 1 | MIDI note | Keep pattern changes small and explicit. |
@@ -129,7 +129,7 @@ flowchart TB
 
 What it controls:
 
-- Discrete scene triggers such as `Intro`, `Crash`, and `Soft`.
+- Discrete shared semantic controls such as `Intro`, `Crash`, `Soft`, `Clean Camera`, and `Blackout`.
 - A macro row on MIDI Ch 10 for base visual shaping.
 - An analysis row on MIDI Ch 15 for biasing the same parameters on a separate lane.
 

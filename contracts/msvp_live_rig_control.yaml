@@ -15,7 +15,11 @@
       "order": 5,
       "scene_transport": "osc_primary",
       "scene_midi_fallback_emitted_by_controller": false,
-      "continuous_shaping_transport": "midi_cc"
+      "continuous_shaping_transport": "midi_cc",
+      "allowed_additional_semantic_ids": [
+        "vid_scene_clean_camera",
+        "vid_state_blackout"
+      ]
     },
     "stability_rules": [
       "Scene semantic IDs are stable contract keys and must not be repurposed.",

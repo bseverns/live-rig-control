@@ -129,7 +129,10 @@ def validate_live_rig(mappings_path: Path, contract: dict[str, Any]) -> tuple[li
         if controller["scene_midi_fallback_emitted_by_controller"] is False and "midi" in pad:
             errors.append(f"{mappings_path}:{scene_id}: controller should not emit MIDI note fallback on this profile")
 
+    allowed_additional_ids = set(controller.get("allowed_additional_semantic_ids", []))
     for pad_id in sorted(all_pads):
+        if pad_id in allowed_additional_ids:
+            continue
         if pad_id.startswith("vid_scene_") and pad_id not in expected_scenes:
             errors.append(f"{mappings_path}: unknown semantic ID '{pad_id}'")
 

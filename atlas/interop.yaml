@@ -28,7 +28,8 @@ consumes:
   osc_addresses: []
   midi_channels: []
 invariants:
-  - src/mappings.json is the single source of truth for pad IDs and routing.
+  - live-rig is the semantic authority repo; this repo consumes a committed mirror of the exported runtime snapshot at atlas/live-rig.default.json.
+  - src/mappings.json and the iPad bundle copy are regenerated from that committed mirror for the shared semantic controls.
   - Pad IDs in mappings.json are stable and must not be renumbered or repurposed lightly.
   - OSC bridge assumes WebSocket on port 9001 unless UI is updated.
   - Canonical rig contracts live in systems-atlas/contracts; do not duplicate here.

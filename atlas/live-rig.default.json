@@ -1,0 +1,591 @@
+{
+  "$schema": "../rig.profile.schema.json",
+  "snapshotVersion": "1.0.0",
+  "exportedAt": "2026-04-05T15:32:43.976Z",
+  "source": {
+    "contractVersion": "1.0.0",
+    "contractPath": "interop/rig.contract.json",
+    "mappingsPath": "mappings.json",
+    "generatedBy": "tools/export-rig-profile.js"
+  },
+  "authority": {
+    "repo": "live-rig",
+    "runtimeDependency": false,
+    "summary": "Authority repo for topology, shared vocabulary, exported mapping snapshots, and failover doctrine."
+  },
+  "survivabilityTiers": {
+    "A": {
+      "id": "A",
+      "label": "Audio survives independently",
+      "minimumOutcome": "Main audio path remains playable even if controller or visual runtimes are absent.",
+      "requiredCapabilities": [
+        "One active clock boss only",
+        "Mixer to PA path remains intact",
+        "Emergency blackout or safe visual path is documented"
+      ]
+    },
+    "B": {
+      "id": "B",
+      "label": "One controller path and one visual path survive",
+      "minimumOutcome": "At least one controller route and one controllable visual endpoint remain available.",
+      "requiredCapabilities": [
+        "Shared scene/state vocabulary remains addressable",
+        "Direct MIDI or OSC can bypass the preferred UI",
+        "At least one visual endpoint or utility visual path remains available"
+      ]
+    },
+    "C": {
+      "id": "C",
+      "label": "Optional enrichment",
+      "minimumOutcome": "Analysis, secondary endpoints, and lab outputs can drop out without ending the set.",
+      "requiredCapabilities": [
+        "Analysis lane can disappear without blocking scene recall",
+        "Secondary endpoint is optional",
+        "Offline or lab repos are never the only source of a required control path"
+      ]
+    }
+  },
+  "controlLanes": {
+    "macro": {
+      "id": "macro",
+      "purpose": "Human-operated continuous control lane for scene shaping and live overrides.",
+      "primarySources": [
+        "live-rig-control",
+        "Edirol PCM-30",
+        "bridge direct MIDI or OSC"
+      ],
+      "primaryConsumers": [
+        "MSVP",
+        "SCapps bridge",
+        "nw_wrld"
+      ],
+      "midiChannels": [
+        10
+      ],
+      "requiredFor": [
+        "B"
+      ]
+    },
+    "analysis": {
+      "id": "analysis",
+      "purpose": "Normalized audio-reactive bias lane that enriches but never gates the visual system.",
+      "primarySources": [
+        "frZone"
+      ],
+      "primaryConsumers": [
+        "MSVP",
+        "SCapps bridge",
+        "nw_wrld"
+      ],
+      "midiChannels": [
+        15
+      ],
+      "requiredFor": [
+        "C"
+      ]
+    },
+    "semantic": {
+      "id": "semantic",
+      "purpose": "Discrete scene, state, and event trigger lane used by UI, bridge, and hardware fallback controls.",
+      "primarySources": [
+        "live-rig-control",
+        "Maschine MK1",
+        "bridge direct OSC or MIDI"
+      ],
+      "primaryConsumers": [
+        "MSVP",
+        "SCapps bridge",
+        "nw_wrld"
+      ],
+      "midiChannels": [
+        10
+      ],
+      "requiredFor": [
+        "B"
+      ]
+    }
+  },
+  "endpointRules": {
+    "invariants": [
+      "Endpoints follow clock; they never originate global transport.",
+      "Canonical scene, state, and event IDs are owned by the shared rig contract, not by endpoint repos.",
+      "MSVP and nw_wrld or wrld_on operate as peer endpoints behind the same contract."
+    ],
+    "degradation": [
+      "If analysis is unavailable, endpoints continue from scene base plus manual macro input only.",
+      "If one endpoint is unavailable, switch to the other endpoint or a documented clean-camera or blackout utility path.",
+      "If the preferred UI is unavailable, direct MIDI or OSC still targets the same semantic IDs through the bridge.",
+      "If the authority repo is unavailable at runtime, exported snapshots remain sufficient for consumers."
+    ]
+  },
+  "semanticCatalog": {
+    "scenes": [
+      {
+        "id": "scene.intro",
+        "label": "Intro",
+        "description": "Establishing scene family shared across controller and endpoint layers."
+      },
+      {
+        "id": "scene.soft",
+        "label": "Soft",
+        "description": "Low-intensity scene family for calmer or more spacious visuals.",
+        "aliases": [
+          "scene.soft_ash"
+        ]
+      },
+      {
+        "id": "scene.crash",
+        "label": "Crash",
+        "description": "High-intensity scene family for harsh or saturated moments.",
+        "aliases": [
+          "scene.angel_swarm"
+        ]
+      },
+      {
+        "id": "scene.clean_camera",
+        "label": "Clean Camera",
+        "description": "Minimal-processing visual state that preserves documentary clarity."
+      }
+    ],
+    "states": [
+      {
+        "id": "state.blackout",
+        "label": "Blackout",
+        "description": "Fastest safe visual kill and reset state."
+      },
+      {
+        "id": "state.manual_override",
+        "label": "Manual Override",
+        "description": "State where direct human control takes priority over automation or weighted modulation."
+      }
+    ],
+    "events": [
+      {
+        "id": "event.noise_burst",
+        "label": "Noise Burst",
+        "description": "Bounded hit event for hybrid audiovisual impact."
+      },
+      {
+        "id": "event.glitch_hit",
+        "label": "Glitch Hit",
+        "description": "Short-lived event that spikes a glitch treatment without changing the long-form scene."
+      }
+    ],
+    "macros": [
+      {
+        "id": "macro.vmix_morph",
+        "label": "Mixer Morph",
+        "description": "Crossfades between current visual layers or worlds."
+      },
+      {
+        "id": "macro.fb_feedback",
+        "label": "Frame Buffer Feedback",
+        "description": "Controls visual memory or echo intensity."
+      },
+      {
+        "id": "macro.mael_depth",
+        "label": "Maelstrom Depth",
+        "description": "Controls tunnel or well depth."
+      },
+      {
+        "id": "macro.mosh",
+        "label": "Mosh",
+        "description": "Controls aggressive glitch or stream-collision intensity."
+      },
+      {
+        "id": "macro.retrace_density",
+        "label": "ReTrace Density",
+        "description": "Controls line or contour density in trace-based worlds."
+      },
+      {
+        "id": "macro.texture_detail",
+        "label": "Texture Detail",
+        "description": "Controls grit or fine-texture detail in texture-oriented worlds."
+      },
+      {
+        "id": "macro.analysis_blend",
+        "label": "Analysis Blend",
+        "description": "Crossfades between analysis influence and manual macro authority."
+      }
+    ],
+    "analysis": [
+      {
+        "id": "analysis.low_band",
+        "label": "Low Band",
+        "description": "Bass-weighted energy from the analysis lane."
+      },
+      {
+        "id": "analysis.mid_band",
+        "label": "Mid Band",
+        "description": "Midrange body energy from the analysis lane."
+      },
+      {
+        "id": "analysis.upper_mid_band",
+        "label": "Upper Mid Band",
+        "description": "Presence or abrasive energy from the analysis lane."
+      },
+      {
+        "id": "analysis.high_band",
+        "label": "High Band",
+        "description": "High-frequency air, cymbal, or hiss energy from the analysis lane."
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "semanticId": "scene.intro",
+      "mappingRef": "vid_scene_intro",
+      "supported": true,
+      "transport": [
+        "midi",
+        "osc"
+      ],
+      "interaction": "toggle",
+      "group": "video.scene",
+      "label": "Intro",
+      "midi": [
+        {
+          "type": "note",
+          "channel": 10,
+          "note": 60,
+          "onValue": 100,
+          "offValue": 0
+        }
+      ],
+      "osc": [
+        {
+          "address": "/video/scene/intro",
+          "onArgs": [
+            1
+          ],
+          "offArgs": [
+            0
+          ]
+        }
+      ],
+      "notes": "Primary intro scene binding."
+    },
+    {
+      "semanticId": "scene.crash",
+      "mappingRef": "vid_scene_crash",
+      "supported": true,
+      "transport": [
+        "midi",
+        "osc"
+      ],
+      "interaction": "toggle",
+      "group": "video.scene",
+      "label": "Crash",
+      "midi": [
+        {
+          "type": "note",
+          "channel": 10,
+          "note": 61,
+          "onValue": 100,
+          "offValue": 0
+        }
+      ],
+      "osc": [
+        {
+          "address": "/video/scene/crash",
+          "onArgs": [
+            1
+          ],
+          "offArgs": [
+            0
+          ]
+        }
+      ],
+      "notes": "Primary crash scene binding."
+    },
+    {
+      "semanticId": "scene.soft",
+      "mappingRef": "vid_scene_soft",
+      "supported": true,
+      "transport": [
+        "midi",
+        "osc"
+      ],
+      "interaction": "toggle",
+      "group": "video.scene",
+      "label": "Soft",
+      "midi": [
+        {
+          "type": "note",
+          "channel": 10,
+          "note": 62,
+          "onValue": 100,
+          "offValue": 0
+        }
+      ],
+      "osc": [
+        {
+          "address": "/video/scene/soft",
+          "onArgs": [
+            1
+          ],
+          "offArgs": [
+            0
+          ]
+        }
+      ],
+      "notes": "Primary soft scene binding."
+    },
+    {
+      "semanticId": "scene.clean_camera",
+      "mappingRef": "vid_scene_clean_camera",
+      "supported": true,
+      "transport": [
+        "midi",
+        "osc"
+      ],
+      "interaction": "toggle",
+      "group": "video.scene",
+      "label": "Clean Camera",
+      "midi": [
+        {
+          "type": "note",
+          "channel": 10,
+          "note": 64,
+          "onValue": 100,
+          "offValue": 0
+        }
+      ],
+      "osc": [
+        {
+          "address": "/video/scene/clean_camera",
+          "onArgs": [
+            1
+          ],
+          "offArgs": [
+            0
+          ]
+        }
+      ],
+      "notes": "Shared clean-camera scene binding."
+    },
+    {
+      "semanticId": "state.blackout",
+      "mappingRef": "vid_state_blackout",
+      "supported": true,
+      "transport": [
+        "midi",
+        "osc"
+      ],
+      "interaction": "toggle",
+      "label": "Blackout",
+      "midi": [
+        {
+          "type": "note",
+          "channel": 10,
+          "note": 63,
+          "onValue": 100,
+          "offValue": 0
+        }
+      ],
+      "osc": [
+        {
+          "address": "/rig/state/blackout",
+          "onArgs": [
+            1
+          ],
+          "offArgs": [
+            0
+          ]
+        }
+      ],
+      "notes": "Global blackout binding that should remain reachable under failure."
+    }
+  ],
+  "repoRegistry": [
+    {
+      "id": "live-rig",
+      "role": "authority",
+      "summary": "Owns topology, vocabulary, failover doctrine, and exported snapshots. It is not a runtime dependency on show night.",
+      "consumes": [
+        "show notes",
+        "post-show lessons",
+        "sibling repo capability statements"
+      ],
+      "produces": [
+        "authority contract",
+        "exported runtime profile",
+        "mapping snapshots",
+        "failover documentation"
+      ],
+      "requiredFor": [
+        "planning",
+        "contract publication"
+      ],
+      "fallbacks": []
+    },
+    {
+      "id": "live-rig-control",
+      "role": "controller",
+      "summary": "Preferred performer UI that emits the shared semantic lane plus concrete MIDI and OSC bindings.",
+      "consumes": [
+        "shared scene and state vocabulary",
+        "exported runtime profile",
+        "mapping snapshots"
+      ],
+      "produces": [
+        "semantic scene, state, and event triggers",
+        "macro lane output",
+        "degraded-state operator messaging"
+      ],
+      "requiredFor": [
+        "preferred control",
+        "mapping-driven UX"
+      ],
+      "fallbacks": [
+        {
+          "when": "live-rig-control is unavailable",
+          "target": "Edirol plus Maschine direct into bridge",
+          "outcome": "Shared scene and state IDs remain reachable without the preferred UI."
+        }
+      ]
+    },
+    {
+      "id": "frZone",
+      "role": "analysis",
+      "summary": "Publishes normalized analysis outputs and band mappings only. It never owns scenes, transport, or endpoint-specific logic.",
+      "consumes": [
+        "post-fader audio bus"
+      ],
+      "produces": [
+        "analysis lane output",
+        "normalized band data"
+      ],
+      "requiredFor": [
+        "analysis enrichment"
+      ],
+      "fallbacks": [
+        {
+          "when": "frZone is unavailable",
+          "target": "scene base plus manual macros",
+          "outcome": "Visuals continue without analysis bias."
+        }
+      ]
+    },
+    {
+      "id": "MSVP",
+      "role": "endpoint",
+      "summary": "Beat-synced visual endpoint that consumes shared scenes, states, macros, and analysis without redefining the contract.",
+      "consumes": [
+        "shared semantic IDs",
+        "macro lane",
+        "analysis lane",
+        "forwarded clock when required"
+      ],
+      "produces": [
+        "Syphon or video output",
+        "endpoint health state"
+      ],
+      "requiredFor": [
+        "primary or secondary visual endpoint"
+      ],
+      "fallbacks": [
+        {
+          "when": "MSVP is unavailable",
+          "target": "nw_wrld or clean-camera or blackout utility path",
+          "outcome": "One visual endpoint survives without requiring MSVP."
+        }
+      ]
+    },
+    {
+      "id": "nw_wrld",
+      "role": "endpoint",
+      "summary": "Runtime visual platform for project-driven visuals. It remains a peer endpoint rather than the contract authority.",
+      "consumes": [
+        "shared semantic IDs",
+        "macro lane",
+        "analysis lane",
+        "wrld_on workspace content"
+      ],
+      "produces": [
+        "projector output",
+        "endpoint health state"
+      ],
+      "requiredFor": [
+        "primary or secondary visual endpoint"
+      ],
+      "fallbacks": [
+        {
+          "when": "nw_wrld is unavailable",
+          "target": "MSVP or clean-camera or SCapps utility path",
+          "outcome": "One visual endpoint survives without requiring nw_wrld."
+        }
+      ]
+    },
+    {
+      "id": "wrld_on",
+      "role": "workspace",
+      "summary": "Project content repo layered on top of nw_wrld. It carries workspace modules and assets, not canonical scene naming.",
+      "consumes": [
+        "nw_wrld runtime",
+        "shared semantic IDs for workspace wiring"
+      ],
+      "produces": [
+        "workspace modules",
+        "project assets"
+      ],
+      "requiredFor": [
+        "nw_wrld project content"
+      ],
+      "fallbacks": [
+        {
+          "when": "wrld_on is unavailable",
+          "target": "alternate nw_wrld workspace or MSVP",
+          "outcome": "The set retains a visual path without requiring this workspace."
+        }
+      ]
+    },
+    {
+      "id": "live-rig-3Dvideo",
+      "role": "lab",
+      "summary": "R and D repo for offline assets, optional live sources, and experimentation. It never becomes the only source of a required control path.",
+      "consumes": [
+        "audio features",
+        "shared control-bus naming when promoted into live use"
+      ],
+      "produces": [
+        "assets",
+        "clips",
+        "optional live control buses"
+      ],
+      "requiredFor": [
+        "optional assets",
+        "research"
+      ],
+      "fallbacks": [
+        {
+          "when": "live-rig-3Dvideo is unavailable",
+          "target": "pre-rendered clips or no-op",
+          "outcome": "No impact on minimum survivability."
+        }
+      ]
+    }
+  ],
+  "healthContract": {
+    "statuses": [
+      "alive",
+      "degraded",
+      "unavailable"
+    ],
+    "requiredFields": [
+      "component",
+      "status",
+      "updatedAt"
+    ],
+    "optionalFields": [
+      "reason",
+      "activeScene",
+      "activeEndpoint",
+      "fallbackActive"
+    ],
+    "notes": [
+      "Unsupported commands should fail visibly and safely.",
+      "Health states are simple enough to mirror in UI, bridge logs, or endpoint consoles."
+    ]
+  }
+}

@@ -18,7 +18,8 @@ Built to mirror the rig mapping docs while staying fast, legible, and stage-proo
 | MIDI out | Device-specific | WebMIDI | Sends notes/CCs per `src/mappings.json`. |
 
 ## Hardware mirrors
-- `src/mappings.json` remains the only runtime-loaded surface map.
+- `src/mappings.json` is the web runtime map and is kept aligned with the iPad bundle copy.
+- Shared semantic controls are generated from the committed mirror `atlas/live-rig.default.json`.
 - `src/maschine_mk1_profile.json` documents a first-pass Maschine MK1 scene/event deck for later hardware integration.
 - The Maschine deck is complementary hardware, not a transport owner and not a replacement for the main web/iPad surface.
 

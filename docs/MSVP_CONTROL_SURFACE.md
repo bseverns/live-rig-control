@@ -17,6 +17,8 @@ Top row of the `msvp` page:
 - `vid_scene_intro`
 - `vid_scene_crash`
 - `vid_scene_soft`
+- `vid_scene_clean_camera`
+- `vid_state_blackout`
 
 These send:
 
@@ -24,6 +26,8 @@ These send:
   - `/video/scene/intro`
   - `/video/scene/crash`
   - `/video/scene/soft`
+  - `/video/scene/clean_camera`
+  - `/rig/state/blackout`
 
 The controller intentionally does not send the MIDI note fallback from this page. That avoids accidental double-trigger semantics.
 
@@ -89,8 +93,9 @@ If clock stops:
 1. Run `python3 tools/validate_msvp_live_rig_control.py`.
 2. Open the `msvp` page.
 3. Verify the top row triggers `Intro`, `Crash`, and `Soft` through OSC.
-4. Move the macro row and confirm MSVP responds on channel `10`.
-5. Move the analysis row and confirm MSVP responds on channel `15`.
-6. Verify incoming MIDI clock still comes from the external master or loopback source, not from MSVP itself.
+4. Verify `Clean Camera` and `Blackout` reach the shared semantic OSC addresses.
+5. Move the macro row and confirm MSVP responds on channel `10`.
+6. Move the analysis row and confirm MSVP responds on channel `15`.
+7. Verify incoming MIDI clock still comes from the external master or loopback source, not from MSVP itself.
 
 The detailed checklist lives in `docs/MSVP_SMOKE_TEST.md`.

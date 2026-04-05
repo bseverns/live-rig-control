@@ -20,7 +20,7 @@ It fixes four things in place:
 
 ## Stable Semantic IDs
 
-`vid_scene_intro`, `vid_scene_crash`, and `vid_scene_soft` are semantic IDs, not cosmetic labels.
+`vid_scene_intro`, `vid_scene_crash`, `vid_scene_soft`, `vid_scene_clean_camera`, and `vid_state_blackout` are semantic IDs, not cosmetic labels.
 
 That means:
 

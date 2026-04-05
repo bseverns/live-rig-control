@@ -20,17 +20,21 @@ Use this after changing either `src/mappings.json` or `MidiVideoSyphonBeats/data
 - Expected: a real loopback/input port such as `IAC Bus 1` or equivalent exists.
 - Failure smell: MSVP only shows `Real Time Sequencer`, or no useful MIDI input at all.
 
-### 2. Intro / Crash / Soft trigger correctly
+### 2. Shared semantic scene/state controls trigger correctly
 
 - Open the `msvp` page in `live-rig-control`.
 - Trigger:
   - `Scene Intro`
   - `Scene Crash`
   - `Scene Soft`
+  - `Clean Camera`
+  - `Blackout`
 - Expected:
   - MSVP receives `/video/scene/intro`
   - MSVP receives `/video/scene/crash`
   - MSVP receives `/video/scene/soft`
+  - the shared semantic lane receives `/video/scene/clean_camera`
+  - the shared semantic lane receives `/rig/state/blackout`
   - the visible preset/behavior changes accordingly
 
 ### 3. Macro controls move expected parameters

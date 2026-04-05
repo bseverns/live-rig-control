@@ -7,8 +7,12 @@ Recommended practice:
 
 - For each show or major revision, create or update a markdown mapping in
   `live-rig` (e.g. `08_midi-mapping-YYYY-MM-DD-SHOWNAME.md`).
-- Mirror the relevant parts of that mapping in `src/mappings.json` under
-  a dedicated profile (e.g. `msvp`, `patterns`, `fxMacros`).
+- Refresh the committed authority snapshot mirror with
+  `python3 tools/sync_live_rig_authority.py --refresh-from-sibling` when needed.
+- Regenerate shared semantic controls from that mirror with
+  `python3 tools/sync_live_rig_authority.py`.
+- Keep local profile-specific controls in `src/mappings.json` under a dedicated
+  profile (e.g. `msvp`, `patterns`, `fxMacros`).
 - If a hardware mirror needs stable IDs before runtime support exists, add an
   adjacent artifact in `src/` and mark it as spec-only rather than forcing it
   into the active runtime profile list.
