@@ -16,6 +16,8 @@ final class MidiManager: ObservableObject {
 
     private var client = MIDIClientRef()
     private var outPort = MIDIPortRef()
+    private var networkSessionObserver: NSObjectProtocol?
+    private var networkContactsObserver: NSObjectProtocol?
 
     func setup() {
         configureAudioSession()
@@ -24,8 +26,26 @@ final class MidiManager: ObservableObject {
         selectedOutputId = ""
         onEvent?("MIDI unavailable in iOS Simulator")
         #else
-        MIDIClientCreate("LiveRigControl" as CFString, midiNotify, UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque()), &client)
-        MIDIOutputPortCreate(client, "Out" as CFString, &outPort)
+        configureNetworkSession()
+        startObservingNetworkSession()
+
+        let clientStatus = MIDIClientCreate(
+            "LiveRigControl" as CFString,
+            midiNotify,
+            UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque()),
+            &client
+        )
+        guard clientStatus == noErr else {
+            onEvent?("MIDI client create failed: \(clientStatus)")
+            return
+        }
+
+        let portStatus = MIDIOutputPortCreate(client, "Out" as CFString, &outPort)
+        guard portStatus == noErr else {
+            onEvent?("MIDI output port create failed: \(portStatus)")
+            return
+        }
+
         refreshOutputs()
         #endif
     }
@@ -37,20 +57,42 @@ final class MidiManager: ObservableObject {
         #else
         var results: [MidiOutput] = []
         let count = MIDIGetNumberOfDestinations()
+        let localNetworkDestinationId = MidiManager.endpointId(
+            MIDINetworkSession.default().destinationEndpoint(),
+            fallback: ""
+        )
 
         for index in 0..<count {
             let endpoint = MIDIGetDestination(index)
             let name = MidiManager.endpointName(endpoint, fallback: "Output \(index + 1)")
             let id = MidiManager.endpointId(endpoint, fallback: "\(index)")
-            let output = MidiOutput(id: id, name: name, endpoint: endpoint)
+            let output = MidiOutput(
+                id: id,
+                name: name,
+                endpoint: endpoint,
+                isLocalNetworkSession: id == localNetworkDestinationId
+            )
             results.append(output)
         }
 
         outputs = results
-        if outputs.contains(where: { $0.id == selectedOutputId }) == false {
-            selectedOutputId = outputs.first?.id ?? ""
+        let currentSelection = outputs.first(where: { $0.id == selectedOutputId })
+        let preferredRemoteOutput = outputs.first(where: { $0.isLocalNetworkSession == false })
+
+        if currentSelection == nil {
+            selectedOutputId = preferredRemoteOutput?.id ?? outputs.first?.id ?? ""
+        } else if currentSelection?.isLocalNetworkSession == true, let preferredRemoteOutput {
+            selectedOutputId = preferredRemoteOutput.id
         }
-        onEvent?("MIDI outputs: \(outputs.count)")
+        let outputNames = outputs.map(\.name).joined(separator: ", ")
+        if outputNames.isEmpty {
+            onEvent?("MIDI outputs: 0")
+        } else {
+            onEvent?("MIDI outputs: \(outputs.count) [\(outputNames)]")
+        }
+        if let selected = outputs.first(where: { $0.id == selectedOutputId }) {
+            onEvent?("MIDI selected output: \(selected.name)")
+        }
         #endif
     }
 
@@ -138,12 +180,23 @@ final class MidiManager: ObservableObject {
                 buffer.count,
                 buffer.bindMemory(to: UInt8.self).baseAddress!
             )
-            _ = MIDISend(outPort, endpoint, &packetList)
+            let status = MIDISend(outPort, endpoint, &packetList)
+            if status != noErr {
+                onEvent?("MIDI send failed: \(status)")
+            } else {
+                onEvent?("MIDI sent \(bytes.count) byte(s) to \(output.name)")
+            }
         }
         #endif
     }
 
     deinit {
+        if let networkSessionObserver {
+            NotificationCenter.default.removeObserver(networkSessionObserver)
+        }
+        if let networkContactsObserver {
+            NotificationCenter.default.removeObserver(networkContactsObserver)
+        }
         if outPort != 0 {
             MIDIPortDispose(outPort)
         }
@@ -191,6 +244,52 @@ final class MidiManager: ObservableObject {
         onEvent?("MIDI clamped \(label): \(original) -> \(clamped)")
     }
 
+    private func configureNetworkSession() {
+        let session = MIDINetworkSession.default()
+        if session.isEnabled == false {
+            session.isEnabled = true
+        }
+        session.connectionPolicy = .anyone
+
+        let displayName = session.localName.isEmpty ? "Session 1" : session.localName
+        onEvent?("Network MIDI enabled: \(displayName) port \(session.networkPort)")
+
+        let sourceName = MidiManager.endpointName(session.sourceEndpoint(), fallback: "Network Source")
+        let destinationName = MidiManager.endpointName(session.destinationEndpoint(), fallback: "Network Destination")
+        onEvent?("Network MIDI endpoints: src=\(sourceName) dst=\(destinationName)")
+
+        let connectionCount = session.connections().count
+        if connectionCount > 0 {
+            onEvent?("Network MIDI connections: \(connectionCount)")
+        }
+    }
+
+    private func startObservingNetworkSession() {
+        let center = NotificationCenter.default
+        networkSessionObserver = center.addObserver(
+            forName: Notification.Name(rawValue: MIDINetworkNotificationSessionDidChange),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                let session = MIDINetworkSession.default()
+                self.onEvent?("Network MIDI session changed: \(session.connections().count) connection(s)")
+                self.refreshOutputs()
+            }
+        }
+
+        networkContactsObserver = center.addObserver(
+            forName: Notification.Name(rawValue: MIDINetworkNotificationContactsDidChange),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                self?.onEvent?("Network MIDI contacts changed")
+            }
+        }
+    }
+
     private func configureAudioSession() {
         #if os(iOS)
         let session = AVAudioSession.sharedInstance()
@@ -211,6 +310,7 @@ struct MidiOutput: Identifiable, Hashable {
     let id: String
     let name: String
     let endpoint: MIDIEndpointRef
+    let isLocalNetworkSession: Bool
 }
 
 private let midiNotify: MIDINotifyProc = { _, refCon in

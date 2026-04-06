@@ -25,6 +25,7 @@ final class LogStore: ObservableObject {
 
     func add(_ message: String) {
         guard isEnabled else { return }
+        print("[LiveRigControl] \(message)")
         entries.append(LogEntry(timestamp: Date(), message: message))
         if entries.count > maxEntries {
             entries.removeFirst(entries.count - maxEntries)
