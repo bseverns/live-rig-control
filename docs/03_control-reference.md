@@ -70,8 +70,8 @@ The repo currently defines these runtime profiles in `src/mappings.json`:
 | Profile ID | Label | Pads | Primary Transport | Why this profile exists |
 | --- | --- | ---: | --- | --- |
 | `msvp` | MSVP | 19 | OSC scenes + MIDI CC | Explicit MSVP page for shared semantic scene/state controls, macro shaping, and analysis shaping. |
-| `nwWrldFeed` | nw_wrld Feed (OSC) | 12 | OSC | Video/software feed state does not belong on instrument channels. |
-| `nwWrldInput` | nw_wrld Input (MIDI) | 26 | MIDI note | A dedicated note-trigger page for NW World input lanes. |
+| `nwWrldFeed` | nw_wrld Feed Bridge | 12 | OSC bridge control | Feed and mixer-state commands stay separate from playable MIDI mappings. |
+| `nwWrldInput` | nw_wrld Input (MIDI) | 26 | MIDI note | A dedicated MIDI mapping page for NW World and SCapps input lanes. |
 | `patterns` | Patterns | 1 | MIDI note | Keep pattern changes small and explicit. |
 | `pcm30Macros` | PCM-30 Macros (Ch11) | 19 | MIDI note + CC | Quick insert/macro gestures without opening the full synth page. |
 | `drumStack` | DrumKid Controls (Ch10) | 16 | MIDI CC | Continuous drum-engine parameter shaping. |
@@ -96,7 +96,7 @@ flowchart TB
         CH10MSVP[Ch 10\nMSVP macro lane]
         CH15[Ch 15\nMSVP analysis lane]
         CH1[Ch 1\nPatterns / utility]
-        CH2[Ch 2\nNW World input lane B]
+        CH2[Ch 2\nNW World / SCapps input lane B]
         RT[MIDI realtime\nStart / Continue / Stop]
     end
 
@@ -150,24 +150,25 @@ What it controls:
 - Named scene selections.
 - Mix-state or software-state toggles.
 
-Why it is OSC-only:
+Why it is bridge-state control:
 
-- These are software/service state changes, not expressive instrument gestures.
-- OSC addresses communicate semantic intent better than overloading a spare MIDI
-  channel with app-specific meaning.
-- Keeping this lane out of MIDI makes it easier to reason about downstream
-  routing and failure modes.
+- These are software/service state changes, not playable SCapps mappings.
+- OSC addresses communicate semantic intent for the bridge layer before any
+  downstream translation or routing.
+- Keeping feed state separate from MIDI input mappings makes it easier to reason
+  about downstream routing and failure modes.
 
 ### `nwWrldInput`
 
 What it controls:
 
-- Input note triggers for the NW World slice on MIDI Ch 1 and Ch 2.
+- Input note triggers for the NW World and SCapps slice on MIDI Ch 1 and Ch 2.
 
 Why it exists as its own profile:
 
 - Inputs are operationally different from feed-state toggles.
-- The target likely wants note semantics, not OSC semantics.
+- The SCapps side responds to MIDI mappings, so note semantics are the
+  destination-facing contract here.
 - Splitting it from `nwWrldFeed` means "change the feed state" and "play the
   feed input" are not mixed together.
 

@@ -21,6 +21,21 @@
         "vid_state_blackout"
       ]
     },
+    "endpoint_runtime": {
+      "interop_version": "1.0.0",
+      "profile": "msvp",
+      "rig_tuned_mode_default": false,
+      "midi": {
+        "preferred_input": "IAC Bus 1",
+        "macro_channel": 10,
+        "analysis_channel": 15
+      },
+      "osc": {
+        "listen_port": 9010,
+        "target_host": "127.0.0.1",
+        "target_port": 9000
+      }
+    },
     "stability_rules": [
       "Scene semantic IDs are stable contract keys and must not be repurposed.",
       "Scene OSC addresses are the primary semantic vocabulary for cross-repo triggering.",
@@ -51,24 +66,47 @@
         "primary_protocol": "osc",
         "fallback_protocol": "midi_note",
         "msvp_receive_channel": 10,
+        "gesture_semantics": "momentary_macro_base_override",
+        "release_behavior": "restore_macro_base",
+        "overlap_behavior": "last_wins_single_active_scene",
+        "endpoint_group": {
+          "id": "msvp_scene",
+          "mode": "exclusive",
+          "exclusive": true
+        },
+        "endpoint_midi": {
+          "on_velocity": 127,
+          "off_velocity": 0
+        },
+        "endpoint_osc": {
+          "on_args": [
+            1
+          ],
+          "off_args": [
+            0
+          ]
+        },
         "scenes": [
           {
             "semantic_id": "vid_scene_intro",
             "label": "Scene Intro",
             "osc_address": "/video/scene/intro",
-            "midi_note": 60
+            "midi_note": 60,
+            "preset": "intro"
           },
           {
             "semantic_id": "vid_scene_crash",
             "label": "Scene Crash",
             "osc_address": "/video/scene/crash",
-            "midi_note": 61
+            "midi_note": 61,
+            "preset": "crash"
           },
           {
             "semantic_id": "vid_scene_soft",
             "label": "Scene Soft",
             "osc_address": "/video/scene/soft",
-            "midi_note": 62
+            "midi_note": 62,
+            "preset": "soft"
           }
         ]
       },
@@ -191,10 +229,13 @@
           "scene OSC addresses",
           "scene MIDI note assignments",
           "scene fallback receive channel",
+          "runtime profile, rig mode default, MIDI input, and OSC routing",
+          "scene toggle off payloads, exclusive group, preset tags, and release behavior",
           "macro lane channel",
           "analysis lane channel",
           "macro parameter names and CC assignments",
-          "analysis parameter names and CC assignments"
+          "analysis parameter names and CC assignments",
+          "macro and analysis OSC mirror addresses and normalized args"
         ]
       }
     },

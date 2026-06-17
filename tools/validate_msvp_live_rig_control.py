@@ -24,6 +24,19 @@ def add_mismatch(errors: list[str], scope: str, field: str, actual: Any, expecte
     errors.append(f"{scope}: {field} is {actual!r}, expected {expected!r}")
 
 
+def notes_have_tags(notes: Any, expected_tags: dict[str, str]) -> bool:
+    if not isinstance(notes, str):
+        return False
+    tokens = notes.replace(",", " ").replace(";", " ").split()
+    found: dict[str, str] = {}
+    for token in tokens:
+        if ":" not in token:
+            continue
+        key, value = token.split(":", 1)
+        found[key.strip().lower()] = value.strip()
+    return all(found.get(key.lower()) == value for key, value in expected_tags.items())
+
+
 def collect_all_pads(profiles: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], list[str]]:
     pads_by_id: dict[str, dict[str, Any]] = {}
     errors: list[str] = []
@@ -157,12 +170,19 @@ def validate_live_rig(mappings_path: Path, contract: dict[str, Any]) -> tuple[li
 
 def get_msvp_profile(data: dict[str, Any]) -> tuple[str | None, dict[str, Any] | None]:
     runtime = data.get("runtime", {})
-    requested_profile = runtime.get("profile")
+    requested_profile = runtime.get("profile") if isinstance(runtime, dict) else None
     profiles = data.get("profiles", {})
     if isinstance(requested_profile, str) and isinstance(profiles, dict):
         profile = profiles.get(requested_profile)
         if isinstance(profile, dict):
             return requested_profile, profile
+    if isinstance(profiles, dict):
+        profile = profiles.get("msvp")
+        if isinstance(profile, dict):
+            return "msvp", profile
+        profile = profiles.get("default")
+        if isinstance(profile, dict):
+            return "default", profile
     if isinstance(profiles, dict) and len(profiles) == 1:
         profile_id, profile = next(iter(profiles.items()))
         if isinstance(profile, dict):
@@ -180,7 +200,8 @@ def validate_endpoint_lane(
     expected_channel = lane_contract["channel"]
     expected_prefix = lane_contract["osc_equivalent_prefix"]
     expected_by_param = {item["name"]: item for item in lane_contract["parameters"]}
-    actual_by_param: dict[str, dict[str, Any]] = {}
+    expected_ids = {item["pad_id"] for item in lane_contract["parameters"]}
+    actual_by_param: dict[str, str] = {}
 
     for pad_id, pad in pads_by_id.items():
         osc = pad.get("osc", {})
@@ -191,32 +212,140 @@ def validate_endpoint_lane(
         if param_name in actual_by_param:
             errors.append(f"{interop_path}: duplicate {lane_name} OSC binding for '{param_name}'")
             continue
-        actual_by_param[param_name] = {"pad_id": pad_id, "pad": pad}
+        actual_by_param[param_name] = pad_id
 
     for param_name, expected in expected_by_param.items():
-        payload = actual_by_param.get(param_name)
-        if payload is None:
-            errors.append(f"{interop_path}: missing {lane_name} parameter '{param_name}'")
+        pad_id = expected["pad_id"]
+        pad = pads_by_id.get(pad_id)
+        if pad is None:
+            errors.append(f"{interop_path}: missing {lane_name} pad '{pad_id}'")
             continue
-        pad = payload["pad"]
         midi = pad.get("midi", {})
-        scope = f"{interop_path}:{payload['pad_id']}"
+        osc = pad.get("osc", {})
+        scope = f"{interop_path}:{pad_id}"
         if midi.get("type") != "cc":
             add_mismatch(errors, scope, "midi.type", midi.get("type"), "cc")
         if midi.get("channel") != expected_channel:
             add_mismatch(errors, scope, "midi.channel", midi.get("channel"), expected_channel)
         if midi.get("cc") != expected["cc"]:
             add_mismatch(errors, scope, "midi.cc", midi.get("cc"), expected["cc"])
+        expected_address = expected_prefix + param_name
+        if osc.get("address") != expected_address:
+            add_mismatch(errors, scope, "osc.address", osc.get("address"), expected_address)
+        if osc.get("args") != [0.5]:
+            add_mismatch(errors, scope, "osc.args", osc.get("args"), [0.5])
+        if not notes_have_tags(pad.get("notes"), {"lane": lane_name, "target": param_name, "normalized": "0..1"}):
+            errors.append(f"{scope}: notes must tag lane:{lane_name} target:{param_name} normalized:0..1")
 
     for param_name in sorted(actual_by_param):
         if param_name not in expected_by_param:
             errors.append(f"{interop_path}: unknown {lane_name} parameter '{param_name}'")
+    for pad_id in sorted(pads_by_id):
+        if pad_id.startswith(f"msvp_{lane_name}_") and pad_id not in expected_ids:
+            errors.append(f"{interop_path}: unknown {lane_name} pad '{pad_id}'")
+
+
+def validate_msvp_runtime(
+    errors: list[str],
+    interop_path: Path,
+    data: dict[str, Any],
+    contract: dict[str, Any],
+) -> None:
+    endpoint_runtime = contract.get("endpoint_runtime", {})
+    if not isinstance(endpoint_runtime, dict):
+        return
+
+    if data.get("interopVersion") != endpoint_runtime.get("interop_version"):
+        add_mismatch(
+            errors,
+            str(interop_path),
+            "interopVersion",
+            data.get("interopVersion"),
+            endpoint_runtime.get("interop_version"),
+        )
+
+    runtime = data.get("runtime")
+    if not isinstance(runtime, dict):
+        errors.append(f"{interop_path}: runtime must be an object")
+        return
+
+    if runtime.get("profile") != endpoint_runtime.get("profile"):
+        add_mismatch(errors, str(interop_path), "runtime.profile", runtime.get("profile"), endpoint_runtime.get("profile"))
+    if runtime.get("rigTunedMode") != endpoint_runtime.get("rig_tuned_mode_default"):
+        add_mismatch(
+            errors,
+            str(interop_path),
+            "runtime.rigTunedMode",
+            runtime.get("rigTunedMode"),
+            endpoint_runtime.get("rig_tuned_mode_default"),
+        )
+
+    midi_runtime = runtime.get("midi")
+    if not isinstance(midi_runtime, dict):
+        errors.append(f"{interop_path}: runtime.midi must be an object")
+    else:
+        midi_expected = endpoint_runtime.get("midi", {})
+        if midi_runtime.get("preferredInput") != midi_expected.get("preferred_input"):
+            add_mismatch(
+                errors,
+                str(interop_path),
+                "runtime.midi.preferredInput",
+                midi_runtime.get("preferredInput"),
+                midi_expected.get("preferred_input"),
+            )
+        if midi_runtime.get("macroChannel") != midi_expected.get("macro_channel"):
+            add_mismatch(
+                errors,
+                str(interop_path),
+                "runtime.midi.macroChannel",
+                midi_runtime.get("macroChannel"),
+                midi_expected.get("macro_channel"),
+            )
+        if midi_runtime.get("analysisChannel") != midi_expected.get("analysis_channel"):
+            add_mismatch(
+                errors,
+                str(interop_path),
+                "runtime.midi.analysisChannel",
+                midi_runtime.get("analysisChannel"),
+                midi_expected.get("analysis_channel"),
+            )
+
+    osc_runtime = runtime.get("osc")
+    if not isinstance(osc_runtime, dict):
+        errors.append(f"{interop_path}: runtime.osc must be an object")
+    else:
+        osc_expected = endpoint_runtime.get("osc", {})
+        if osc_runtime.get("listenPort") != osc_expected.get("listen_port"):
+            add_mismatch(
+                errors,
+                str(interop_path),
+                "runtime.osc.listenPort",
+                osc_runtime.get("listenPort"),
+                osc_expected.get("listen_port"),
+            )
+        if osc_runtime.get("targetHost") != osc_expected.get("target_host"):
+            add_mismatch(
+                errors,
+                str(interop_path),
+                "runtime.osc.targetHost",
+                osc_runtime.get("targetHost"),
+                osc_expected.get("target_host"),
+            )
+        if osc_runtime.get("targetPort") != osc_expected.get("target_port"):
+            add_mismatch(
+                errors,
+                str(interop_path),
+                "runtime.osc.targetPort",
+                osc_runtime.get("targetPort"),
+                osc_expected.get("target_port"),
+            )
 
 
 def validate_msvp(interop_path: Path, contract: dict[str, Any]) -> tuple[list[str], list[str]]:
     data = load_json(interop_path)
-    runtime = data.get("runtime", {})
-    midi_runtime = runtime.get("midi", {}) if isinstance(runtime, dict) else {}
+    if not isinstance(data, dict):
+        return [f"{interop_path}: root must be an object"], []
+
     profile_id, profile = get_msvp_profile(data)
     if profile is None:
         return [f"{interop_path}: no usable profile found"], []
@@ -224,28 +353,15 @@ def validate_msvp(interop_path: Path, contract: dict[str, Any]) -> tuple[list[st
     pads_by_id, profile_errors = profile_pads_by_id(profile, profile_id)
     errors = [f"{interop_path}: {msg}" for msg in profile_errors]
     checks: list[str] = []
+    validate_msvp_runtime(errors, interop_path, data, contract)
 
     scene_contract = contract["controls"]["scene_triggers"]
     macro_contract = contract["controls"]["macro_lane"]
     analysis_contract = contract["controls"]["analysis_lane"]
     expected_scenes = {scene["semantic_id"]: scene for scene in scene_contract["scenes"]}
-
-    if midi_runtime.get("macroChannel") != macro_contract["channel"]:
-        add_mismatch(
-            errors,
-            str(interop_path),
-            "runtime.midi.macroChannel",
-            midi_runtime.get("macroChannel"),
-            macro_contract["channel"],
-        )
-    if midi_runtime.get("analysisChannel") != analysis_contract["channel"]:
-        add_mismatch(
-            errors,
-            str(interop_path),
-            "runtime.midi.analysisChannel",
-            midi_runtime.get("analysisChannel"),
-            analysis_contract["channel"],
-        )
+    scene_group_contract = scene_contract.get("endpoint_group", {})
+    scene_midi_contract = scene_contract.get("endpoint_midi", {})
+    scene_osc_contract = scene_contract.get("endpoint_osc", {})
 
     for scene_id, expected in expected_scenes.items():
         pad = pads_by_id.get(scene_id)
@@ -254,7 +370,12 @@ def validate_msvp(interop_path: Path, contract: dict[str, Any]) -> tuple[list[st
             continue
         midi = pad.get("midi", {})
         osc = pad.get("osc", {})
+        group = pad.get("group", {})
         scope = f"{interop_path}:{scene_id}"
+        if pad.get("toggle") is not True:
+            add_mismatch(errors, scope, "toggle", pad.get("toggle"), True)
+        if pad.get("mode") != "toggle":
+            add_mismatch(errors, scope, "mode", pad.get("mode"), "toggle")
         if midi.get("type") != "note":
             add_mismatch(errors, scope, "midi.type", midi.get("type"), "note")
         if midi.get("channel") != scene_contract["msvp_receive_channel"]:
@@ -267,8 +388,56 @@ def validate_msvp(interop_path: Path, contract: dict[str, Any]) -> tuple[list[st
             )
         if midi.get("note") != expected["midi_note"]:
             add_mismatch(errors, scope, "midi.note", midi.get("note"), expected["midi_note"])
+        if midi.get("onVelocity") != scene_midi_contract.get("on_velocity"):
+            add_mismatch(
+                errors,
+                scope,
+                "midi.onVelocity",
+                midi.get("onVelocity"),
+                scene_midi_contract.get("on_velocity"),
+            )
+        if midi.get("offVelocity") != scene_midi_contract.get("off_velocity"):
+            add_mismatch(
+                errors,
+                scope,
+                "midi.offVelocity",
+                midi.get("offVelocity"),
+                scene_midi_contract.get("off_velocity"),
+            )
         if osc.get("address") != expected["osc_address"]:
             add_mismatch(errors, scope, "osc.address", osc.get("address"), expected["osc_address"])
+        if osc.get("onArgs") != scene_osc_contract.get("on_args"):
+            add_mismatch(errors, scope, "osc.onArgs", osc.get("onArgs"), scene_osc_contract.get("on_args"))
+        if osc.get("offArgs") != scene_osc_contract.get("off_args"):
+            add_mismatch(errors, scope, "osc.offArgs", osc.get("offArgs"), scene_osc_contract.get("off_args"))
+        if not isinstance(group, dict):
+            errors.append(f"{scope}: group must be an object")
+        else:
+            if group.get("id") != scene_group_contract.get("id"):
+                add_mismatch(errors, scope, "group.id", group.get("id"), scene_group_contract.get("id"))
+            if group.get("mode") != scene_group_contract.get("mode"):
+                add_mismatch(errors, scope, "group.mode", group.get("mode"), scene_group_contract.get("mode"))
+            if group.get("exclusive") != scene_group_contract.get("exclusive"):
+                add_mismatch(
+                    errors,
+                    scope,
+                    "group.exclusive",
+                    group.get("exclusive"),
+                    scene_group_contract.get("exclusive"),
+                )
+        if not notes_have_tags(
+            pad.get("notes"),
+            {
+                "contract": "rig",
+                "scene": expected.get("preset", ""),
+                "preset": expected.get("preset", ""),
+                "release": scene_contract.get("release_behavior", ""),
+            },
+        ):
+            errors.append(
+                f"{scope}: notes must tag contract:rig scene:{expected.get('preset')} "
+                f"preset:{expected.get('preset')} release:{scene_contract.get('release_behavior')}"
+            )
 
     for pad_id in sorted(pads_by_id):
         if pad_id.startswith("vid_scene_") and pad_id not in expected_scenes:
@@ -279,10 +448,10 @@ def validate_msvp(interop_path: Path, contract: dict[str, Any]) -> tuple[list[st
 
     if not errors:
         checks.append(
-            f"{interop_path}: scenes match canonical IDs, OSC addresses, note fallback, macro ch {macro_contract['channel']}, analysis ch {analysis_contract['channel']}"
+            f"{interop_path}: runtime profile, MIDI input, OSC routing, scenes, macro ch {macro_contract['channel']}, and analysis ch {analysis_contract['channel']} match contract"
         )
         checks.append(
-            f"{interop_path}: macro and analysis expose {len(macro_contract['parameters'])} canonical parameters each"
+            f"{interop_path}: scene release semantics and {len(macro_contract['parameters'])}+{len(analysis_contract['parameters'])} MIDI/OSC lane mirrors match MSVP interop"
         )
     return errors, checks
 

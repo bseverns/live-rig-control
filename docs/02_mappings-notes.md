@@ -42,7 +42,7 @@ so changes stay intentional and interoperable.
 - `electribe`: Ch 11 (shares the PCM-30 channel so inserts and Electribe controls land on the same target)
 - `drumStack`: Ch 10 (standard drum channel; includes DrumKid + DR-550 pads and DrumKid CC)
 - `patterns`: Ch 1 (pattern selection lane; kept simple and low-traffic)
-- `nwWrldInput`: Ch 1 and Ch 2 (two-lane input targeting the NW World slice)
+- `nwWrldInput`: Ch 1 and Ch 2 (two-lane MIDI input targeting the NW World and SCapps slice)
 - `transport`: Ch 1 (global MIDI real-time control for external sync)
 
 If a device moves channels, update both the profile and the notes here so

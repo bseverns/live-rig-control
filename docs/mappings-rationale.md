@@ -22,7 +22,7 @@ notes in the `live-rig` repository.
 - MSVP scenes: OSC-first semantic triggers.
 - Ch 10: MSVP macro shaping lane.
 - Ch 15: MSVP analysis shaping lane.
-- Ch 1–2: NW World input lanes.
+- Ch 1–2: NW World and SCapps MIDI input lanes.
 
 Rationale:
 
@@ -34,8 +34,8 @@ Rationale:
   not double-fire alongside a fallback note path.
 - Ch 10 carries MSVP macro shaping because it is a compact performance lane.
 - Ch 15 keeps MSVP analysis bias separate from macro base intent.
-- Ch 1–2 are reserved for NW World input, which often travels a different
-  processing path.
+- Ch 1–2 are reserved for NW World and SCapps input mappings, which often travel
+  a different processing path from feed-state commands.
 
 ## Profile Boundaries
 
@@ -48,7 +48,8 @@ Rationale:
 - `msvp` is isolated so scene cues, macro shaping, and analysis shaping stay on
   one explicit page instead of being spread across generic video controls.
 - `transport` is isolated so Start/Stop never fires during parameter edits.
-- `patterns` and `nwWrldInput` remain compact utility pages.
+- `patterns` and `nwWrldInput` remain compact utility pages; `nwWrldInput` is
+  the MIDI-mapped SCapps/NW World input surface.
 - Standalone hardware mirrors such as the Maschine MK1 deck can live as
   adjacent artifacts when the stable IDs matter before the runtime is ready to
   render them as active profiles.
