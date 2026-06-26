@@ -10,6 +10,7 @@ struct Mapping: Codable {
                 label: value.label,
                 section: value.section,
                 order: value.order,
+                layout: value.layout,
                 gridSize: value.gridSize,
                 pads: value.pads
             )
@@ -66,20 +67,22 @@ struct Profile: Codable, Identifiable {
     let label: String?
     let section: String?
     let order: Int?
+    let layout: LayoutMapping?
     let gridSize: [Int]?
     let pads: [Pad]
 
-    init(id: String, label: String?, section: String?, order: Int?, gridSize: [Int]?, pads: [Pad]) {
+    init(id: String, label: String?, section: String?, order: Int?, layout: LayoutMapping?, gridSize: [Int]?, pads: [Pad]) {
         self.id = id
         self.label = label
         self.section = section
         self.order = order
+        self.layout = layout
         self.gridSize = gridSize
         self.pads = pads
     }
 
     enum CodingKeys: String, CodingKey {
-        case label, section, order, gridSize, pads
+        case label, section, order, layout, gridSize, pads
     }
 
     init(from decoder: Decoder) throws {
@@ -87,6 +90,7 @@ struct Profile: Codable, Identifiable {
         label = try container.decodeIfPresent(String.self, forKey: .label)
         section = try container.decodeIfPresent(String.self, forKey: .section)
         order = try container.decodeIfPresent(Int.self, forKey: .order)
+        layout = try container.decodeIfPresent(LayoutMapping.self, forKey: .layout)
         gridSize = try container.decodeIfPresent([Int].self, forKey: .gridSize)
         pads = try container.decode([Pad].self, forKey: .pads)
         id = ""
@@ -113,6 +117,9 @@ struct Pad: Codable, Identifiable {
     let notes: String?
     let ui: UiMapping?
     let group: GroupMapping?
+    let risk: String?
+    let queuePolicy: String?
+    let queueTtlMs: Int?
 
     var isToggle: Bool {
         if ui?.type == "slider" {
@@ -126,6 +133,12 @@ struct Pad: Codable, Identifiable {
         }
         return mode == "toggle"
     }
+}
+
+struct LayoutMapping: Codable {
+    let kind: String
+    let minCardWidth: Int?
+    let riskDisplay: Bool?
 }
 
 struct GroupMapping: Codable {

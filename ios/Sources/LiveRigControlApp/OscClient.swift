@@ -23,6 +23,13 @@ final class OscClient: ObservableObject {
         case udp(Data)
     }
 
+    private struct QueuedMessage {
+        let message: OutboundMessage
+        let policy: String
+        let key: String
+        let expiresAt: Date?
+    }
+
     private var session: URLSession?
     private var webSocketTask: URLSessionWebSocketTask?
     private var udpConnection: NWConnection?
@@ -30,7 +37,7 @@ final class OscClient: ObservableObject {
     private var reconnectTask: Task<Void, Never>?
     private var allowReconnect = false
     private var currentEndpoint: Endpoint?
-    private var pendingMessages: [OutboundMessage] = []
+    private var pendingMessages: [QueuedMessage] = []
     private let maxPendingMessages = 200
 
     func connect(host: String) async {
@@ -89,17 +96,23 @@ final class OscClient: ObservableObject {
         guard let osc = pad.osc else { return }
         let args = osc.resolvedArgs(forState: state, value: nil)
         guard let message = makeOutboundMessage(address: osc.address, args: args, state: state) else { return }
-        sendMessage(message)
+        sendMessage(message, queueOptions: queueOptions(for: pad))
     }
 
     func send(pad: Pad, value: Int) {
         guard let osc = pad.osc else { return }
         let args = osc.resolvedArgs(forState: nil, value: value)
         guard let message = makeOutboundMessage(address: osc.address, args: args, state: nil) else { return }
-        sendMessage(message)
+        sendMessage(message, queueOptions: queueOptions(for: pad))
     }
 
     private var lastHost: String = ""
+
+    private func queueOptions(for pad: Pad) -> (policy: String, key: String, ttl: TimeInterval) {
+        let policy = pad.queuePolicy ?? (pad.ui?.type == "slider" ? "latest" : "ttl")
+        let ttl = TimeInterval(pad.queueTtlMs ?? 1000) / 1000.0
+        return (policy: policy, key: pad.id, ttl: ttl)
+    }
 
     private func receiveLoop() {
         webSocketTask?.receive { [weak self] result in
@@ -131,11 +144,11 @@ final class OscClient: ObservableObject {
         }
     }
 
-    private func sendMessage(_ message: OutboundMessage) {
+    private func sendMessage(_ message: OutboundMessage, queueOptions: (policy: String, key: String, ttl: TimeInterval)? = nil) {
         switch message {
         case .websocket(let socketMessage):
             guard state == .connected, let socket = webSocketTask else {
-                enqueue(message)
+                enqueue(message, options: queueOptions)
                 return
             }
 
@@ -143,14 +156,14 @@ final class OscClient: ObservableObject {
                 guard let self = self else { return }
                 if error != nil {
                     Task { @MainActor in
-                        self.enqueue(message)
+                        self.enqueue(message, options: queueOptions)
                         self.handleTransportFailure(message: "OSC send failed; reconnecting")
                     }
                 }
             }
         case .udp(let data):
             guard state == .connected, let connection = udpConnection else {
-                enqueue(message)
+                enqueue(message, options: queueOptions)
                 return
             }
 
@@ -158,7 +171,7 @@ final class OscClient: ObservableObject {
                 guard let self = self else { return }
                 if let error {
                     Task { @MainActor in
-                        self.enqueue(message)
+                        self.enqueue(message, options: queueOptions)
                         self.handleTransportFailure(
                             message: "OSC UDP send failed: \(error.localizedDescription); reconnecting"
                         )
@@ -168,11 +181,23 @@ final class OscClient: ObservableObject {
         }
     }
 
-    private func enqueue(_ message: OutboundMessage) {
+    private func enqueue(_ message: OutboundMessage, options: (policy: String, key: String, ttl: TimeInterval)? = nil) {
+        let policy = options?.policy ?? "ttl"
+        if policy == "never" {
+            onEvent?("OSC offline; message dropped")
+            return
+        }
+
+        let key = options?.key ?? UUID().uuidString
+        if policy == "latest" || policy == "safety" {
+            pendingMessages.removeAll { $0.key == key }
+        }
+
         if pendingMessages.count >= maxPendingMessages {
             pendingMessages.removeFirst()
         }
-        pendingMessages.append(message)
+        let expiresAt = policy == "ttl" ? Date().addingTimeInterval(options?.ttl ?? 1.0) : nil
+        pendingMessages.append(QueuedMessage(message: message, policy: policy, key: key, expiresAt: expiresAt))
         queuedCount = pendingMessages.count
         onEvent?("OSC queued (\(pendingMessages.count))")
     }
@@ -182,8 +207,24 @@ final class OscClient: ObservableObject {
         let queued = pendingMessages
         pendingMessages.removeAll()
         queuedCount = 0
-        for message in queued {
-            sendMessage(message)
+        var expiredCount = 0
+        let now = Date()
+        for queuedMessage in queued {
+            if let expiresAt = queuedMessage.expiresAt, expiresAt < now {
+                expiredCount += 1
+                continue
+            }
+            sendMessage(
+                queuedMessage.message,
+                queueOptions: (
+                    policy: queuedMessage.policy,
+                    key: queuedMessage.key,
+                    ttl: max(queuedMessage.expiresAt?.timeIntervalSince(now) ?? 1.0, 0.001)
+                )
+            )
+        }
+        if expiredCount > 0 {
+            onEvent?("OSC expired \(expiredCount) queued message(s)")
         }
     }
 

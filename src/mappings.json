@@ -31,7 +31,10 @@
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "vid_scene_crash",
@@ -56,7 +59,10 @@
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "vid_scene_soft",
@@ -81,7 +87,10 @@
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "vid_scene_clean_camera",
@@ -106,7 +115,10 @@
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "vid_state_blackout",
@@ -126,7 +138,9 @@
               0
             ]
           },
-          "notes": "Shared blackout state. OSC primary in live-rig-control; canonical MIDI fallback note is 63 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror."
+          "notes": "Shared blackout state. OSC primary in live-rig-control; canonical MIDI fallback note is 63 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
+          "risk": "critical",
+          "queuePolicy": "safety"
         },
         {
           "id": "msvp_macro_lines_per_frame",
@@ -148,7 +162,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MSVP macro lane. Canonical param linesPerFrame, OSC equivalent /msvp/macro/linesPerFrame."
+          "notes": "MSVP macro lane. Canonical param linesPerFrame, OSC equivalent /msvp/macro/linesPerFrame.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_macro_max_line_size",
@@ -170,7 +186,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MSVP macro lane. Canonical param maxLineSize, OSC equivalent /msvp/macro/maxLineSize."
+          "notes": "MSVP macro lane. Canonical param maxLineSize, OSC equivalent /msvp/macro/maxLineSize.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_macro_opacity_min",
@@ -192,7 +210,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MSVP macro lane. Canonical param opacityMin, OSC equivalent /msvp/macro/opacityMin."
+          "notes": "MSVP macro lane. Canonical param opacityMin, OSC equivalent /msvp/macro/opacityMin.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_macro_effect_interval_beats",
@@ -214,7 +234,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MSVP macro lane. Canonical param effectIntervalBeats, OSC equivalent /msvp/macro/effectIntervalBeats."
+          "notes": "MSVP macro lane. Canonical param effectIntervalBeats, OSC equivalent /msvp/macro/effectIntervalBeats.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_macro_effect_duration_beats",
@@ -236,7 +258,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MSVP macro lane. Canonical param effectDurationBeats, OSC equivalent /msvp/macro/effectDurationBeats."
+          "notes": "MSVP macro lane. Canonical param effectDurationBeats, OSC equivalent /msvp/macro/effectDurationBeats.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_macro_bpm_smoothing",
@@ -258,7 +282,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MSVP macro lane. Canonical param bpmSmoothing, OSC equivalent /msvp/macro/bpmSmoothing."
+          "notes": "MSVP macro lane. Canonical param bpmSmoothing, OSC equivalent /msvp/macro/bpmSmoothing.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_macro_effect_bias",
@@ -280,7 +306,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MSVP macro lane. Canonical param effectBias, OSC equivalent /msvp/macro/effectBias."
+          "notes": "MSVP macro lane. Canonical param effectBias, OSC equivalent /msvp/macro/effectBias.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_analysis_lines_per_frame",
@@ -302,7 +330,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MSVP analysis lane. Canonical param linesPerFrame, OSC equivalent /msvp/analysis/linesPerFrame."
+          "notes": "MSVP analysis lane. Canonical param linesPerFrame, OSC equivalent /msvp/analysis/linesPerFrame.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_analysis_max_line_size",
@@ -324,7 +354,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MSVP analysis lane. Canonical param maxLineSize, OSC equivalent /msvp/analysis/maxLineSize."
+          "notes": "MSVP analysis lane. Canonical param maxLineSize, OSC equivalent /msvp/analysis/maxLineSize.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_analysis_opacity_min",
@@ -346,7 +378,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MSVP analysis lane. Canonical param opacityMin, OSC equivalent /msvp/analysis/opacityMin."
+          "notes": "MSVP analysis lane. Canonical param opacityMin, OSC equivalent /msvp/analysis/opacityMin.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_analysis_effect_interval_beats",
@@ -368,7 +402,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MSVP analysis lane. Canonical param effectIntervalBeats, OSC equivalent /msvp/analysis/effectIntervalBeats."
+          "notes": "MSVP analysis lane. Canonical param effectIntervalBeats, OSC equivalent /msvp/analysis/effectIntervalBeats.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_analysis_effect_duration_beats",
@@ -390,7 +426,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MSVP analysis lane. Canonical param effectDurationBeats, OSC equivalent /msvp/analysis/effectDurationBeats."
+          "notes": "MSVP analysis lane. Canonical param effectDurationBeats, OSC equivalent /msvp/analysis/effectDurationBeats.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_analysis_bpm_smoothing",
@@ -412,7 +450,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MSVP analysis lane. Canonical param bpmSmoothing, OSC equivalent /msvp/analysis/bpmSmoothing."
+          "notes": "MSVP analysis lane. Canonical param bpmSmoothing, OSC equivalent /msvp/analysis/bpmSmoothing.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "msvp_analysis_effect_bias",
@@ -434,11 +474,18 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MSVP analysis lane. Canonical param effectBias, OSC equivalent /msvp/analysis/effectBias."
+          "notes": "MSVP analysis lane. Canonical param effectBias, OSC equivalent /msvp/analysis/effectBias.",
+          "risk": "low",
+          "queuePolicy": "never"
         }
       ],
       "section": "video",
-      "order": 5
+      "order": 5,
+      "layout": {
+        "kind": "parameterBoard",
+        "minCardWidth": 180,
+        "riskDisplay": true
+      }
     },
     "nwWrldFeed": {
       "label": "Video Feed",
@@ -465,7 +512,10 @@
               0
             ]
           },
-          "notes": "Bridge this to SC Video Mixer input enable for the nw_wrld feed."
+          "notes": "Bridge this to SC Video Mixer input enable for the nw_wrld feed.",
+          "risk": "medium",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_feed_blackout",
@@ -485,7 +535,9 @@
               0
             ]
           },
-          "notes": "Hard kill for the nw_wrld feed or mixer layer."
+          "notes": "Hard kill for the nw_wrld feed or mixer layer.",
+          "risk": "critical",
+          "queuePolicy": "safety"
         },
         {
           "id": "nw_scene_intro",
@@ -509,7 +561,10 @@
             "id": "nw_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_scene_crash",
@@ -533,7 +588,10 @@
             "id": "nw_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_scene_soft",
@@ -557,7 +615,10 @@
             "id": "nw_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_mix_clean",
@@ -577,7 +638,10 @@
               0
             ]
           },
-          "notes": "Intended to bias toward unprocessed nw_wrld feed in the mixer."
+          "notes": "Intended to bias toward unprocessed nw_wrld feed in the mixer.",
+          "risk": "medium",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_mix_processed",
@@ -597,7 +661,10 @@
               0
             ]
           },
-          "notes": "Intended to bias toward processed/feedback chain."
+          "notes": "Intended to bias toward processed/feedback chain.",
+          "risk": "medium",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_key_enable",
@@ -617,7 +684,10 @@
               0
             ]
           },
-          "notes": "Key on/off in SC Video Mixer if used."
+          "notes": "Key on/off in SC Video Mixer if used.",
+          "risk": "medium",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_fx_feedback",
@@ -636,7 +706,10 @@
             "offArgs": [
               0
             ]
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_overlay_text",
@@ -655,7 +728,10 @@
             "offArgs": [
               0
             ]
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_overlay_grid",
@@ -674,7 +750,10 @@
             "offArgs": [
               0
             ]
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         },
         {
           "id": "nw_overlay_mask",
@@ -693,11 +772,18 @@
             "offArgs": [
               0
             ]
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000
         }
       ],
       "section": "video",
-      "order": 10
+      "order": 10,
+      "layout": {
+        "kind": "mappedGrid",
+        "riskDisplay": true
+      }
     },
     "nwWrldInput": {
       "label": "Video Input",
@@ -718,7 +804,9 @@
             "note": 12,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_2",
@@ -732,7 +820,9 @@
             "note": 13,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_3",
@@ -746,7 +836,9 @@
             "note": 14,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_4",
@@ -760,7 +852,9 @@
             "note": 15,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_5",
@@ -774,7 +868,9 @@
             "note": 16,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_6",
@@ -788,7 +884,9 @@
             "note": 17,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_7",
@@ -802,7 +900,9 @@
             "note": 18,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_8",
@@ -816,7 +916,9 @@
             "note": 19,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_1",
@@ -830,7 +932,9 @@
             "note": 112,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_2",
@@ -844,7 +948,9 @@
             "note": 113,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_3",
@@ -858,7 +964,9 @@
             "note": 114,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_4",
@@ -872,7 +980,9 @@
             "note": 115,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_5",
@@ -886,7 +996,9 @@
             "note": 116,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_6",
@@ -900,7 +1012,9 @@
             "note": 117,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_7",
@@ -914,7 +1028,9 @@
             "note": 118,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_8",
@@ -928,7 +1044,9 @@
             "note": 119,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_9",
@@ -942,7 +1060,9 @@
             "note": 120,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_10",
@@ -956,7 +1076,9 @@
             "note": 121,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_11",
@@ -970,7 +1092,9 @@
             "note": 122,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_12",
@@ -984,7 +1108,9 @@
             "note": 123,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_13",
@@ -998,7 +1124,9 @@
             "note": 124,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_14",
@@ -1012,7 +1140,9 @@
             "note": 125,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_15",
@@ -1026,7 +1156,9 @@
             "note": 126,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_ch_16",
@@ -1040,7 +1172,9 @@
             "note": 127,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_9",
@@ -1054,7 +1188,9 @@
             "note": 20,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "nw_track_10",
@@ -1068,11 +1204,17 @@
             "note": 21,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         }
       ],
       "section": "video",
-      "order": 20
+      "order": 20,
+      "layout": {
+        "kind": "mappedGrid",
+        "riskDisplay": true
+      }
     },
     "patterns": {
       "label": "Patterns",
@@ -1093,11 +1235,17 @@
             "note": 40,
             "onVelocity": 100,
             "offVelocity": 0
-          }
+          },
+          "risk": "medium",
+          "queuePolicy": "never"
         }
       ],
       "section": "show",
-      "order": 20
+      "order": 20,
+      "layout": {
+        "kind": "performanceDeck",
+        "riskDisplay": true
+      }
     },
     "pcm30Macros": {
       "label": "FX Macros",
@@ -1126,7 +1274,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_f2_fb",
@@ -1148,7 +1298,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_f3_mosh",
@@ -1170,7 +1322,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_f4_mael",
@@ -1192,7 +1346,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_f5_retrace",
@@ -1214,7 +1370,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_f6_contrast",
@@ -1236,7 +1394,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_f7_spare",
@@ -1258,7 +1418,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_f8_blackout",
@@ -1280,7 +1442,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "critical",
+          "queuePolicy": "safety"
         },
         {
           "id": "pcm30_k1_glitch",
@@ -1302,7 +1466,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_k2_fb",
@@ -1324,7 +1490,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_k3_warp",
@@ -1346,7 +1514,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_k4_wire",
@@ -1368,7 +1538,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_k5_texture",
@@ -1390,7 +1562,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_k6_blend",
@@ -1412,7 +1586,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_k7_hue",
@@ -1434,7 +1610,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_k8_spare",
@@ -1456,7 +1634,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "pcm30_scene_crash",
@@ -1475,7 +1655,10 @@
             "id": "pcm30_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "never",
+          "queueTtlMs": 1000
         },
         {
           "id": "pcm30_scene_soft",
@@ -1494,7 +1677,10 @@
             "id": "pcm30_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "high",
+          "queuePolicy": "never",
+          "queueTtlMs": 1000
         },
         {
           "id": "pcm30_blackout",
@@ -1513,11 +1699,18 @@
             "id": "pcm30_scene",
             "mode": "exclusive",
             "exclusive": true
-          }
+          },
+          "risk": "critical",
+          "queuePolicy": "safety"
         }
       ],
       "section": "sound",
-      "order": 20
+      "order": 20,
+      "layout": {
+        "kind": "parameterBoard",
+        "minCardWidth": 180,
+        "riskDisplay": true
+      }
     },
     "drumStack": {
       "label": "Drum Controls",
@@ -1546,7 +1739,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc17_zoom",
@@ -1568,7 +1763,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc18_range",
@@ -1590,7 +1787,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc19_midpoint",
@@ -1612,7 +1811,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc20_pitch",
@@ -1634,7 +1835,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc21_crush",
@@ -1656,7 +1859,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc22_crop",
@@ -1678,7 +1883,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc23_drop",
@@ -1700,7 +1907,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc24_drone",
@@ -1722,7 +1931,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc25_modulate",
@@ -1744,7 +1955,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc26_tuning",
@@ -1766,7 +1979,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc27_note",
@@ -1788,7 +2003,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC27 is 'Note' but regular note commands are preferred."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC27 is 'Note' but regular note commands are preferred.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc28_beat",
@@ -1810,7 +2027,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc29_beats_bar",
@@ -1832,7 +2051,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc30_swing",
@@ -1854,7 +2075,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_cc31_tempo",
@@ -1876,11 +2099,18 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC31 (Tempo) ignored when DrumKid is synced to external clock."
+          "notes": "DrumKid responds to CC 16-31 on any channel; sent on Ch 10 for drum stack. CC31 (Tempo) ignored when DrumKid is synced to external clock.",
+          "risk": "low",
+          "queuePolicy": "never"
         }
       ],
       "section": "sound",
-      "order": 40
+      "order": 40,
+      "layout": {
+        "kind": "parameterBoard",
+        "minCardWidth": 180,
+        "riskDisplay": true
+      }
     },
     "drumStackNotes": {
       "label": "Drum Pads",
@@ -1902,7 +2132,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DrumKid default note output: Kick C1 (36) on Ch 10."
+          "notes": "DrumKid default note output: Kick C1 (36) on Ch 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_click",
@@ -1917,7 +2149,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DrumKid default note output: Click C#1 (37) on Ch 10."
+          "notes": "DrumKid default note output: Click C#1 (37) on Ch 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_snare",
@@ -1932,7 +2166,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DrumKid default note output: Snare D1 (38) on Ch 10."
+          "notes": "DrumKid default note output: Snare D1 (38) on Ch 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_hat_closed",
@@ -1947,7 +2183,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DrumKid default note output: Closed hat F#1 (42) on Ch 10."
+          "notes": "DrumKid default note output: Closed hat F#1 (42) on Ch 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_tom",
@@ -1962,7 +2200,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DrumKid default note output: Tom G1 (43) on Ch 10."
+          "notes": "DrumKid default note output: Tom G1 (43) on Ch 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "drum_velocity",
@@ -1978,7 +2218,9 @@
             "initial": 100,
             "showValue": true
           },
-          "notes": "Global velocity for note pads in this profile."
+          "notes": "Global velocity for note pads in this profile.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_kick_vel",
@@ -1995,7 +2237,9 @@
             "showValue": true,
             "target": "drumkid_kick"
           },
-          "notes": "Per-pad velocity override for DrumKid note pad."
+          "notes": "Per-pad velocity override for DrumKid note pad.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_click_vel",
@@ -2012,7 +2256,9 @@
             "showValue": true,
             "target": "drumkid_click"
           },
-          "notes": "Per-pad velocity override for DrumKid note pad."
+          "notes": "Per-pad velocity override for DrumKid note pad.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_snare_vel",
@@ -2029,7 +2275,9 @@
             "showValue": true,
             "target": "drumkid_snare"
           },
-          "notes": "Per-pad velocity override for DrumKid note pad."
+          "notes": "Per-pad velocity override for DrumKid note pad.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_hat_closed_vel",
@@ -2046,7 +2294,9 @@
             "showValue": true,
             "target": "drumkid_hat_closed"
           },
-          "notes": "Per-pad velocity override for DrumKid note pad."
+          "notes": "Per-pad velocity override for DrumKid note pad.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "drumkid_tom_vel",
@@ -2063,7 +2313,9 @@
             "showValue": true,
             "target": "drumkid_tom"
           },
-          "notes": "Per-pad velocity override for DrumKid note pad."
+          "notes": "Per-pad velocity override for DrumKid note pad.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_01",
@@ -2078,7 +2330,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 1."
+          "notes": "DR-550 factory pad map: Bank A pad 1.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_02",
@@ -2093,7 +2347,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 2."
+          "notes": "DR-550 factory pad map: Bank A pad 2.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_03",
@@ -2108,7 +2364,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 3."
+          "notes": "DR-550 factory pad map: Bank A pad 3.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_04",
@@ -2123,7 +2381,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 4."
+          "notes": "DR-550 factory pad map: Bank A pad 4.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_05",
@@ -2138,7 +2398,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 5."
+          "notes": "DR-550 factory pad map: Bank A pad 5.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_06",
@@ -2153,7 +2415,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 6."
+          "notes": "DR-550 factory pad map: Bank A pad 6.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_07",
@@ -2168,7 +2432,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 7."
+          "notes": "DR-550 factory pad map: Bank A pad 7.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_08",
@@ -2183,7 +2449,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 8."
+          "notes": "DR-550 factory pad map: Bank A pad 8.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_09",
@@ -2198,7 +2466,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 9."
+          "notes": "DR-550 factory pad map: Bank A pad 9.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_10",
@@ -2213,7 +2483,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 10."
+          "notes": "DR-550 factory pad map: Bank A pad 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_11",
@@ -2228,7 +2500,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 11."
+          "notes": "DR-550 factory pad map: Bank A pad 11.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_a_12",
@@ -2243,7 +2517,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank A pad 12."
+          "notes": "DR-550 factory pad map: Bank A pad 12.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_01",
@@ -2258,7 +2534,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 1."
+          "notes": "DR-550 factory pad map: Bank B pad 1.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_02",
@@ -2273,7 +2551,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 2."
+          "notes": "DR-550 factory pad map: Bank B pad 2.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_04",
@@ -2288,7 +2568,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 4."
+          "notes": "DR-550 factory pad map: Bank B pad 4.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_05",
@@ -2303,7 +2585,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 5."
+          "notes": "DR-550 factory pad map: Bank B pad 5.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_06",
@@ -2318,7 +2602,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 6."
+          "notes": "DR-550 factory pad map: Bank B pad 6.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_07",
@@ -2333,7 +2619,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 7."
+          "notes": "DR-550 factory pad map: Bank B pad 7.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_08",
@@ -2348,7 +2636,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 8."
+          "notes": "DR-550 factory pad map: Bank B pad 8.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_09",
@@ -2363,7 +2653,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 9."
+          "notes": "DR-550 factory pad map: Bank B pad 9.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_b_10",
@@ -2378,7 +2670,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank B pad 10."
+          "notes": "DR-550 factory pad map: Bank B pad 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_01",
@@ -2393,7 +2687,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 1."
+          "notes": "DR-550 factory pad map: Bank C pad 1.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_03",
@@ -2408,7 +2704,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 3."
+          "notes": "DR-550 factory pad map: Bank C pad 3.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_04",
@@ -2423,7 +2721,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 4."
+          "notes": "DR-550 factory pad map: Bank C pad 4.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_05",
@@ -2438,7 +2738,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 5."
+          "notes": "DR-550 factory pad map: Bank C pad 5.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_06",
@@ -2453,7 +2755,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 6."
+          "notes": "DR-550 factory pad map: Bank C pad 6.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_07",
@@ -2468,7 +2772,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 7."
+          "notes": "DR-550 factory pad map: Bank C pad 7.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_08",
@@ -2483,7 +2789,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 8."
+          "notes": "DR-550 factory pad map: Bank C pad 8.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_09",
@@ -2498,7 +2806,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 9."
+          "notes": "DR-550 factory pad map: Bank C pad 9.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_10",
@@ -2513,7 +2823,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 10."
+          "notes": "DR-550 factory pad map: Bank C pad 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_11",
@@ -2528,7 +2840,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 11."
+          "notes": "DR-550 factory pad map: Bank C pad 11.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_c_12",
@@ -2543,7 +2857,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank C pad 12."
+          "notes": "DR-550 factory pad map: Bank C pad 12.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_d_07",
@@ -2558,7 +2874,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank D pad 7."
+          "notes": "DR-550 factory pad map: Bank D pad 7.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_d_08",
@@ -2573,7 +2891,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank D pad 8."
+          "notes": "DR-550 factory pad map: Bank D pad 8.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_d_09",
@@ -2588,7 +2908,9 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank D pad 9."
+          "notes": "DR-550 factory pad map: Bank D pad 9.",
+          "risk": "medium",
+          "queuePolicy": "never"
         },
         {
           "id": "dr550_d_10",
@@ -2603,11 +2925,17 @@
             "onVelocity": 100,
             "offVelocity": 0
           },
-          "notes": "DR-550 factory pad map: Bank D pad 10."
+          "notes": "DR-550 factory pad map: Bank D pad 10.",
+          "risk": "medium",
+          "queuePolicy": "never"
         }
       ],
       "section": "sound",
-      "order": 30
+      "order": 30,
+      "layout": {
+        "kind": "mappedGrid",
+        "riskDisplay": true
+      }
     },
     "electribe": {
       "label": "Synth",
@@ -2636,7 +2964,9 @@
             "initial": 1,
             "showValue": true
           },
-          "notes": "Electribe pattern select (1-127) with bank toggle A/B."
+          "notes": "Electribe pattern select (1-127) with bank toggle A/B.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_bank_a",
@@ -2648,7 +2978,9 @@
             "role": "patternBank",
             "bank": 0
           },
-          "notes": "Electribe pattern bank A (LSB 0)."
+          "notes": "Electribe pattern bank A (LSB 0).",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_bank_b",
@@ -2660,7 +2992,9 @@
             "role": "patternBank",
             "bank": 1
           },
-          "notes": "Electribe pattern bank B (LSB 1)."
+          "notes": "Electribe pattern bank B (LSB 1).",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_scene_1",
@@ -2674,7 +3008,10 @@
             "program": 1,
             "programBankMode": "electribePattern"
           },
-          "notes": "Quick scene (pattern) select; uses current bank."
+          "notes": "Quick scene (pattern) select; uses current bank.",
+          "risk": "high",
+          "queuePolicy": "never",
+          "queueTtlMs": 1000
         },
         {
           "id": "electribe_scene_2",
@@ -2688,7 +3025,10 @@
             "program": 2,
             "programBankMode": "electribePattern"
           },
-          "notes": "Quick scene (pattern) select; uses current bank."
+          "notes": "Quick scene (pattern) select; uses current bank.",
+          "risk": "high",
+          "queuePolicy": "never",
+          "queueTtlMs": 1000
         },
         {
           "id": "electribe_scene_3",
@@ -2702,7 +3042,10 @@
             "program": 3,
             "programBankMode": "electribePattern"
           },
-          "notes": "Quick scene (pattern) select; uses current bank."
+          "notes": "Quick scene (pattern) select; uses current bank.",
+          "risk": "high",
+          "queuePolicy": "never",
+          "queueTtlMs": 1000
         },
         {
           "id": "electribe_scene_4",
@@ -2716,7 +3059,10 @@
             "program": 4,
             "programBankMode": "electribePattern"
           },
-          "notes": "Quick scene (pattern) select; uses current bank."
+          "notes": "Quick scene (pattern) select; uses current bank.",
+          "risk": "high",
+          "queuePolicy": "never",
+          "queueTtlMs": 1000
         },
         {
           "id": "electribe_cc7",
@@ -2738,7 +3084,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc10",
@@ -2760,7 +3108,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc74",
@@ -2782,7 +3132,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc71",
@@ -2804,7 +3156,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc73",
@@ -2826,7 +3180,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc72",
@@ -2848,7 +3204,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc83",
@@ -2870,7 +3228,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc80",
@@ -2892,7 +3252,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc81",
@@ -2914,7 +3276,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc82",
@@ -2936,7 +3300,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc85",
@@ -2958,7 +3324,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc86",
@@ -2980,7 +3348,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc87",
@@ -3002,7 +3372,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc102",
@@ -3024,7 +3396,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc103",
@@ -3046,7 +3420,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "Electribe 2S panel control CC."
+          "notes": "Electribe 2S panel control CC.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc104",
@@ -3061,7 +3437,9 @@
             "onValue": 127,
             "offValue": 0
           },
-          "notes": "Electribe 2S panel control on/off (0=Off, 127=On)."
+          "notes": "Electribe 2S panel control on/off (0=Off, 127=On).",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc105",
@@ -3076,7 +3454,9 @@
             "onValue": 127,
             "offValue": 0
           },
-          "notes": "Electribe 2S panel control on/off (0=Off, 127=On)."
+          "notes": "Electribe 2S panel control on/off (0=Off, 127=On).",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "electribe_cc106",
@@ -3091,11 +3471,18 @@
             "onValue": 127,
             "offValue": 0
           },
-          "notes": "Electribe 2S panel control on/off (0=Off, 127=On)."
+          "notes": "Electribe 2S panel control on/off (0=Off, 127=On).",
+          "risk": "low",
+          "queuePolicy": "never"
         }
       ],
       "section": "sound",
-      "order": 50
+      "order": 50,
+      "layout": {
+        "kind": "parameterBoard",
+        "minCardWidth": 180,
+        "riskDisplay": true
+      }
     },
     "transport": {
       "label": "Transport",
@@ -3115,7 +3502,9 @@
             "channel": 1,
             "realtime": "start"
           },
-          "notes": "MIDI realtime Start (FA)."
+          "notes": "MIDI realtime Start (FA).",
+          "risk": "critical",
+          "queuePolicy": "never"
         },
         {
           "id": "transport_continue",
@@ -3128,7 +3517,9 @@
             "channel": 1,
             "realtime": "continue"
           },
-          "notes": "MIDI realtime Continue (FB)."
+          "notes": "MIDI realtime Continue (FB).",
+          "risk": "critical",
+          "queuePolicy": "never"
         },
         {
           "id": "transport_stop",
@@ -3141,11 +3532,17 @@
             "channel": 1,
             "realtime": "stop"
           },
-          "notes": "MIDI realtime Stop (FC)."
+          "notes": "MIDI realtime Stop (FC).",
+          "risk": "critical",
+          "queuePolicy": "never"
         }
       ],
       "section": "show",
-      "order": 10
+      "order": 10,
+      "layout": {
+        "kind": "performanceDeck",
+        "riskDisplay": true
+      }
     },
     "seedbox": {
       "label": "Seeds",
@@ -3172,7 +3569,9 @@
             "mode": "exclusive",
             "exclusive": true
           },
-          "notes": "SeedBox mode preset: internal clock, no transport latch."
+          "notes": "SeedBox mode preset: internal clock, no transport latch.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_mode_follow",
@@ -3192,7 +3591,9 @@
             "mode": "exclusive",
             "exclusive": true
           },
-          "notes": "SeedBox mode preset: follow external clock."
+          "notes": "SeedBox mode preset: follow external clock.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_mode_follow_latch",
@@ -3212,7 +3613,9 @@
             "mode": "exclusive",
             "exclusive": true
           },
-          "notes": "SeedBox mode preset: follow external clock and latch transport."
+          "notes": "SeedBox mode preset: follow external clock and latch transport.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_focus_seed",
@@ -3233,7 +3636,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MN42 param map CC21: divide 0-127 across the active SeedBox seed count."
+          "notes": "MN42 param map CC21: divide 0-127 across the active SeedBox seed count.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_seed_pitch",
@@ -3254,7 +3659,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MN42 param map CC22: maps 0-127 to roughly -24 to +24 semitones."
+          "notes": "MN42 param map CC22: maps 0-127 to roughly -24 to +24 semitones.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_seed_density",
@@ -3275,7 +3682,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MN42 param map CC23: seed density macro."
+          "notes": "MN42 param map CC23: seed density macro.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_seed_probability",
@@ -3296,7 +3705,9 @@
             "initial": 96,
             "showValue": true
           },
-          "notes": "MN42 param map CC24: seed probability macro."
+          "notes": "MN42 param map CC24: seed probability macro.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_seed_jitter",
@@ -3317,7 +3728,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MN42 param map CC25: seed timing jitter macro."
+          "notes": "MN42 param map CC25: seed timing jitter macro.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_seed_tone",
@@ -3338,7 +3751,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MN42 param map CC26: seed tone macro."
+          "notes": "MN42 param map CC26: seed tone macro.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_seed_spread",
@@ -3359,7 +3774,9 @@
             "initial": 64,
             "showValue": true
           },
-          "notes": "MN42 param map CC27: seed stereo spread macro."
+          "notes": "MN42 param map CC27: seed stereo spread macro.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_seed_mutate",
@@ -3380,7 +3797,9 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "MN42 param map CC28: seed mutation depth macro."
+          "notes": "MN42 param map CC28: seed mutation depth macro.",
+          "risk": "low",
+          "queuePolicy": "never"
         },
         {
           "id": "seedbox_quantize",
@@ -3401,11 +3820,18 @@
             "initial": 0,
             "showValue": true
           },
-          "notes": "SeedBox quantize control CC18. Value encoding follows the SeedBox MN42 map."
+          "notes": "SeedBox quantize control CC18. Value encoding follows the SeedBox MN42 map.",
+          "risk": "low",
+          "queuePolicy": "never"
         }
       ],
       "section": "sound",
-      "order": 10
+      "order": 10,
+      "layout": {
+        "kind": "parameterBoard",
+        "minCardWidth": 180,
+        "riskDisplay": true
+      }
     },
     "mn42Slots": {
       "label": "Controller Slots",
@@ -3433,7 +3859,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_02",
@@ -3454,7 +3882,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_03",
@@ -3475,7 +3905,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_04",
@@ -3496,7 +3928,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_05",
@@ -3517,7 +3951,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_06",
@@ -3538,7 +3974,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_07",
@@ -3559,7 +3997,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_08",
@@ -3580,7 +4020,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_09",
@@ -3601,7 +4043,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_10",
@@ -3622,7 +4066,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_11",
@@ -3643,7 +4089,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_12",
@@ -3664,7 +4112,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_13",
@@ -3685,7 +4135,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_14",
@@ -3706,7 +4158,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_15",
@@ -3727,7 +4181,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_16",
@@ -3748,7 +4204,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_17",
@@ -3769,7 +4227,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_18",
@@ -3790,7 +4250,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_19",
@@ -3811,7 +4273,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_20",
@@ -3832,7 +4296,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_21",
@@ -3853,7 +4319,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_22",
@@ -3874,7 +4342,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_23",
@@ -3895,7 +4365,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_24",
@@ -3916,7 +4388,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_25",
@@ -3937,7 +4411,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_26",
@@ -3958,7 +4434,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_27",
@@ -3979,7 +4457,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_28",
@@ -4000,7 +4480,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_29",
@@ -4021,7 +4503,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_30",
@@ -4042,7 +4526,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_31",
@@ -4063,7 +4549,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_32",
@@ -4084,7 +4572,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_33",
@@ -4105,7 +4595,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_34",
@@ -4126,7 +4618,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_35",
@@ -4147,7 +4641,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_36",
@@ -4168,7 +4664,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_37",
@@ -4189,7 +4687,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_38",
@@ -4210,7 +4710,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_39",
@@ -4231,7 +4733,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_40",
@@ -4252,7 +4756,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_41",
@@ -4273,7 +4779,9 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         },
         {
           "id": "mn42_slot_42",
@@ -4294,11 +4802,18 @@
             "step": 1,
             "initial": 0,
             "showValue": true
-          }
+          },
+          "risk": "low",
+          "queuePolicy": "latest"
         }
       ],
       "section": "setup",
-      "order": 10
+      "order": 10,
+      "layout": {
+        "kind": "parameterBoard",
+        "minCardWidth": 120,
+        "riskDisplay": true
+      }
     }
   }
 }

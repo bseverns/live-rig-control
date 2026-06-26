@@ -11,7 +11,8 @@
   "scripts": {
     "start": "node osc-bridge.js",
     "validate-mappings": "node validate-mappings.js",
-    "simulate-mapping": "node simulate-mapping.js"
+    "simulate-mapping": "node simulate-mapping.js",
+    "generate-handbook": "node generate-handbook.js"
   },
   "dependencies": {
     "ajv": "^8.12.0",

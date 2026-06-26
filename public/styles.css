@@ -64,6 +64,40 @@ select {
   padding: 18px;
 }
 
+.safety-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 143, 143, 0.35);
+  border-radius: 14px;
+  background: rgba(255, 143, 143, 0.08);
+}
+
+.safety-copy {
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.safety-button {
+  min-height: 40px;
+  padding: 9px 13px;
+  border: 1px solid rgba(255, 143, 143, 0.55);
+  border-radius: 8px;
+  color: var(--text);
+  background: rgba(255, 143, 143, 0.14);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.safety-button.armed {
+  color: #160506;
+  background: var(--red);
+}
+
 .header-main,
 .header-actions,
 .panel-heading,
@@ -409,7 +443,7 @@ input[type="text"] {
 
 .parameter-board {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(var(--parameter-card-min, 180px), 1fr));
   gap: var(--surface-gap);
 }
 
@@ -431,6 +465,7 @@ input[type="text"] {
 }
 
 .pad-card {
+  position: relative;
   min-height: 92px;
   padding: 12px;
   border-radius: 16px;
@@ -448,6 +483,23 @@ input[type="text"] {
   place-items: center;
   text-align: center;
   font-weight: 700;
+}
+
+.pad-card.risk-low {
+  border-color: rgba(140, 224, 157, 0.22);
+}
+
+.pad-card.risk-medium {
+  border-color: rgba(255, 213, 107, 0.35);
+}
+
+.pad-card.risk-high {
+  border-color: rgba(255, 143, 143, 0.52);
+}
+
+.pad-card.risk-critical {
+  border-color: rgba(255, 143, 143, 0.95);
+  box-shadow: inset 0 0 0 1px rgba(255, 143, 143, 0.28);
 }
 
 .pad-card.button-pad.on {
@@ -474,6 +526,28 @@ input[type="text"] {
 .pad-label {
   font-size: 0.95rem;
   line-height: 1.2;
+}
+
+.risk-mark {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  padding: 2px 5px;
+  border-radius: 6px;
+  color: #06111f;
+  background: rgba(238, 244, 251, 0.72);
+  font-size: 0.62rem;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.risk-high .risk-mark {
+  background: var(--yellow);
+}
+
+.risk-critical .risk-mark {
+  background: var(--red);
 }
 
 .pad-value {

@@ -14,15 +14,6 @@ const SECTION_TITLES = {
   video: "Video",
   setup: "Setup"
 };
-const PERFORMANCE_DECK_PROFILES = new Set(["transport", "patterns"]);
-const PARAMETER_BOARD_PROFILES = new Set([
-  "msvp",
-  "seedbox",
-  "pcm30Macros",
-  "drumStack",
-  "electribe",
-  "mn42Slots"
-]);
 const STORAGE_KEYS = {
   selectedProfileId: "selected_profile_id",
   selectedSection: "selected_section",
@@ -70,6 +61,7 @@ const oscPillDetailEl = document.getElementById("osc-pill-detail");
 const appReadinessEl = document.getElementById("app-readiness");
 const connectionsToggleBtn = document.getElementById("connections-toggle");
 const logsToggleBtn = document.getElementById("logs-toggle");
+const safeBlackoutBtn = document.getElementById("safe-blackout");
 const connectionsPanel = document.getElementById("connections-panel");
 const logsPanel = document.getElementById("logs-panel");
 const sectionBar = document.getElementById("section-bar");
@@ -101,6 +93,8 @@ const logEntriesEl = document.getElementById("log-entries");
 let qrStream = null;
 let qrDetector = null;
 let qrScanFrame = null;
+let safeBlackoutArmedUntil = 0;
+let safeBlackoutArmTimer = null;
 
 async function loadMappings() {
   const response = await fetch("../src/mappings.json", { cache: "no-store" });
@@ -119,6 +113,7 @@ function normalizeProfiles(mappingDoc) {
       label: profile.label,
       section: profile.section,
       order: profile.order,
+      layout: normalizeLayout(profile.layout),
       gridSize: profile.gridSize,
       pads: profile.pads ?? []
     }))
@@ -133,6 +128,17 @@ function normalizeProfiles(mappingDoc) {
 
       return profileName(left).localeCompare(profileName(right));
     });
+}
+
+function normalizeLayout(layout) {
+  const allowedKinds = new Set(["performanceDeck", "parameterBoard", "mappedGrid"]);
+  const kind = allowedKinds.has(layout?.kind) ? layout.kind : "mappedGrid";
+  const minCardWidth = Number.isFinite(layout?.minCardWidth) ? layout.minCardWidth : 180;
+  return {
+    kind,
+    minCardWidth,
+    riskDisplay: layout?.riskDisplay !== false
+  };
 }
 
 function sectionRank(section) {
@@ -171,9 +177,7 @@ function currentSection() {
 }
 
 function profileLayoutKind(profile) {
-  if (PERFORMANCE_DECK_PROFILES.has(profile.id)) return "performanceDeck";
-  if (PARAMETER_BOARD_PROFILES.has(profile.id)) return "parameterBoard";
-  return "mappedGrid";
+  return normalizeLayout(profile?.layout).kind;
 }
 
 function sortedPadsForDisplay(profile) {
@@ -246,6 +250,8 @@ function bindUi() {
     showingLogs = !showingLogs;
     renderPanels();
   });
+
+  safeBlackoutBtn.addEventListener("click", handleSafeBlackoutClick);
 
   midiSelect.addEventListener("change", () => {
     const nextId = midiSelect.value;
@@ -326,6 +332,34 @@ function bindUi() {
       stopQrScanner();
     }
   });
+}
+
+function handleSafeBlackoutClick() {
+  const now = Date.now();
+  if (safeBlackoutArmedUntil > now) {
+    disarmSafeBlackout();
+    safeBlackout();
+    addLog("Safe blackout executed");
+    return;
+  }
+
+  safeBlackoutArmedUntil = now + 4000;
+  safeBlackoutBtn.classList.add("armed");
+  safeBlackoutBtn.textContent = "Confirm Safe Blackout";
+  if (safeBlackoutArmTimer) {
+    window.clearTimeout(safeBlackoutArmTimer);
+  }
+  safeBlackoutArmTimer = window.setTimeout(disarmSafeBlackout, 4000);
+}
+
+function disarmSafeBlackout() {
+  safeBlackoutArmedUntil = 0;
+  if (safeBlackoutArmTimer) {
+    window.clearTimeout(safeBlackoutArmTimer);
+    safeBlackoutArmTimer = null;
+  }
+  safeBlackoutBtn.classList.remove("armed");
+  safeBlackoutBtn.textContent = "Arm Safe Blackout";
 }
 
 function renderPanels() {
@@ -513,6 +547,7 @@ function renderSurface(profile) {
   const layout = profileLayoutKind(profile);
   if (layout === "performanceDeck") {
     surface.className = "surface performance-deck";
+    surface.style.removeProperty("--parameter-card-min");
     const track = document.createElement("div");
     track.className = "performance-deck-track";
     sortedPadsForDisplay(profile).forEach((pad) => {
@@ -524,12 +559,14 @@ function renderSurface(profile) {
 
   if (layout === "parameterBoard") {
     surface.className = "surface parameter-board";
+    surface.style.setProperty("--parameter-card-min", `${normalizeLayout(profile.layout).minCardWidth}px`);
     sortedPadsForDisplay(profile).forEach((pad) => {
       surface.appendChild(createPadElement(pad));
     });
     return;
   }
 
+  surface.style.removeProperty("--parameter-card-min");
   surface.className = "surface mapped-grid";
   const cols = Math.max(profile.gridSize?.[0] ?? 8, 1);
   const rows = Math.max(profile.gridSize?.[1] ?? 8, 1);
@@ -576,9 +613,12 @@ function createButtonPad(pad) {
   const element = document.createElement("button");
   const isOn = getPadState(pad.id).on;
   element.type = "button";
-  element.className = `pad-card button-pad ${isOn ? "on" : "off"}`;
+  element.className = `pad-card button-pad risk-${padRisk(pad)} ${isOn ? "on" : "off"}`;
   element.dataset.padId = pad.id;
-  element.innerHTML = `<span class="pad-label">${escapeHtml(pad.label || pad.id)}</span>`;
+  element.innerHTML = `
+    <span class="risk-mark">${escapeHtml(padRiskLabel(pad))}</span>
+    <span class="pad-label">${escapeHtml(pad.label || pad.id)}</span>
+  `;
   padElements.set(pad.id, element);
 
   if (pad.ui?.role === "patternBank") {
@@ -620,12 +660,15 @@ function createSliderPad(pad) {
   const ui = getUiConfig(pad);
   const value = sliderValueForPad(pad);
   const element = document.createElement("div");
-  element.className = "pad-card slider-pad";
+  element.className = `pad-card slider-pad risk-${padRisk(pad)}`;
   element.dataset.padId = pad.id;
 
   const label = document.createElement("div");
   label.className = "pad-label";
-  label.textContent = pad.label || pad.id;
+  label.innerHTML = `
+    <span>${escapeHtml(pad.label || pad.id)}</span>
+    <span class="risk-mark">${escapeHtml(padRiskLabel(pad))}</span>
+  `;
 
   const slider = document.createElement("input");
   slider.type = "range";
@@ -647,6 +690,19 @@ function createSliderPad(pad) {
 
   element.append(label, slider, valueEl);
   return element;
+}
+
+function padRisk(pad) {
+  return ["low", "medium", "high", "critical"].includes(pad?.risk) ? pad.risk : "medium";
+}
+
+function padRiskLabel(pad) {
+  return {
+    low: "LOW",
+    medium: "MED",
+    high: "HIGH",
+    critical: "CRIT"
+  }[padRisk(pad)];
 }
 
 function selectSection(section) {

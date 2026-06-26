@@ -17,6 +17,13 @@ function notifyStatus(status, detail = "") {
   }
 }
 
+function queueOptionsForMapping(mapping) {
+  const policy = mapping?.queuePolicy ?? (mapping?.ui?.type === "slider" ? "latest" : "ttl");
+  const queueKey = mapping?.id || mapping?.osc?.address || "";
+  const ttlMs = Number.isFinite(mapping?.queueTtlMs) ? mapping.queueTtlMs : 1000;
+  return { policy, queueKey, ttlMs };
+}
+
 function resolveOscArg(arg, { value = null, state = null } = {}) {
   if (typeof arg !== "string") return arg;
   if (arg === "$value" && Number.isFinite(value)) return value;
@@ -48,21 +55,50 @@ function resolveOscArgs(mapping, { state = null, value = null } = {}) {
   return source.map((arg) => resolveOscArg(arg, { value, state }));
 }
 
-function enqueuePayload(payload) {
+function enqueuePayload(payload, options = {}) {
+  const policy = options.policy || "ttl";
+  if (policy === "never") {
+    notifyStatus(oscStatus, "OSC offline; message dropped");
+    return false;
+  }
+
+  const queueKey = options.queueKey || payload.address;
+  const now = Date.now();
+  const record = {
+    payload,
+    policy,
+    queueKey,
+    expiresAt: policy === "ttl" ? now + (options.ttlMs || 1000) : null
+  };
+
+  if (policy === "latest" || policy === "safety") {
+    const existingIndex = pendingMessages.findIndex((entry) => entry.queueKey === queueKey);
+    if (existingIndex >= 0) {
+      pendingMessages.splice(existingIndex, 1);
+    }
+  }
+
   if (pendingMessages.length >= maxPendingMessages) {
     pendingMessages.shift();
   }
-  pendingMessages.push(payload);
+  pendingMessages.push(record);
   notifyStatus(oscStatus, `OSC queued (${pendingMessages.length})`);
+  return true;
 }
 
 function flushPending() {
   if (!socket || socket.readyState !== WebSocket.OPEN) return;
+  const now = Date.now();
   const queued = pendingMessages.splice(0, pendingMessages.length);
-  for (const payload of queued) {
-    socket.send(JSON.stringify(payload));
+  let expiredCount = 0;
+  for (const record of queued) {
+    if (record.expiresAt && record.expiresAt < now) {
+      expiredCount += 1;
+      continue;
+    }
+    socket.send(JSON.stringify(record.payload));
   }
-  notifyStatus("connected");
+  notifyStatus("connected", expiredCount > 0 ? `Expired ${expiredCount} queued OSC message(s)` : "");
 }
 
 function clearReconnectTimer() {
@@ -80,9 +116,9 @@ function scheduleReconnect(detail = "OSC bridge disconnected; reconnecting") {
   }, reconnectDelayMs);
 }
 
-function sendPayload(payload) {
+function sendPayload(payload, options = {}) {
   if (!socket || socket.readyState !== WebSocket.OPEN) {
-    enqueuePayload(payload);
+    enqueuePayload(payload, options);
     scheduleReconnect();
     return false;
   }
@@ -162,7 +198,7 @@ export function sendOscMessage(mapping, state) {
     args: resolveOscArgs(mapping, { state }),
     state
   };
-  return sendPayload(payload);
+  return sendPayload(payload, queueOptionsForMapping(mapping));
 }
 
 export function sendOscValue(mapping, value) {
@@ -172,5 +208,5 @@ export function sendOscValue(mapping, value) {
     args: resolveOscArgs(mapping, { value }),
     state: "value"
   };
-  return sendPayload(payload);
+  return sendPayload(payload, queueOptionsForMapping(mapping));
 }

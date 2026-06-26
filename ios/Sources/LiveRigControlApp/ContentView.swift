@@ -150,6 +150,39 @@ private enum ProfileLayoutKind {
     case mappedGrid
 }
 
+private enum PadRiskLevel: String {
+    case low
+    case medium
+    case high
+    case critical
+
+    var label: String {
+        switch self {
+        case .low:
+            return "LOW"
+        case .medium:
+            return "MED"
+        case .high:
+            return "HIGH"
+        case .critical:
+            return "CRIT"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .low:
+            return .green
+        case .medium:
+            return .yellow
+        case .high:
+            return .orange
+        case .critical:
+            return .red
+        }
+    }
+}
+
 private extension Profile {
     var sortedPadsForDisplay: [Pad] {
         pads.sorted {
@@ -166,14 +199,24 @@ private extension Profile {
     }
 
     var layoutKind: ProfileLayoutKind {
-        switch id {
-        case "transport", "patterns":
+        switch layout?.kind {
+        case "performanceDeck":
             return .performanceDeck
-        case "msvp", "seedbox", "pcm30Macros", "drumStack", "electribe", "mn42Slots":
+        case "parameterBoard":
             return .parameterBoard
         default:
             return .mappedGrid
         }
+    }
+
+    var minCardWidth: CGFloat {
+        CGFloat(layout?.minCardWidth ?? 180)
+    }
+}
+
+private extension Pad {
+    var riskLevel: PadRiskLevel {
+        PadRiskLevel(rawValue: risk ?? "") ?? .medium
     }
 }
 
@@ -269,9 +312,8 @@ struct ParameterBoardView: View {
     var body: some View {
         GeometryReader { proxy in
             let width = max(proxy.size.width, 320)
-            let minCardWidth: CGFloat = profile.id == "mn42Slots" ? 120 : 180
             let columns = [
-                GridItem(.adaptive(minimum: minCardWidth, maximum: 240), spacing: 14)
+                GridItem(.adaptive(minimum: profile.minCardWidth, maximum: 240), spacing: 14)
             ]
 
             ScrollView {
@@ -306,6 +348,7 @@ struct HeaderPanelView: View {
     @ObservedObject var store: MappingStore
     @ObservedObject var midi: MidiManager
     @ObservedObject var osc: OscClient
+    @State private var safeBlackoutArmed = false
     let selectedProfileName: String?
     let onShowConnections: () -> Void
     let onShowLogs: () -> Void
@@ -347,6 +390,12 @@ struct HeaderPanelView: View {
                 Button("Logs", action: onShowLogs)
                     .buttonStyle(.bordered)
 
+                Button(safeBlackoutArmed ? "Confirm Blackout" : "Safe Blackout") {
+                    handleSafeBlackout()
+                }
+                .buttonStyle(.bordered)
+                .tint(.red)
+
                 Spacer()
 
                 if store.oscEnabled || midi.isVirtualSourceActive || !midi.outputs.isEmpty {
@@ -384,6 +433,19 @@ struct HeaderPanelView: View {
             return .yellow
         case .disconnected:
             return .gray
+        }
+    }
+
+    private func handleSafeBlackout() {
+        if safeBlackoutArmed {
+            safeBlackoutArmed = false
+            store.safeBlackout()
+            return
+        }
+
+        safeBlackoutArmed = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            safeBlackoutArmed = false
         }
     }
 }
@@ -859,18 +921,30 @@ struct PadView: View {
     private let haptic = HapticFeedback()
 
     var body: some View {
-        Text(pad.label ?? pad.id)
-            .font(.subheadline)
-            .multilineTextAlignment(.center)
-            .lineLimit(2)
+        ZStack(alignment: .topTrailing) {
+            Text(pad.label ?? pad.id)
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .padding(.horizontal, 18)
+
+            Text(pad.riskLevel.label)
+                .font(.caption2.weight(.bold))
+                .padding(.horizontal, 5)
+                .padding(.vertical, 2)
+                .background(pad.riskLevel.color.opacity(0.9))
+                .foregroundStyle(.black)
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+                .padding(6)
+        }
             .frame(maxWidth: .infinity, minHeight: minHeight)
             .padding(8)
-            .background(isOn ? Color.green.opacity(0.9) : Color.gray.opacity(0.15))
+            .background(isOn ? Color.green.opacity(0.9) : pad.riskLevel.color.opacity(0.12))
             .foregroundStyle(isOn ? .black : .primary)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                    .stroke(pad.riskLevel.color.opacity(pad.riskLevel == .critical ? 0.9 : 0.35), lineWidth: pad.riskLevel == .critical ? 2 : 1)
             )
             .shadow(color: isOn ? Color.green.opacity(0.2) : .clear, radius: 6)
             .scaleEffect(isPressed ? 0.98 : 1.0)
@@ -912,10 +986,20 @@ struct PadSliderView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(pad.label ?? pad.id)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
+            HStack(alignment: .firstTextBaseline) {
+                Text(pad.label ?? pad.id)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+                Spacer()
+                Text(pad.riskLevel.label)
+                    .font(.caption2.weight(.bold))
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 2)
+                    .background(pad.riskLevel.color.opacity(0.9))
+                    .foregroundStyle(.black)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+            }
             Slider(
                 value: $localValue,
                 in: minValue...maxValue,
@@ -943,11 +1027,11 @@ struct PadSliderView: View {
         }
         .frame(maxWidth: .infinity, minHeight: minHeight)
         .padding(8)
-        .background(Color.gray.opacity(0.15))
+        .background(pad.riskLevel.color.opacity(0.12))
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                .stroke(pad.riskLevel.color.opacity(pad.riskLevel == .critical ? 0.9 : 0.35), lineWidth: pad.riskLevel == .critical ? 2 : 1)
         )
         .onAppear {
             localValue = Double(value)

@@ -233,6 +233,35 @@ final class MappingStore: ObservableObject {
         await updateOscHost(host)
     }
 
+    func safeBlackout() {
+        let allPads = profiles.flatMap(\.pads)
+        let blackoutPads = allPads.filter { pad in
+            pad.osc?.address == "/rig/state/blackout" ||
+                pad.id == "vid_state_blackout" ||
+                pad.osc?.address == "/nw_wrld/feed/blackout" ||
+                pad.id == "nw_feed_blackout"
+        }
+        let overlayPads = allPads.filter { pad in
+            pad.id.hasPrefix("nw_overlay_") ||
+                pad.id.hasPrefix("nw_fx_") ||
+                (pad.osc?.address.contains("/overlay/") ?? false) ||
+                (pad.osc?.address.contains("/fx/") ?? false)
+        }
+
+        for pad in overlayPads {
+            padStates[pad.id] = false
+            sendMidiIfNeeded(for: pad, state: false)
+            sendOscIfNeeded(for: pad, state: false, force: true)
+        }
+
+        for pad in blackoutPads {
+            padStates[pad.id] = true
+            sendMidiIfNeeded(for: pad, state: true)
+            sendOscIfNeeded(for: pad, state: true, force: true)
+        }
+        logs.add("Safe blackout executed")
+    }
+
     private func sendMidiIfNeeded(for pad: Pad, state: Bool) {
         guard let midiMapping = pad.midi else { return }
         switch midiMapping.type {
@@ -356,8 +385,8 @@ final class MappingStore: ObservableObject {
         profileControls[key] = state
     }
 
-    private func sendOscIfNeeded(for pad: Pad, state: Bool) {
-        guard oscEnabled, pad.osc != nil else { return }
+    private func sendOscIfNeeded(for pad: Pad, state: Bool, force: Bool = false) {
+        guard (oscEnabled || force), pad.osc != nil else { return }
         osc.send(pad: pad, state: state ? "on" : "off")
     }
 

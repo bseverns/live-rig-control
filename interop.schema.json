@@ -41,6 +41,9 @@
         "order": {
           "type": "integer"
         },
+        "layout": {
+          "$ref": "#/$defs/layout"
+        },
         "gridSize": {
           "type": "array",
           "minItems": 2,
@@ -107,6 +110,17 @@
         },
         "notes": {
           "type": "string"
+        },
+        "risk": {
+          "$ref": "#/$defs/risk"
+        },
+        "queuePolicy": {
+          "$ref": "#/$defs/queuePolicy"
+        },
+        "queueTtlMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 60000
         }
       },
       "additionalProperties": false,
@@ -218,6 +232,49 @@
             }
           }
         }
+      ]
+    },
+    "layout": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "performanceDeck",
+            "parameterBoard",
+            "mappedGrid"
+          ]
+        },
+        "minCardWidth": {
+          "type": "integer",
+          "minimum": 80,
+          "maximum": 320
+        },
+        "riskDisplay": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "risk": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "queuePolicy": {
+      "type": "string",
+      "enum": [
+        "never",
+        "latest",
+        "ttl",
+        "safety"
       ]
     },
     "group": {
