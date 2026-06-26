@@ -29,6 +29,18 @@
         "label": {
           "type": "string"
         },
+        "section": {
+          "type": "string",
+          "enum": [
+            "show",
+            "sound",
+            "video",
+            "setup"
+          ]
+        },
+        "order": {
+          "type": "integer"
+        },
         "gridSize": {
           "type": "array",
           "minItems": 2,
@@ -118,11 +130,37 @@
       "allOf": [
         {
           "if": {
-            "properties": {
-              "toggle": {
-                "const": true
+            "allOf": [
+              {
+                "required": [
+                  "toggle"
+                ],
+                "properties": {
+                  "toggle": {
+                    "const": true
+                  }
+                }
+              },
+              {
+                "not": {
+                  "required": [
+                    "ui"
+                  ],
+                  "properties": {
+                    "ui": {
+                      "required": [
+                        "type"
+                      ],
+                      "properties": {
+                        "type": {
+                          "const": "slider"
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "then": {
             "properties": {
@@ -137,11 +175,37 @@
         },
         {
           "if": {
-            "properties": {
-              "mode": {
-                "const": "toggle"
+            "allOf": [
+              {
+                "required": [
+                  "mode"
+                ],
+                "properties": {
+                  "mode": {
+                    "const": "toggle"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "required": [
+                    "ui"
+                  ],
+                  "properties": {
+                    "ui": {
+                      "required": [
+                        "type"
+                      ],
+                      "properties": {
+                        "type": {
+                          "const": "slider"
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "then": {
             "properties": {

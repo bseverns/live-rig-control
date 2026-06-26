@@ -271,6 +271,34 @@ input[type="text"] {
   color: var(--red);
 }
 
+.qr-scanner {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.qr-scanner-panel {
+  width: min(620px, 100%);
+  padding: 18px;
+  border-radius: 20px;
+  background: #0b1624;
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--shadow);
+}
+
+.qr-video {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: block;
+  border-radius: 14px;
+  background: #02060a;
+  object-fit: cover;
+}
+
 .log-entries {
   max-height: 240px;
   overflow: auto;

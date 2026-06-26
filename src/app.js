@@ -49,6 +49,7 @@ let oscHostError = null;
 let oscHostHint = "";
 let oscStatus = "disconnected";
 let oscStatusDetail = "";
+let oscQueuedCount = 0;
 let logsEnabled = window.localStorage.getItem(STORAGE_KEYS.logsEnabled) !== "false";
 let showingConnections = true;
 let showingLogs = false;
@@ -88,9 +89,18 @@ const oscStatusText = document.getElementById("osc-status-text");
 const oscReconnectBtn = document.getElementById("osc-reconnect");
 const oscHostErrorEl = document.getElementById("osc-host-error");
 const oscHostHintEl = document.getElementById("osc-host-hint");
+const scanQrBtn = document.getElementById("scan-qr");
+const qrScanner = document.getElementById("qr-scanner");
+const qrCloseBtn = document.getElementById("qr-close");
+const qrVideo = document.getElementById("qr-video");
+const qrStatus = document.getElementById("qr-status");
 const logEnabledToggle = document.getElementById("log-enabled");
 const clearLogsBtn = document.getElementById("clear-logs");
 const logEntriesEl = document.getElementById("log-entries");
+
+let qrStream = null;
+let qrDetector = null;
+let qrScanFrame = null;
 
 async function loadMappings() {
   const response = await fetch("../src/mappings.json", { cache: "no-store" });
@@ -285,6 +295,14 @@ function bindUi() {
     connectCurrentOsc();
   });
 
+  scanQrBtn.addEventListener("click", startQrScanner);
+  qrCloseBtn.addEventListener("click", stopQrScanner);
+  qrScanner.addEventListener("click", (event) => {
+    if (event.target === qrScanner) {
+      stopQrScanner();
+    }
+  });
+
   logEnabledToggle.addEventListener("change", () => {
     logsEnabled = logEnabledToggle.checked;
     window.localStorage.setItem(STORAGE_KEYS.logsEnabled, String(logsEnabled));
@@ -300,6 +318,12 @@ function bindUi() {
     const profile = currentProfile();
     if (profile && profileLayoutKind(profile) === "mappedGrid") {
       renderSurface(profile);
+    }
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !qrScanner.classList.contains("hidden")) {
+      stopQrScanner();
     }
   });
 }
@@ -342,10 +366,10 @@ function renderStatus() {
 
   const oscLabel = oscEnabled
     ? (oscStatus === "connected"
-      ? "Connected"
+      ? (oscQueuedCount > 0 ? `Connected (${oscQueuedCount} queued)` : "Connected")
       : oscStatus === "connecting"
         ? "Connecting"
-        : "Disconnected")
+        : (oscQueuedCount > 0 ? `Disconnected (${oscQueuedCount} queued)` : "Disconnected"))
     : "Disabled";
   oscPillDetailEl.textContent = oscLabel;
 
@@ -450,9 +474,13 @@ function renderConnections() {
   } else if (oscStatus === "connecting") {
     oscStatusText.textContent = "OSC connecting...";
   } else if (oscStatus === "connected") {
-    oscStatusText.textContent = "OSC connected";
+    oscStatusText.textContent = oscQueuedCount > 0
+      ? `OSC connected; ${oscQueuedCount} queued`
+      : "OSC connected";
   } else {
-    oscStatusText.textContent = oscStatusDetail || "OSC disconnected";
+    oscStatusText.textContent = oscQueuedCount > 0
+      ? `${oscStatusDetail || "OSC disconnected"}; ${oscQueuedCount} queued`
+      : (oscStatusDetail || "OSC disconnected");
   }
 
   oscReconnectBtn.disabled = Boolean(oscHostError) || oscStatus === "connecting";
@@ -818,6 +846,89 @@ function connectCurrentOsc() {
     oscStatusDetail = error instanceof Error ? error.message : "OSC bridge failed";
     renderStatus();
     renderConnections();
+  }
+}
+
+async function startQrScanner() {
+  qrScanner.classList.remove("hidden");
+  qrStatus.textContent = "Starting camera...";
+
+  if (!navigator.mediaDevices?.getUserMedia) {
+    qrStatus.textContent = "Camera access is not available in this browser.";
+    return;
+  }
+
+  if (!("BarcodeDetector" in window)) {
+    qrStatus.textContent = "QR scanning is not available in this browser.";
+    return;
+  }
+
+  try {
+    qrDetector = new window.BarcodeDetector({ formats: ["qr_code"] });
+    qrStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: "environment" } },
+      audio: false
+    });
+    qrVideo.srcObject = qrStream;
+    await qrVideo.play();
+    qrStatus.textContent = "Point the camera at an OSC host QR code.";
+    scanQrFrame();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Camera failed";
+    qrStatus.textContent = message;
+    addLog(`QR scanner failed: ${message}`);
+  }
+}
+
+function stopQrScanner() {
+  if (qrScanFrame) {
+    window.cancelAnimationFrame(qrScanFrame);
+    qrScanFrame = null;
+  }
+  if (qrStream) {
+    qrStream.getTracks().forEach((track) => track.stop());
+    qrStream = null;
+  }
+  qrVideo.pause();
+  qrVideo.srcObject = null;
+  qrDetector = null;
+  qrScanner.classList.add("hidden");
+}
+
+async function scanQrFrame() {
+  if (!qrDetector || qrScanner.classList.contains("hidden")) return;
+  try {
+    const barcodes = await qrDetector.detect(qrVideo);
+    const rawValue = barcodes.find((barcode) => barcode.rawValue)?.rawValue;
+    if (rawValue) {
+      applyOscHostFromQr(rawValue);
+      stopQrScanner();
+      return;
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "QR scan failed";
+    qrStatus.textContent = message;
+  }
+  qrScanFrame = window.requestAnimationFrame(scanQrFrame);
+}
+
+function applyOscHostFromQr(payload) {
+  const host = extractHostFromQr(payload);
+  oscHostInput.value = host;
+  handleOscHostCommit();
+  addLog("OSC host scanned from QR");
+}
+
+function extractHostFromQr(payload) {
+  const trimmed = String(payload ?? "").trim();
+  try {
+    const parsed = new URL(trimmed);
+    if (!parsed.hostname) return trimmed;
+    const scheme = parsed.protocol.replace(":", "").toLowerCase();
+    const port = parsed.port ? `:${parsed.port}` : "";
+    return scheme ? `${scheme}://${parsed.hostname}${port}` : parsed.hostname;
+  } catch {
+    return trimmed;
   }
 }
 
@@ -1251,9 +1362,10 @@ async function main() {
     oscHostInput.value = oscHost;
     logEnabledToggle.checked = logsEnabled;
 
-    subscribeOscStatus(({ status, detail = "" }) => {
+    subscribeOscStatus(({ status, detail = "", queuedCount = 0 }) => {
       oscStatus = status;
       oscStatusDetail = detail;
+      oscQueuedCount = queuedCount;
       renderStatus();
       renderConnections();
     });

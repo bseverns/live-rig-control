@@ -534,22 +534,32 @@ final class MappingStore: ObservableObject {
         let mode = midiMapping.programBankMode ?? "none"
         let bankMsb: Int?
         let bankLsb: Int?
+        let safeProgram: Int
         switch mode {
+        case "electribePattern":
+            let bank = profileControlState(for: selectedProfileId).patternBank
+            bankMsb = 0
+            bankLsb = bank
+            safeProgram = bank == 1 ? min(program, 121) : program
         case "msb":
             bankMsb = midiMapping.bankMsb
             bankLsb = nil
+            safeProgram = program
         case "lsb":
             bankMsb = nil
             bankLsb = midiMapping.bankLsb
+            safeProgram = program
         case "both":
             bankMsb = midiMapping.bankMsb
             bankLsb = midiMapping.bankLsb
+            safeProgram = program
         default:
             bankMsb = nil
             bankLsb = nil
+            safeProgram = program
         }
-        midi.sendProgramChange(channel: midiMapping.channel, program: program, bankMsb: bankMsb, bankLsb: bankLsb)
-        logs.add("MIDI Program ch \(midiMapping.channel) = \(program)")
+        midi.sendProgramChange(channel: midiMapping.channel, program: safeProgram, bankMsb: bankMsb, bankLsb: bankLsb)
+        logs.add("MIDI Program ch \(midiMapping.channel) = \(safeProgram)")
     }
 }
 

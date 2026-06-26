@@ -66,6 +66,8 @@
           />
         </label>
 
+        <button id="scan-qr" class="secondary-button" type="button">Scan QR</button>
+
         <label class="toggle-row" for="osc-enabled">
           <input type="checkbox" id="osc-enabled" />
           <span id="osc-status-dot" class="status-dot osc disconnected"></span>
@@ -80,6 +82,17 @@
       <p id="osc-host-hint" class="panel-note hidden"></p>
       <p id="osc-status-text" class="panel-note">OSC disconnected</p>
     </section>
+
+    <div id="qr-scanner" class="qr-scanner hidden" role="dialog" aria-modal="true" aria-labelledby="qr-scanner-title">
+      <div class="qr-scanner-panel">
+        <div class="panel-heading">
+          <h2 id="qr-scanner-title">Scan QR</h2>
+          <button id="qr-close" class="secondary-button" type="button">Close</button>
+        </div>
+        <video id="qr-video" class="qr-video" playsinline muted></video>
+        <p id="qr-status" class="panel-note">Point the camera at an OSC host QR code.</p>
+      </div>
+    </div>
 
     <section id="logs-panel" class="panel-card hidden">
       <div class="panel-heading">
