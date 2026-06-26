@@ -329,8 +329,8 @@ struct HeaderPanelView: View {
                 HStack(spacing: 10) {
                     StatusPill(
                         title: "MIDI",
-                        detail: midi.outputs.first(where: { $0.id == midi.selectedOutputId })?.name ?? "Not Connected",
-                        tint: midi.outputs.isEmpty ? .gray : .green
+                        detail: midi.isVirtualSourceActive ? midi.virtualSourceName : "Not Connected",
+                        tint: midi.isVirtualSourceActive ? .green : .gray
                     )
                     StatusPill(
                         title: "OSC",
@@ -349,7 +349,7 @@ struct HeaderPanelView: View {
 
                 Spacer()
 
-                if store.oscEnabled || !midi.outputs.isEmpty {
+                if store.oscEnabled || midi.isVirtualSourceActive || !midi.outputs.isEmpty {
                     Text("Control surface ready")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
@@ -456,6 +456,11 @@ struct ConnectionBarView: View {
                 Text("MIDI:")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+                if midi.isVirtualSourceActive {
+                    Text("Source: \(midi.virtualSourceName)")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
                 if let selected = midi.outputs.first(where: { $0.id == midi.selectedOutputId }) {
                     Text("Selected: \(selected.name)")
                         .font(.footnote)
@@ -505,7 +510,7 @@ struct ConnectionBarView: View {
             }
 
             if midi.outputs.isEmpty {
-                Text("Connect a MIDI device.")
+                Text(midi.isVirtualSourceActive ? "System MIDI source is active." : "Connect a MIDI device.")
                     .foregroundStyle(.secondary)
             }
 

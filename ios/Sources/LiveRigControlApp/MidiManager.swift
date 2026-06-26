@@ -1,12 +1,16 @@
 import AVFoundation
 import CoreMIDI
+import Darwin
 import Foundation
 
 @MainActor
 final class MidiManager: ObservableObject {
     private static let selectedOutputKey = "midi_output_id"
+    private static let virtualSourceDisplayName = "LiveRigControl"
 
     @Published var outputs: [MidiOutput] = []
+    @Published var isVirtualSourceActive = false
+    @Published var virtualSourceName = MidiManager.virtualSourceDisplayName
     @Published var selectedOutputId: String = UserDefaults.standard.string(forKey: MidiManager.selectedOutputKey) ?? "" {
         didSet {
             UserDefaults.standard.set(selectedOutputId, forKey: MidiManager.selectedOutputKey)
@@ -16,6 +20,7 @@ final class MidiManager: ObservableObject {
 
     private var client = MIDIClientRef()
     private var outPort = MIDIPortRef()
+    private var virtualSource = MIDIEndpointRef()
     private var networkSessionObserver: NSObjectProtocol?
     private var networkContactsObserver: NSObjectProtocol?
 
@@ -24,6 +29,7 @@ final class MidiManager: ObservableObject {
         #if targetEnvironment(simulator)
         outputs = []
         selectedOutputId = ""
+        isVirtualSourceActive = false
         onEvent?("MIDI unavailable in iOS Simulator")
         #else
         configureNetworkSession()
@@ -40,10 +46,22 @@ final class MidiManager: ObservableObject {
             return
         }
 
-        let portStatus = MIDIOutputPortCreate(client, "Out" as CFString, &outPort)
-        guard portStatus == noErr else {
-            onEvent?("MIDI output port create failed: \(portStatus)")
+        let sourceStatus = MIDISourceCreate(
+            client,
+            MidiManager.virtualSourceDisplayName as CFString,
+            &virtualSource
+        )
+        guard sourceStatus == noErr else {
+            onEvent?("MIDI virtual source create failed: \(sourceStatus)")
             return
+        }
+        isVirtualSourceActive = true
+        virtualSourceName = MidiManager.endpointName(virtualSource, fallback: MidiManager.virtualSourceDisplayName)
+        onEvent?("MIDI virtual source: \(virtualSourceName)")
+
+        let portStatus = MIDIOutputPortCreate(client, "Out" as CFString, &outPort)
+        if portStatus != noErr {
+            onEvent?("MIDI output port create failed: \(portStatus)")
         }
 
         refreshOutputs()
@@ -162,13 +180,8 @@ final class MidiManager: ObservableObject {
         #if targetEnvironment(simulator)
         onEvent?("MIDI send ignored in simulator")
         #else
-        guard let output = outputs.first(where: { $0.id == selectedOutputId }) else {
-            onEvent?("MIDI no output selected")
-            return
-        }
-        let endpoint = output.endpoint
         var packetList = MIDIPacketList()
-        let timeStamp: MIDITimeStamp = 0
+        let timeStamp = MIDITimeStamp(mach_absolute_time())
 
         bytes.withUnsafeBytes { buffer in
             var packet = MIDIPacketListInit(&packetList)
@@ -180,9 +193,32 @@ final class MidiManager: ObservableObject {
                 buffer.count,
                 buffer.bindMemory(to: UInt8.self).baseAddress!
             )
-            let status = MIDISend(outPort, endpoint, &packetList)
+
+            var publishedToVirtualSource = false
+            if virtualSource != 0 {
+                let status = MIDIReceived(virtualSource, &packetList)
+                if status != noErr {
+                    onEvent?("MIDI virtual source send failed: \(status)")
+                } else {
+                    publishedToVirtualSource = true
+                    onEvent?("MIDI published \(bytes.count) byte(s) from \(virtualSourceName)")
+                }
+            }
+
+            guard let output = outputs.first(where: { $0.id == selectedOutputId }) else {
+                if publishedToVirtualSource == false {
+                    onEvent?("MIDI no output selected")
+                }
+                return
+            }
+            guard outPort != 0 else {
+                onEvent?("MIDI output port unavailable")
+                return
+            }
+
+            let status = MIDISend(outPort, output.endpoint, &packetList)
             if status != noErr {
-                onEvent?("MIDI send failed: \(status)")
+                onEvent?("MIDI output send failed: \(status)")
             } else {
                 onEvent?("MIDI sent \(bytes.count) byte(s) to \(output.name)")
             }
@@ -199,6 +235,9 @@ final class MidiManager: ObservableObject {
         }
         if outPort != 0 {
             MIDIPortDispose(outPort)
+        }
+        if virtualSource != 0 {
+            MIDIEndpointDispose(virtualSource)
         }
         if client != 0 {
             MIDIClientDispose(client)

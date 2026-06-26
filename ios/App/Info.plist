@@ -21,9 +21,10 @@
   <key>OSC_HOST</key>
   <string></string>
   <key>NSLocalNetworkUsageDescription</key>
-  <string>Connect to the OSC bridge on your local network.</string>
+  <string>Connect to MIDI and OSC devices on your local network.</string>
   <key>NSBonjourServices</key>
   <array>
+    <string>_apple-midi._udp</string>
     <string>_osc._udp</string>
     <string>_osc._tcp</string>
   </array>
