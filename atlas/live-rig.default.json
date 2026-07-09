@@ -1,591 +1,691 @@
 {
-  "$schema": "../rig.profile.schema.json",
-  "snapshotVersion": "1.0.0",
-  "exportedAt": "2026-04-05T15:32:43.976Z",
+  "export_version": "1.0.0",
   "source": {
-    "contractVersion": "1.0.0",
-    "contractPath": "interop/rig.contract.json",
-    "mappingsPath": "mappings.json",
-    "generatedBy": "tools/export-rig-profile.js"
+    "profile_path": "profiles/minimal.yaml",
+    "scene_path": "scenes/minimal-scenes.yaml",
+    "controller_paths": [
+      "controllers/edirol-pcm30.yaml",
+      "controllers/live-rig-control.yaml",
+      "controllers/maschine-mk1.yaml"
+    ],
+    "contract_path": "interop/rig.contract.json",
+    "generated_by": "tools/export-rig-profile.js",
+    "build_fingerprint": "sha256:828406540ef1e94ee9dd6fc64b3043962f033d64c2e08ad765c38eb45150ae72"
   },
-  "authority": {
-    "repo": "live-rig",
-    "runtimeDependency": false,
-    "summary": "Authority repo for topology, shared vocabulary, exported mapping snapshots, and failover doctrine."
-  },
-  "survivabilityTiers": {
-    "A": {
-      "id": "A",
-      "label": "Audio survives independently",
-      "minimumOutcome": "Main audio path remains playable even if controller or visual runtimes are absent.",
-      "requiredCapabilities": [
-        "One active clock boss only",
-        "Mixer to PA path remains intact",
-        "Emergency blackout or safe visual path is documented"
-      ]
+  "profile": {
+    "profile_id": "profile.minimal",
+    "label": "Minimal Playable Rig",
+    "version": "1.0.0",
+    "notes": "Smallest viable live-rig envelope for a show that still needs a safe way home.",
+    "scene_file": "scenes/minimal-scenes.yaml",
+    "validate_scene_file": true,
+    "required_devices": [
+      {
+        "id": "controller.edirol_pcm_30",
+        "label": "Edirol PCM-30 or equivalent",
+        "role": "controller"
+      },
+      {
+        "id": "device.visual_placeholder",
+        "label": "One visual endpoint or placeholder endpoint",
+        "role": "visual_endpoint"
+      },
+      {
+        "id": "audio.output.pa",
+        "label": "Audio output path",
+        "role": "audio_output"
+      }
+    ],
+    "optional_devices": [
+      {
+        "id": "analysis.frzone",
+        "label": "frZone",
+        "role": "analysis"
+      },
+      {
+        "id": "controller.maschine_mk1",
+        "label": "Maschine MK1",
+        "role": "semantic_deck"
+      }
+    ],
+    "controllers": [
+      {
+        "id": "controller.edirol_pcm_30",
+        "label": "Edirol PCM-30 or equivalent",
+        "role": "primary macro controller",
+        "notes": "Drives scene recall and manual overrides."
+      }
+    ],
+    "visual_endpoints": [
+      {
+        "id": "device.visual_placeholder",
+        "label": "One visual endpoint or placeholder endpoint",
+        "role": "primary visual endpoint",
+        "notes": "Accepts semantic scene IDs and can be a minimal stand-in for the room."
+      }
+    ],
+    "audio_patch_reference": {
+      "id": "patch.audio.main_to_pa",
+      "label": "Main bus to PA",
+      "source": "main mix bus",
+      "destination": "PA or interface",
+      "notes": "The room must stay audible even if optional analysis or secondary visuals disappear."
     },
-    "B": {
-      "id": "B",
-      "label": "One controller path and one visual path survive",
-      "minimumOutcome": "At least one controller route and one controllable visual endpoint remain available.",
-      "requiredCapabilities": [
-        "Shared scene/state vocabulary remains addressable",
-        "Direct MIDI or OSC can bypass the preferred UI",
-        "At least one visual endpoint or utility visual path remains available"
-      ]
+    "clock_doctrine": {
+      "boss": "One active clock boss only",
+      "followers": [
+        "controller",
+        "visual_endpoints"
+      ],
+      "invariants": [
+        "Endpoints follow clock.",
+        "No endpoint owns transport or Start/Stop.",
+        "Manual overrides must remain available without analysis."
+      ],
+      "notes": "Minimal show night should still be navigable from a single controller path."
     },
-    "C": {
-      "id": "C",
-      "label": "Optional enrichment",
-      "minimumOutcome": "Analysis, secondary endpoints, and lab outputs can drop out without ending the set.",
-      "requiredCapabilities": [
-        "Analysis lane can disappear without blocking scene recall",
-        "Secondary endpoint is optional",
-        "Offline or lab repos are never the only source of a required control path"
-      ]
+    "safety_states": [
+      "state.blackout",
+      "scene.clean_camera"
+    ],
+    "doctor": {
+      "checks": [
+        "npm run validate:scenes",
+        "npm run validate:profiles"
+      ],
+      "readiness": [
+        "Scene file resolves and validates.",
+        "Blackout and clean camera are reachable.",
+        "A human can recover the room without needing optional devices."
+      ],
+      "notes": "Minimal profile is the fallback profile for cramped rooms, partial failure, or reduced loadouts."
     }
   },
-  "controlLanes": {
-    "macro": {
-      "id": "macro",
-      "purpose": "Human-operated continuous control lane for scene shaping and live overrides.",
-      "primarySources": [
-        "live-rig-control",
-        "Edirol PCM-30",
-        "bridge direct MIDI or OSC"
-      ],
-      "primaryConsumers": [
-        "MSVP",
-        "SCapps bridge",
-        "nw_wrld"
-      ],
-      "midiChannels": [
-        10
-      ],
-      "requiredFor": [
-        "B"
-      ]
-    },
-    "analysis": {
-      "id": "analysis",
-      "purpose": "Normalized audio-reactive bias lane that enriches but never gates the visual system.",
-      "primarySources": [
-        "frZone"
-      ],
-      "primaryConsumers": [
-        "MSVP",
-        "SCapps bridge",
-        "nw_wrld"
-      ],
-      "midiChannels": [
-        15
-      ],
-      "requiredFor": [
-        "C"
-      ]
-    },
-    "semantic": {
-      "id": "semantic",
-      "purpose": "Discrete scene, state, and event trigger lane used by UI, bridge, and hardware fallback controls.",
-      "primarySources": [
-        "live-rig-control",
-        "Maschine MK1",
-        "bridge direct OSC or MIDI"
-      ],
-      "primaryConsumers": [
-        "MSVP",
-        "SCapps bridge",
-        "nw_wrld"
-      ],
-      "midiChannels": [
-        10
-      ],
-      "requiredFor": [
-        "B"
-      ]
-    }
-  },
-  "endpointRules": {
-    "invariants": [
-      "Endpoints follow clock; they never originate global transport.",
-      "Canonical scene, state, and event IDs are owned by the shared rig contract, not by endpoint repos.",
-      "MSVP and nw_wrld or wrld_on operate as peer endpoints behind the same contract."
-    ],
-    "degradation": [
-      "If analysis is unavailable, endpoints continue from scene base plus manual macro input only.",
-      "If one endpoint is unavailable, switch to the other endpoint or a documented clean-camera or blackout utility path.",
-      "If the preferred UI is unavailable, direct MIDI or OSC still targets the same semantic IDs through the bridge.",
-      "If the authority repo is unavailable at runtime, exported snapshots remain sufficient for consumers."
-    ]
-  },
-  "semanticCatalog": {
-    "scenes": [
-      {
-        "id": "scene.intro",
-        "label": "Intro",
-        "description": "Establishing scene family shared across controller and endpoint layers."
-      },
-      {
-        "id": "scene.soft",
-        "label": "Soft",
-        "description": "Low-intensity scene family for calmer or more spacious visuals.",
-        "aliases": [
-          "scene.soft_ash"
-        ]
-      },
-      {
-        "id": "scene.crash",
-        "label": "Crash",
-        "description": "High-intensity scene family for harsh or saturated moments.",
-        "aliases": [
-          "scene.angel_swarm"
-        ]
-      },
-      {
-        "id": "scene.clean_camera",
-        "label": "Clean Camera",
-        "description": "Minimal-processing visual state that preserves documentary clarity."
-      }
-    ],
-    "states": [
-      {
-        "id": "state.blackout",
-        "label": "Blackout",
-        "description": "Fastest safe visual kill and reset state."
-      },
-      {
-        "id": "state.manual_override",
-        "label": "Manual Override",
-        "description": "State where direct human control takes priority over automation or weighted modulation."
-      }
-    ],
-    "events": [
-      {
-        "id": "event.noise_burst",
-        "label": "Noise Burst",
-        "description": "Bounded hit event for hybrid audiovisual impact."
-      },
-      {
-        "id": "event.glitch_hit",
-        "label": "Glitch Hit",
-        "description": "Short-lived event that spikes a glitch treatment without changing the long-form scene."
-      }
-    ],
-    "macros": [
-      {
-        "id": "macro.vmix_morph",
-        "label": "Mixer Morph",
-        "description": "Crossfades between current visual layers or worlds."
-      },
-      {
-        "id": "macro.fb_feedback",
-        "label": "Frame Buffer Feedback",
-        "description": "Controls visual memory or echo intensity."
-      },
-      {
-        "id": "macro.mael_depth",
-        "label": "Maelstrom Depth",
-        "description": "Controls tunnel or well depth."
-      },
-      {
-        "id": "macro.mosh",
-        "label": "Mosh",
-        "description": "Controls aggressive glitch or stream-collision intensity."
-      },
-      {
-        "id": "macro.retrace_density",
-        "label": "ReTrace Density",
-        "description": "Controls line or contour density in trace-based worlds."
-      },
-      {
-        "id": "macro.texture_detail",
-        "label": "Texture Detail",
-        "description": "Controls grit or fine-texture detail in texture-oriented worlds."
-      },
-      {
-        "id": "macro.analysis_blend",
-        "label": "Analysis Blend",
-        "description": "Crossfades between analysis influence and manual macro authority."
-      }
-    ],
-    "analysis": [
-      {
-        "id": "analysis.low_band",
-        "label": "Low Band",
-        "description": "Bass-weighted energy from the analysis lane."
-      },
-      {
-        "id": "analysis.mid_band",
-        "label": "Mid Band",
-        "description": "Midrange body energy from the analysis lane."
-      },
-      {
-        "id": "analysis.upper_mid_band",
-        "label": "Upper Mid Band",
-        "description": "Presence or abrasive energy from the analysis lane."
-      },
-      {
-        "id": "analysis.high_band",
-        "label": "High Band",
-        "description": "High-frequency air, cymbal, or hiss energy from the analysis lane."
-      }
-    ]
-  },
-  "bindings": [
+  "scenes": [
     {
-      "semanticId": "scene.intro",
-      "mappingRef": "vid_scene_intro",
-      "supported": true,
-      "transport": [
-        "midi",
-        "osc"
-      ],
-      "interaction": "toggle",
-      "group": "video.scene",
+      "id": "scene.intro",
       "label": "Intro",
-      "midi": [
+      "ramp_ms": 640,
+      "hard_override": false,
+      "notes": "Opening scene with room to settle.",
+      "params": {
+        "look": "clean_intro",
+        "intensity": 0.3,
+        "camera": "clean",
+        "macro_bias": 0.2
+      },
+      "analysis": {
+        "influence": 0.25,
+        "weights": {
+          "low_band": 0.1,
+          "mid_band": 0.2,
+          "upper_mid_band": 0.15,
+          "high_band": 0.05
+        }
+      },
+      "triggers": [
         {
-          "type": "note",
+          "type": "midi_note",
           "channel": 10,
-          "note": 60,
-          "onValue": 100,
-          "offValue": 0
-        }
-      ],
-      "osc": [
+          "note": 60
+        },
         {
-          "address": "/video/scene/intro",
-          "onArgs": [
-            1
-          ],
-          "offArgs": [
-            0
-          ]
+          "type": "osc",
+          "address": "/video/scene/intro"
         }
-      ],
-      "notes": "Primary intro scene binding."
+      ]
     },
     {
-      "semanticId": "scene.crash",
-      "mappingRef": "vid_scene_crash",
-      "supported": true,
-      "transport": [
-        "midi",
-        "osc"
-      ],
-      "interaction": "toggle",
-      "group": "video.scene",
+      "id": "scene.crash",
       "label": "Crash",
-      "midi": [
+      "ramp_ms": 280,
+      "hard_override": false,
+      "notes": "Harsh scene for peaks and damage.",
+      "params": {
+        "look": "crash",
+        "intensity": 0.85,
+        "camera": "processed",
+        "macro_bias": 0.75
+      },
+      "analysis": {
+        "influence": 0.4,
+        "weights": {
+          "low_band": 0.35,
+          "mid_band": 0.45,
+          "upper_mid_band": 0.55,
+          "high_band": 0.3
+        }
+      },
+      "triggers": [
         {
-          "type": "note",
+          "type": "midi_note",
           "channel": 10,
-          "note": 61,
-          "onValue": 100,
-          "offValue": 0
-        }
-      ],
-      "osc": [
+          "note": 61
+        },
         {
-          "address": "/video/scene/crash",
-          "onArgs": [
-            1
-          ],
-          "offArgs": [
-            0
-          ]
+          "type": "osc",
+          "address": "/video/scene/crash"
         }
-      ],
-      "notes": "Primary crash scene binding."
+      ]
     },
     {
-      "semanticId": "scene.soft",
-      "mappingRef": "vid_scene_soft",
-      "supported": true,
-      "transport": [
-        "midi",
-        "osc"
-      ],
-      "interaction": "toggle",
-      "group": "video.scene",
+      "id": "scene.soft",
       "label": "Soft",
-      "midi": [
+      "ramp_ms": 500,
+      "hard_override": false,
+      "notes": "Low-intensity fallback that keeps movement readable.",
+      "params": {
+        "look": "soft",
+        "intensity": 0.45,
+        "camera": "clean",
+        "macro_bias": 0.35
+      },
+      "analysis": {
+        "influence": 0.35,
+        "weights": {
+          "low_band": 0.15,
+          "mid_band": 0.25,
+          "upper_mid_band": 0.2,
+          "high_band": 0.1
+        }
+      },
+      "triggers": [
         {
-          "type": "note",
+          "type": "midi_note",
           "channel": 10,
-          "note": 62,
-          "onValue": 100,
-          "offValue": 0
-        }
-      ],
-      "osc": [
+          "note": 62
+        },
         {
-          "address": "/video/scene/soft",
-          "onArgs": [
-            1
-          ],
-          "offArgs": [
-            0
-          ]
+          "type": "osc",
+          "address": "/video/scene/soft"
         }
-      ],
-      "notes": "Primary soft scene binding."
+      ]
     },
     {
-      "semanticId": "scene.clean_camera",
-      "mappingRef": "vid_scene_clean_camera",
-      "supported": true,
-      "transport": [
-        "midi",
-        "osc"
-      ],
-      "interaction": "toggle",
-      "group": "video.scene",
+      "id": "scene.clean_camera",
       "label": "Clean Camera",
-      "midi": [
+      "ramp_ms": 300,
+      "hard_override": false,
+      "notes": "Documentary-safe view with minimal treatment.",
+      "params": {
+        "look": "clean_camera",
+        "intensity": 0.1,
+        "camera": "clean",
+        "macro_bias": 0.05
+      },
+      "analysis": {
+        "influence": 0.15,
+        "weights": {
+          "low_band": 0.05,
+          "mid_band": 0.05,
+          "upper_mid_band": 0.05,
+          "high_band": 0.05
+        }
+      },
+      "triggers": [
         {
-          "type": "note",
+          "type": "midi_note",
           "channel": 10,
-          "note": 64,
-          "onValue": 100,
-          "offValue": 0
-        }
-      ],
-      "osc": [
+          "note": 64
+        },
         {
-          "address": "/video/scene/clean_camera",
-          "onArgs": [
-            1
-          ],
-          "offArgs": [
-            0
-          ]
+          "type": "osc",
+          "address": "/video/scene/clean_camera"
         }
-      ],
-      "notes": "Shared clean-camera scene binding."
-    },
+      ]
+    }
+  ],
+  "states": [
     {
-      "semanticId": "state.blackout",
-      "mappingRef": "vid_state_blackout",
-      "supported": true,
-      "transport": [
-        "midi",
-        "osc"
-      ],
-      "interaction": "toggle",
+      "id": "state.blackout",
       "label": "Blackout",
-      "midi": [
+      "ramp_ms": 0,
+      "hard_override": true,
+      "notes": "Fastest safe visual kill and reset state.",
+      "params": {
+        "look": "blackout",
+        "visibility": 0,
+        "camera": "none",
+        "macro_bias": 0
+      },
+      "analysis": {
+        "influence": 0,
+        "weights": {
+          "low_band": 0,
+          "mid_band": 0,
+          "upper_mid_band": 0,
+          "high_band": 0
+        }
+      },
+      "triggers": [
         {
-          "type": "note",
+          "type": "midi_note",
           "channel": 10,
-          "note": 63,
-          "onValue": 100,
-          "offValue": 0
-        }
-      ],
-      "osc": [
+          "note": 63
+        },
         {
-          "address": "/rig/state/blackout",
-          "onArgs": [
-            1
-          ],
-          "offArgs": [
-            0
-          ]
-        }
-      ],
-      "notes": "Global blackout binding that should remain reachable under failure."
-    }
-  ],
-  "repoRegistry": [
-    {
-      "id": "live-rig",
-      "role": "authority",
-      "summary": "Owns topology, vocabulary, failover doctrine, and exported snapshots. It is not a runtime dependency on show night.",
-      "consumes": [
-        "show notes",
-        "post-show lessons",
-        "sibling repo capability statements"
-      ],
-      "produces": [
-        "authority contract",
-        "exported runtime profile",
-        "mapping snapshots",
-        "failover documentation"
-      ],
-      "requiredFor": [
-        "planning",
-        "contract publication"
-      ],
-      "fallbacks": []
-    },
-    {
-      "id": "live-rig-control",
-      "role": "controller",
-      "summary": "Preferred performer UI that emits the shared semantic lane plus concrete MIDI and OSC bindings.",
-      "consumes": [
-        "shared scene and state vocabulary",
-        "exported runtime profile",
-        "mapping snapshots"
-      ],
-      "produces": [
-        "semantic scene, state, and event triggers",
-        "macro lane output",
-        "degraded-state operator messaging"
-      ],
-      "requiredFor": [
-        "preferred control",
-        "mapping-driven UX"
-      ],
-      "fallbacks": [
-        {
-          "when": "live-rig-control is unavailable",
-          "target": "Edirol plus Maschine direct into bridge",
-          "outcome": "Shared scene and state IDs remain reachable without the preferred UI."
+          "type": "osc",
+          "address": "/rig/state/blackout"
         }
       ]
     },
     {
-      "id": "frZone",
-      "role": "analysis",
-      "summary": "Publishes normalized analysis outputs and band mappings only. It never owns scenes, transport, or endpoint-specific logic.",
-      "consumes": [
-        "post-fader audio bus"
-      ],
-      "produces": [
-        "analysis lane output",
-        "normalized band data"
-      ],
-      "requiredFor": [
-        "analysis enrichment"
-      ],
-      "fallbacks": [
-        {
-          "when": "frZone is unavailable",
-          "target": "scene base plus manual macros",
-          "outcome": "Visuals continue without analysis bias."
+      "id": "state.manual_override",
+      "label": "Manual Override",
+      "ramp_ms": 0,
+      "hard_override": true,
+      "notes": "Human control takes priority over automation and weights.",
+      "params": {
+        "look": "manual_override",
+        "authority": "human",
+        "camera": "direct"
+      },
+      "analysis": {
+        "influence": 0,
+        "weights": {
+          "low_band": 0,
+          "mid_band": 0,
+          "upper_mid_band": 0,
+          "high_band": 0
         }
-      ]
-    },
-    {
-      "id": "MSVP",
-      "role": "endpoint",
-      "summary": "Beat-synced visual endpoint that consumes shared scenes, states, macros, and analysis without redefining the contract.",
-      "consumes": [
-        "shared semantic IDs",
-        "macro lane",
-        "analysis lane",
-        "forwarded clock when required"
-      ],
-      "produces": [
-        "Syphon or video output",
-        "endpoint health state"
-      ],
-      "requiredFor": [
-        "primary or secondary visual endpoint"
-      ],
-      "fallbacks": [
+      },
+      "triggers": [
         {
-          "when": "MSVP is unavailable",
-          "target": "nw_wrld or clean-camera or blackout utility path",
-          "outcome": "One visual endpoint survives without requiring MSVP."
-        }
-      ]
-    },
-    {
-      "id": "nw_wrld",
-      "role": "endpoint",
-      "summary": "Runtime visual platform for project-driven visuals. It remains a peer endpoint rather than the contract authority.",
-      "consumes": [
-        "shared semantic IDs",
-        "macro lane",
-        "analysis lane",
-        "wrld_on workspace content"
-      ],
-      "produces": [
-        "projector output",
-        "endpoint health state"
-      ],
-      "requiredFor": [
-        "primary or secondary visual endpoint"
-      ],
-      "fallbacks": [
+          "type": "midi_cc",
+          "channel": 10,
+          "cc": 64
+        },
         {
-          "when": "nw_wrld is unavailable",
-          "target": "MSVP or clean-camera or SCapps utility path",
-          "outcome": "One visual endpoint survives without requiring nw_wrld."
-        }
-      ]
-    },
-    {
-      "id": "wrld_on",
-      "role": "workspace",
-      "summary": "Project content repo layered on top of nw_wrld. It carries workspace modules and assets, not canonical scene naming.",
-      "consumes": [
-        "nw_wrld runtime",
-        "shared semantic IDs for workspace wiring"
-      ],
-      "produces": [
-        "workspace modules",
-        "project assets"
-      ],
-      "requiredFor": [
-        "nw_wrld project content"
-      ],
-      "fallbacks": [
-        {
-          "when": "wrld_on is unavailable",
-          "target": "alternate nw_wrld workspace or MSVP",
-          "outcome": "The set retains a visual path without requiring this workspace."
-        }
-      ]
-    },
-    {
-      "id": "live-rig-3Dvideo",
-      "role": "lab",
-      "summary": "R and D repo for offline assets, optional live sources, and experimentation. It never becomes the only source of a required control path.",
-      "consumes": [
-        "audio features",
-        "shared control-bus naming when promoted into live use"
-      ],
-      "produces": [
-        "assets",
-        "clips",
-        "optional live control buses"
-      ],
-      "requiredFor": [
-        "optional assets",
-        "research"
-      ],
-      "fallbacks": [
-        {
-          "when": "live-rig-3Dvideo is unavailable",
-          "target": "pre-rendered clips or no-op",
-          "outcome": "No impact on minimum survivability."
+          "type": "osc",
+          "address": "/rig/state/manual_override"
         }
       ]
     }
   ],
-  "healthContract": {
-    "statuses": [
-      "alive",
-      "degraded",
-      "unavailable"
+  "macros": [
+    {
+      "id": "macro.vmix_morph",
+      "label": "Mixer Morph",
+      "description": "Crossfades between current visual layers or worlds."
+    },
+    {
+      "id": "macro.fb_feedback",
+      "label": "Frame Buffer Feedback",
+      "description": "Controls visual memory or echo intensity."
+    },
+    {
+      "id": "macro.mael_depth",
+      "label": "Maelstrom Depth",
+      "description": "Controls tunnel or well depth."
+    },
+    {
+      "id": "macro.mosh",
+      "label": "Mosh",
+      "description": "Controls aggressive glitch or stream-collision intensity."
+    },
+    {
+      "id": "macro.retrace_density",
+      "label": "ReTrace Density",
+      "description": "Controls line or contour density in trace-based worlds."
+    },
+    {
+      "id": "macro.texture_detail",
+      "label": "Texture Detail",
+      "description": "Controls grit or fine-texture detail in texture-oriented worlds."
+    },
+    {
+      "id": "macro.analysis_blend",
+      "label": "Analysis Blend",
+      "description": "Crossfades between analysis influence and manual macro authority."
+    }
+  ],
+  "controller_bindings": [
+    {
+      "controller_name": "Edirol PCM-30",
+      "version": "1.0.0",
+      "role": "physical_macro_surface",
+      "midi_channel": 10,
+      "notes": "Human macro surface for the video lane. Raw MIDI is transport; the semantic IDs below are the meaning.",
+      "source_path": "controllers/edirol-pcm30.yaml",
+      "controls": [
+        {
+          "id": "button.scene_intro",
+          "physical_label": "Button 1",
+          "semantic_id": "scene.intro",
+          "midi": {
+            "type": "note",
+            "note": 60,
+            "velocity": 127
+          },
+          "notes": "Primary intro scene recall."
+        },
+        {
+          "id": "button.scene_crash",
+          "physical_label": "Button 2",
+          "semantic_id": "scene.crash",
+          "midi": {
+            "type": "note",
+            "note": 61,
+            "velocity": 127
+          },
+          "notes": "Harsh scene recall."
+        },
+        {
+          "id": "button.scene_soft",
+          "physical_label": "Button 3",
+          "semantic_id": "scene.soft",
+          "midi": {
+            "type": "note",
+            "note": 62,
+            "velocity": 127
+          },
+          "notes": "Low-intensity scene recall."
+        },
+        {
+          "id": "button.state_blackout",
+          "physical_label": "Button 4",
+          "semantic_id": "state.blackout",
+          "safety": true,
+          "midi": {
+            "type": "note",
+            "note": 63,
+            "velocity": 127
+          },
+          "notes": "Fastest safe visual kill. Keep this reachable."
+        },
+        {
+          "id": "button.scene_clean_camera",
+          "physical_label": "Button 5",
+          "semantic_id": "scene.clean_camera",
+          "safety": true,
+          "midi": {
+            "type": "note",
+            "note": 64,
+            "velocity": 127
+          },
+          "notes": "Documentary-safe recovery view."
+        },
+        {
+          "id": "button.state_manual_override",
+          "physical_label": "Button 6",
+          "semantic_id": "state.manual_override",
+          "safety": true,
+          "midi": {
+            "type": "note",
+            "note": 65,
+            "velocity": 127
+          },
+          "notes": "Hands-on priority mode."
+        },
+        {
+          "id": "knob.macro_fb_feedback",
+          "physical_label": "Knob 1",
+          "semantic_id": "macro.fb_feedback",
+          "midi": {
+            "type": "cc",
+            "cc": 21,
+            "value": 64
+          },
+          "notes": "Macro CC for frame-buffer feedback."
+        }
+      ]
+    },
+    {
+      "controller_name": "live-rig-control",
+      "version": "1.0.0",
+      "role": "semantic_web_surface",
+      "notes": "Browser-facing semantic control surface. This is not a physical MIDI controller. It expresses semantic IDs directly over OSC so the UI can stay meaning-first.",
+      "source_path": "controllers/live-rig-control.yaml",
+      "controls": [
+        {
+          "id": "ui.state_blackout",
+          "physical_label": "Web button: Blackout",
+          "semantic_id": "state.blackout",
+          "safety": true,
+          "osc": {
+            "address": "/rig/state/blackout",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Hard kill remains reachable in the browser UI."
+        },
+        {
+          "id": "ui.scene_clean_camera",
+          "physical_label": "Web button: Clean Camera",
+          "semantic_id": "scene.clean_camera",
+          "safety": true,
+          "osc": {
+            "address": "/video/scene/clean_camera",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Documentary-safe recovery state."
+        },
+        {
+          "id": "ui.scene_intro",
+          "physical_label": "Web button: Intro",
+          "semantic_id": "scene.intro",
+          "osc": {
+            "address": "/video/scene/intro",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Semantic scene recall."
+        },
+        {
+          "id": "ui.scene_crash",
+          "physical_label": "Web button: Crash",
+          "semantic_id": "scene.crash",
+          "osc": {
+            "address": "/video/scene/crash",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Semantic scene recall."
+        },
+        {
+          "id": "ui.scene_soft",
+          "physical_label": "Web button: Soft",
+          "semantic_id": "scene.soft",
+          "osc": {
+            "address": "/video/scene/soft",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Semantic scene recall."
+        },
+        {
+          "id": "ui.state_manual_override",
+          "physical_label": "Web button: Manual Override",
+          "semantic_id": "state.manual_override",
+          "safety": true,
+          "osc": {
+            "address": "/rig/state/manual_override",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Human priority mode."
+        },
+        {
+          "id": "ui.macro_analysis_blend",
+          "physical_label": "Web slider: Analysis Blend",
+          "semantic_id": "macro.analysis_blend",
+          "osc": {
+            "address": "/macro/analysis_blend",
+            "args": [
+              0.5
+            ]
+          },
+          "notes": "Semantic macro control for analysis/manual balance."
+        }
+      ]
+    },
+    {
+      "controller_name": "Maschine MK1",
+      "version": "1.0.0",
+      "role": "dormant_safe_subset",
+      "notes": "Conservative semantic subset only. This deck stays dormant unless a show doc explicitly arms it. Row doctrine is intentionally narrow: top row safety, second row core scenes, lower rows unarmed until the hardware template is locked.",
+      "source_path": "controllers/maschine-mk1.yaml",
+      "controls": [
+        {
+          "id": "pad.row1.col1",
+          "physical_label": "Pad row 1 col 1",
+          "semantic_id": "state.blackout",
+          "safety": true,
+          "osc": {
+            "address": "/rig/state/blackout",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Safe kill pad in the conservative subset."
+        },
+        {
+          "id": "pad.row1.col2",
+          "physical_label": "Pad row 1 col 2",
+          "semantic_id": "scene.clean_camera",
+          "safety": true,
+          "osc": {
+            "address": "/video/scene/clean_camera",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Clean-camera recovery pad."
+        },
+        {
+          "id": "pad.row2.col1",
+          "physical_label": "Pad row 2 col 1",
+          "semantic_id": "scene.intro",
+          "osc": {
+            "address": "/video/scene/intro",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Narrow, readable scene recall only."
+        },
+        {
+          "id": "pad.row2.col2",
+          "physical_label": "Pad row 2 col 2",
+          "semantic_id": "scene.soft",
+          "osc": {
+            "address": "/video/scene/soft",
+            "args": [
+              1
+            ]
+          },
+          "notes": "Soft fallback scene in the safe subset."
+        }
+      ]
+    }
+  ],
+  "safety_states": [
+    "state.blackout",
+    "scene.clean_camera"
+  ],
+  "required_devices": [
+    {
+      "id": "controller.edirol_pcm_30",
+      "label": "Edirol PCM-30 or equivalent",
+      "role": "controller"
+    },
+    {
+      "id": "device.visual_placeholder",
+      "label": "One visual endpoint or placeholder endpoint",
+      "role": "visual_endpoint"
+    },
+    {
+      "id": "audio.output.pa",
+      "label": "Audio output path",
+      "role": "audio_output"
+    }
+  ],
+  "optional_devices": [
+    {
+      "id": "analysis.frzone",
+      "label": "frZone",
+      "role": "analysis"
+    },
+    {
+      "id": "controller.maschine_mk1",
+      "label": "Maschine MK1",
+      "role": "semantic_deck"
+    }
+  ],
+  "visual_endpoints": [
+    {
+      "id": "device.visual_placeholder",
+      "label": "One visual endpoint or placeholder endpoint",
+      "role": "primary visual endpoint",
+      "notes": "Accepts semantic scene IDs and can be a minimal stand-in for the room."
+    }
+  ],
+  "audio_patch_reference": {
+    "id": "patch.audio.main_to_pa",
+    "label": "Main bus to PA",
+    "source": "main mix bus",
+    "destination": "PA or interface",
+    "notes": "The room must stay audible even if optional analysis or secondary visuals disappear."
+  },
+  "clock_doctrine": {
+    "boss": "One active clock boss only",
+    "followers": [
+      "controller",
+      "visual_endpoints"
     ],
-    "requiredFields": [
-      "component",
-      "status",
-      "updatedAt"
+    "invariants": [
+      "Endpoints follow clock.",
+      "No endpoint owns transport or Start/Stop.",
+      "Manual overrides must remain available without analysis."
     ],
-    "optionalFields": [
-      "reason",
-      "activeScene",
-      "activeEndpoint",
-      "fallbackActive"
+    "notes": "Minimal show night should still be navigable from a single controller path."
+  },
+  "validation_summary": {
+    "status": "pass",
+    "validators": [
+      {
+        "name": "contract",
+        "status": "pass",
+        "message": "OK: contract 1.0.0 validated with 7 repo entries.",
+        "target": "interop/rig.contract.json"
+      },
+      {
+        "name": "profile",
+        "status": "pass",
+        "message": "OK: profiles/minimal.yaml validated.",
+        "target": "profiles/minimal.yaml"
+      },
+      {
+        "name": "scene",
+        "status": "pass",
+        "message": "OK: scenes/minimal-scenes.yaml validated (6 scene entries).",
+        "target": "scenes/minimal-scenes.yaml"
+      },
+      {
+        "name": "controllers",
+        "status": "pass",
+        "message": "OK: 3 controller file(s) validated.",
+        "target": "controllers/edirol-pcm30.yaml, controllers/live-rig-control.yaml, controllers/maschine-mk1.yaml"
+      }
     ],
-    "notes": [
-      "Unsupported commands should fail visibly and safely.",
-      "Health states are simple enough to mirror in UI, bridge logs, or endpoint consoles."
-    ]
+    "counts": {
+      "scenes": 4,
+      "states": 2,
+      "macros": 7,
+      "controller_bindings": 3,
+      "required_devices": 3,
+      "optional_devices": 2,
+      "visual_endpoints": 1,
+      "safety_states": 2
+    },
+    "warnings": [],
+    "errors": []
   }
 }

@@ -13,7 +13,6 @@
           "label": "Scene Intro",
           "row": 0,
           "col": 0,
-          "toggle": true,
           "osc": {
             "address": "/video/scene/intro",
             "args": [
@@ -26,22 +25,22 @@
               0
             ]
           },
-          "notes": "Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 60 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
+          "notes": "scene.intro from live-rig controller export. Canonical MIDI fallback is ch 10 note 60. Generated from the committed live-rig snapshot mirror.",
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000,
+          "toggle": true,
           "group": {
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          },
-          "risk": "high",
-          "queuePolicy": "ttl",
-          "queueTtlMs": 1000
+          }
         },
         {
           "id": "vid_scene_crash",
           "label": "Scene Crash",
           "row": 0,
           "col": 1,
-          "toggle": true,
           "osc": {
             "address": "/video/scene/crash",
             "args": [
@@ -54,22 +53,22 @@
               0
             ]
           },
-          "notes": "Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 61 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
+          "notes": "scene.crash from live-rig controller export. Canonical MIDI fallback is ch 10 note 61. Generated from the committed live-rig snapshot mirror.",
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000,
+          "toggle": true,
           "group": {
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          },
-          "risk": "high",
-          "queuePolicy": "ttl",
-          "queueTtlMs": 1000
+          }
         },
         {
           "id": "vid_scene_soft",
           "label": "Scene Soft",
           "row": 0,
           "col": 2,
-          "toggle": true,
           "osc": {
             "address": "/video/scene/soft",
             "args": [
@@ -82,22 +81,22 @@
               0
             ]
           },
-          "notes": "Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 62 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
+          "notes": "scene.soft from live-rig controller export. Canonical MIDI fallback is ch 10 note 62. Generated from the committed live-rig snapshot mirror.",
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000,
+          "toggle": true,
           "group": {
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          },
-          "risk": "high",
-          "queuePolicy": "ttl",
-          "queueTtlMs": 1000
+          }
         },
         {
           "id": "vid_scene_clean_camera",
           "label": "Clean Camera",
           "row": 0,
           "col": 3,
-          "toggle": true,
           "osc": {
             "address": "/video/scene/clean_camera",
             "args": [
@@ -110,22 +109,22 @@
               0
             ]
           },
-          "notes": "Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 64 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
+          "notes": "scene.clean_camera from live-rig controller export. Canonical MIDI fallback is ch 10 note 64. Generated from the committed live-rig snapshot mirror.",
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000,
+          "toggle": true,
           "group": {
             "id": "msvp_scene",
             "mode": "exclusive",
             "exclusive": true
-          },
-          "risk": "high",
-          "queuePolicy": "ttl",
-          "queueTtlMs": 1000
+          }
         },
         {
           "id": "vid_state_blackout",
           "label": "Blackout",
           "row": 0,
           "col": 4,
-          "toggle": true,
           "osc": {
             "address": "/rig/state/blackout",
             "args": [
@@ -138,9 +137,58 @@
               0
             ]
           },
-          "notes": "Shared blackout state. OSC primary in live-rig-control; canonical MIDI fallback note is 63 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror.",
+          "notes": "state.blackout from live-rig controller export. Canonical MIDI fallback is ch 10 note 63. Generated from the committed live-rig snapshot mirror.",
           "risk": "critical",
-          "queuePolicy": "safety"
+          "queuePolicy": "safety",
+          "queueTtlMs": 1000,
+          "toggle": true
+        },
+        {
+          "id": "rig_state_manual_override",
+          "label": "Manual Override",
+          "row": 0,
+          "col": 5,
+          "osc": {
+            "address": "/rig/state/manual_override",
+            "args": [
+              1
+            ],
+            "onArgs": [
+              1
+            ],
+            "offArgs": [
+              0
+            ]
+          },
+          "notes": "state.manual_override from live-rig controller export. Canonical MIDI fallback is ch 10 cc 64. Generated from the committed live-rig snapshot mirror.",
+          "risk": "high",
+          "queuePolicy": "ttl",
+          "queueTtlMs": 1000,
+          "toggle": true
+        },
+        {
+          "id": "macro_analysis_blend",
+          "label": "Analysis Blend",
+          "row": 0,
+          "col": 6,
+          "osc": {
+            "address": "/macro/analysis_blend",
+            "args": [
+              "$value01"
+            ]
+          },
+          "notes": "macro.analysis_blend from live-rig controller export. Generated from the committed live-rig snapshot mirror.",
+          "risk": "medium",
+          "queuePolicy": "latest",
+          "queueTtlMs": 1000,
+          "ui": {
+            "type": "slider",
+            "min": 0,
+            "max": 127,
+            "step": 1,
+            "initial": 64,
+            "showValue": true
+          }
         },
         {
           "id": "msvp_macro_lines_per_frame",

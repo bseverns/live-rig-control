@@ -392,13 +392,18 @@ extension CodableValue {
         if raw == "$value", let value {
             return .int(value)
         }
+        if raw == "$value01", let value {
+            return .double(Double(value) / 127.0)
+        }
         if raw == "$state", let state {
             return .string(state)
         }
 
         var resolved = raw
         if let value {
-            resolved = resolved.replacingOccurrences(of: "$value", with: String(value))
+            resolved = resolved
+                .replacingOccurrences(of: "$value01", with: String(Double(value) / 127.0))
+                .replacingOccurrences(of: "$value", with: String(value))
         }
         if let state {
             resolved = resolved.replacingOccurrences(of: "$state", with: state)

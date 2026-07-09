@@ -26,13 +26,26 @@ AUTHORITY_IDS = [
     "vid_scene_soft",
     "vid_scene_clean_camera",
     "vid_state_blackout",
+    "rig_state_manual_override",
+    "macro_analysis_blend",
 ]
+SEMANTIC_TO_RUNTIME_ID = {
+    "scene.intro": "vid_scene_intro",
+    "scene.crash": "vid_scene_crash",
+    "scene.soft": "vid_scene_soft",
+    "scene.clean_camera": "vid_scene_clean_camera",
+    "state.blackout": "vid_state_blackout",
+    "state.manual_override": "rig_state_manual_override",
+    "macro.analysis_blend": "macro_analysis_blend",
+}
 LAYOUT = {
     "vid_scene_intro": {"row": 0, "col": 0, "group": SCENE_GROUP},
     "vid_scene_crash": {"row": 0, "col": 1, "group": SCENE_GROUP},
     "vid_scene_soft": {"row": 0, "col": 2, "group": SCENE_GROUP},
     "vid_scene_clean_camera": {"row": 0, "col": 3, "group": SCENE_GROUP},
     "vid_state_blackout": {"row": 0, "col": 4},
+    "rig_state_manual_override": {"row": 0, "col": 5},
+    "macro_analysis_blend": {"row": 0, "col": 6},
 }
 LABEL_OVERRIDES = {
     "vid_scene_intro": "Scene Intro",
@@ -40,6 +53,8 @@ LABEL_OVERRIDES = {
     "vid_scene_soft": "Scene Soft",
     "vid_scene_clean_camera": "Clean Camera",
     "vid_state_blackout": "Blackout",
+    "rig_state_manual_override": "Manual Override",
+    "macro_analysis_blend": "Analysis Blend",
 }
 
 
@@ -60,6 +75,9 @@ def ensure_list(value: Any) -> list[Any]:
 
 def authority_controls(snapshot_path: Path) -> dict[str, dict[str, Any]]:
     snapshot_data = load_json(snapshot_path)
+    if isinstance(snapshot_data.get("controller_bindings"), list):
+        return authority_controls_from_profile_export(snapshot_data, snapshot_path)
+
     bindings = snapshot_data.get("bindings")
     if not isinstance(bindings, list):
         raise SystemExit(f"{snapshot_path}: missing 'bindings' list")
@@ -71,11 +89,41 @@ def authority_controls(snapshot_path: Path) -> dict[str, dict[str, Any]]:
     }
 
     result: dict[str, dict[str, Any]] = {}
-    for control_id in AUTHORITY_IDS:
+    for control_id in AUTHORITY_IDS[:5]:
         binding = bindings_by_ref.get(control_id)
         if binding is None or binding.get("supported") is not True:
             raise SystemExit(f"{snapshot_path}: missing supported binding '{control_id}'")
         result[control_id] = build_runtime_pad(control_id, binding)
+    return result
+
+
+def authority_controls_from_profile_export(snapshot_data: dict[str, Any], snapshot_path: Path) -> dict[str, dict[str, Any]]:
+    controls = None
+    for controller in snapshot_data["controller_bindings"]:
+        if controller.get("controller_name") == "live-rig-control":
+            controls = controller.get("controls")
+            break
+    if not isinstance(controls, list):
+        raise SystemExit(f"{snapshot_path}: missing live-rig-control controller controls")
+
+    fallback = fallback_transport_by_semantic(snapshot_data)
+    result: dict[str, dict[str, Any]] = {}
+    for control in controls:
+        runtime_id = SEMANTIC_TO_RUNTIME_ID.get(control.get("semantic_id"))
+        if runtime_id:
+            result[runtime_id] = build_runtime_pad_from_controller(runtime_id, control, fallback.get(control.get("semantic_id")))
+    missing = [control_id for control_id in AUTHORITY_IDS if control_id not in result]
+    if missing:
+        raise SystemExit(f"{snapshot_path}: missing live-rig-control semantic controls: {', '.join(missing)}")
+    return result
+
+
+def fallback_transport_by_semantic(snapshot_data: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    result: dict[str, dict[str, Any]] = {}
+    for group in ("scenes", "states"):
+        for item in snapshot_data.get(group, []):
+            if isinstance(item, dict) and isinstance(item.get("id"), str):
+                result[item["id"]] = {"triggers": item.get("triggers", [])}
     return result
 
 
@@ -103,11 +151,45 @@ def build_runtime_pad(control_id: str, binding: dict[str, Any]) -> dict[str, Any
             "offArgs": ensure_list(osc_binding.get("offArgs")),
         },
         "notes": build_notes(control_id, note),
+        "risk": "high",
+        "queuePolicy": "ttl",
+        "queueTtlMs": 1000,
     }
 
     if "group" in layout:
         pad["group"] = layout["group"]
 
+    return pad
+
+
+def build_runtime_pad_from_controller(control_id: str, control: dict[str, Any], fallback: dict[str, Any] | None) -> dict[str, Any]:
+    layout = LAYOUT[control_id]
+    osc = control.get("osc")
+    if not isinstance(osc, dict) or not osc.get("address"):
+        raise SystemExit(f"{control.get('id', control_id)}: missing OSC transport details in profile export")
+
+    is_slider = control_id == "macro_analysis_blend"
+    args = ["$value01"] if is_slider else ensure_list(osc.get("onArgs") or osc.get("args"))
+    is_blackout = control_id == "vid_state_blackout"
+    pad: dict[str, Any] = {
+        "id": control_id,
+        "label": LABEL_OVERRIDES.get(control_id, control.get("physical_label", control_id)),
+        "row": layout["row"],
+        "col": layout["col"],
+        "osc": {"address": osc["address"], "args": args},
+        "notes": build_notes_from_controller(control, fallback),
+        "risk": "critical" if is_blackout else ("high" if control.get("safety") or control_id.startswith("vid_scene_") else "medium"),
+        "queuePolicy": "safety" if is_blackout else ("latest" if is_slider else "ttl"),
+        "queueTtlMs": 1000,
+    }
+    if is_slider:
+        pad["ui"] = {"type": "slider", "min": 0, "max": 127, "step": 1, "initial": 64, "showValue": True}
+    else:
+        pad["toggle"] = True
+        pad["osc"]["onArgs"] = args
+        pad["osc"]["offArgs"] = [0]
+    if "group" in layout:
+        pad["group"] = layout["group"]
     return pad
 
 
@@ -123,6 +205,16 @@ def build_notes(control_id: str, note: Any) -> str:
         f"canonical MIDI fallback note is {note} on the live-rig semantic lane. "
         "Generated from the committed live-rig snapshot mirror."
     )
+
+
+def build_notes_from_controller(control: dict[str, Any], fallback: dict[str, Any] | None) -> str:
+    triggers = fallback.get("triggers", []) if fallback else []
+    midi = next((item for item in triggers if isinstance(item, dict) and str(item.get("type", "")).startswith("midi_")), None)
+    suffix = ""
+    if midi:
+        detail = f"ch {midi.get('channel')} " + (f"note {midi.get('note')}" if "note" in midi else f"cc {midi.get('cc')}")
+        suffix = f" Canonical MIDI fallback is {detail}."
+    return f"{control.get('semantic_id')} from live-rig controller export.{suffix} Generated from the committed live-rig snapshot mirror."
 
 
 def sync_document(document: dict[str, Any], controls: dict[str, dict[str, Any]]) -> tuple[dict[str, Any], bool]:
@@ -143,7 +235,7 @@ def sync_document(document: dict[str, Any], controls: dict[str, dict[str, Any]])
     insert_at = first_authority_index if first_authority_index is not None else (first_macro_index if first_macro_index is not None else 0)
 
     remaining = [pad for pad in pads if pad.get("id") not in AUTHORITY_IDS]
-    canonical = [controls[control_id] for control_id in AUTHORITY_IDS]
+    canonical = [controls[control_id] for control_id in AUTHORITY_IDS if control_id in controls]
     next_pads = remaining[:insert_at] + canonical + remaining[insert_at:]
 
     changed = next_pads != pads
@@ -170,7 +262,7 @@ def check_document(document: dict[str, Any], controls: dict[str, dict[str, Any]]
         if actual is None:
             errors.append(f"{target}: missing authority-synced control '{control_id}'")
             continue
-        for field in ("label", "row", "col", "toggle", "notes"):
+        for field in ("label", "row", "col", "toggle", "notes", "ui", "risk", "queuePolicy", "queueTtlMs"):
             if actual.get(field) != expected.get(field):
                 errors.append(f"{target}:{control_id}: {field} is {actual.get(field)!r}, expected {expected.get(field)!r}")
         if actual.get("group") != expected.get("group"):

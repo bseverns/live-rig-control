@@ -27,11 +27,14 @@ function queueOptionsForMapping(mapping) {
 function resolveOscArg(arg, { value = null, state = null } = {}) {
   if (typeof arg !== "string") return arg;
   if (arg === "$value" && Number.isFinite(value)) return value;
+  if (arg === "$value01" && Number.isFinite(value)) return value / 127;
   if (arg === "$state" && state) return state;
 
   let resolved = arg;
   if (Number.isFinite(value)) {
-    resolved = resolved.replaceAll("$value", String(value));
+    resolved = resolved
+      .replaceAll("$value01", String(value / 127))
+      .replaceAll("$value", String(value));
   }
   if (state) {
     resolved = resolved.replaceAll("$state", state);
