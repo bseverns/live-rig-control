@@ -16,6 +16,85 @@ struct HapticFeedback {
 }
 #endif
 
+private enum AppTheme {
+    static let background = Color(red: 0.051, green: 0.055, blue: 0.063)
+    static let panel = Color(red: 0.082, green: 0.090, blue: 0.102)
+    static let panelRaised = Color(red: 0.106, green: 0.118, blue: 0.133)
+    static let line = Color.white.opacity(0.16)
+    static let primaryText = Color(red: 0.957, green: 0.957, blue: 0.949)
+    static let mutedText = Color(red: 0.659, green: 0.678, blue: 0.702)
+    static let success = Color(red: 0.537, green: 0.820, blue: 0.561)
+    static let warning = Color(red: 0.890, green: 0.749, blue: 0.380)
+    static let danger = Color(red: 0.878, green: 0.435, blue: 0.435)
+    static let panelRadius: CGFloat = 8
+    static let controlRadius: CGFloat = 5
+    static let padRadius: CGFloat = 6
+}
+
+private struct MinimalButtonStyle: ButtonStyle {
+    enum Role {
+        case normal
+        case danger
+    }
+
+    @Environment(\.isEnabled) private var isEnabled
+
+    var role: Role = .normal
+    var isSelected = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        let background = selectedBackground.opacity(configuration.isPressed ? 0.78 : 1)
+        let foreground = selectedForeground
+        let border = borderColor.opacity(isSelected ? 1 : 0.72)
+
+        configuration.label
+            .font(.subheadline.weight(.semibold))
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(background)
+            .foregroundStyle(foreground)
+            .overlay(
+                RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous)
+                    .stroke(border, lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
+            .opacity(isEnabled ? 1 : 0.55)
+    }
+
+    private var selectedBackground: Color {
+        if isSelected {
+            switch role {
+            case .normal:
+                return AppTheme.primaryText
+            case .danger:
+                return AppTheme.danger
+            }
+        }
+        return AppTheme.panelRaised
+    }
+
+    private var selectedForeground: Color {
+        if isSelected {
+            return AppTheme.background
+        }
+        switch role {
+        case .normal:
+            return AppTheme.primaryText
+        case .danger:
+            return AppTheme.danger
+        }
+    }
+
+    private var borderColor: Color {
+        switch role {
+        case .normal:
+            return isSelected ? AppTheme.primaryText : AppTheme.line
+        case .danger:
+            return AppTheme.danger
+        }
+    }
+}
+
 struct ContentView: View {
     @StateObject private var store = MappingStore()
     @State private var showingConnections = false
@@ -24,6 +103,9 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
+            AppTheme.background
+                .ignoresSafeArea()
+
             VStack(spacing: 16) {
                 HeaderPanelView(
                     store: store,
@@ -58,10 +140,11 @@ struct ContentView: View {
                             Text(profile.label ?? profile.id)
                                 .font(.title3)
                                 .bold()
+                                .foregroundStyle(AppTheme.primaryText)
                             Spacer()
                             Text("\(profile.pads.count) controls")
                                 .font(.footnote)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(AppTheme.mutedText)
                         }
 
                         ProfileSurfaceView(
@@ -77,12 +160,13 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 } else {
                     Text("No profile loaded")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 }
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .tint(AppTheme.primaryText)
 
             if store.isLoading {
                 LoadingOverlayView()
@@ -91,6 +175,7 @@ struct ContentView: View {
         .task {
             await store.loadMappings()
         }
+        .preferredColorScheme(.dark)
         .onChange(of: store.selectedProfileId) { _, _ in
             selectedSection = store.selectedProfile?.performerSection
         }
@@ -100,9 +185,13 @@ struct ContentView: View {
                     ConnectionBarView(store: store, midi: store.midi, osc: store.osc)
                         .padding()
                 }
+                .background(AppTheme.background)
                 .navigationTitle("Connections")
                 .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(AppTheme.panel, for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
             }
+            .presentationBackground(AppTheme.background)
         }
         .sheet(isPresented: $showingLogs) {
             NavigationStack {
@@ -110,7 +199,11 @@ struct ContentView: View {
                     .padding()
                     .navigationTitle("Log")
                     .navigationBarTitleDisplayMode(.inline)
+                    .toolbarBackground(AppTheme.panel, for: .navigationBar)
+                    .toolbarBackground(.visible, for: .navigationBar)
             }
+            .background(AppTheme.background)
+            .presentationBackground(AppTheme.background)
         }
     }
 
@@ -172,13 +265,33 @@ private enum PadRiskLevel: String {
     var color: Color {
         switch self {
         case .low:
-            return .green
+            return AppTheme.success
         case .medium:
-            return .yellow
+            return AppTheme.warning
         case .high:
-            return .orange
+            return AppTheme.warning
         case .critical:
-            return .red
+            return AppTheme.danger
+        }
+    }
+
+    var badgeFill: Color {
+        switch self {
+        case .low:
+            return AppTheme.panel
+        case .medium, .high:
+            return AppTheme.warning
+        case .critical:
+            return AppTheme.danger
+        }
+    }
+
+    var badgeForeground: Color {
+        switch self {
+        case .low:
+            return AppTheme.primaryText
+        case .medium, .high, .critical:
+            return AppTheme.background
         }
     }
 }
@@ -358,12 +471,13 @@ struct HeaderPanelView: View {
             HStack(alignment: .top, spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Live Rig Control")
-                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .font(.system(size: 32, weight: .bold, design: .default))
+                        .foregroundStyle(AppTheme.primaryText)
 
                     if let selectedProfileName {
                         Text(selectedProfileName)
                             .font(.headline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(AppTheme.mutedText)
                     }
                 }
 
@@ -373,7 +487,7 @@ struct HeaderPanelView: View {
                     StatusPill(
                         title: "MIDI",
                         detail: midi.isVirtualSourceActive ? midi.virtualSourceName : "Not Connected",
-                        tint: midi.isVirtualSourceActive ? .green : .gray
+                        tint: midi.isVirtualSourceActive ? AppTheme.success : AppTheme.mutedText
                     )
                     StatusPill(
                         title: "OSC",
@@ -385,33 +499,36 @@ struct HeaderPanelView: View {
 
             HStack(spacing: 10) {
                 Button("Connections", action: onShowConnections)
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(MinimalButtonStyle())
 
                 Button("Logs", action: onShowLogs)
-                    .buttonStyle(.bordered)
+                    .buttonStyle(MinimalButtonStyle())
 
                 Button(safeBlackoutArmed ? "Confirm Blackout" : "Safe Blackout") {
                     handleSafeBlackout()
                 }
-                .buttonStyle(.bordered)
-                .tint(.red)
+                .buttonStyle(MinimalButtonStyle(role: .danger, isSelected: safeBlackoutArmed))
 
                 Spacer()
 
                 if store.oscEnabled || midi.isVirtualSourceActive || !midi.outputs.isEmpty {
                     Text("Control surface ready")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 } else {
                     Text("Set up MIDI or OSC, then select a profile.")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 }
             }
         }
         .padding(18)
-        .background(Color.gray.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .background(AppTheme.panel)
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.panelRadius, style: .continuous)
+                .stroke(AppTheme.line, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.panelRadius, style: .continuous))
     }
 
     private var oscLabel: String {
@@ -428,11 +545,11 @@ struct HeaderPanelView: View {
     private var oscTint: Color {
         switch osc.state {
         case .connected:
-            return .green
+            return AppTheme.success
         case .connecting:
-            return .yellow
+            return AppTheme.warning
         case .disconnected:
-            return .gray
+            return AppTheme.mutedText
         }
     }
 
@@ -463,17 +580,22 @@ struct StatusPill: View {
                     .frame(width: 8, height: 8)
                 Text(title)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
             }
 
             Text(detail)
                 .font(.subheadline.weight(.semibold))
+                .foregroundStyle(AppTheme.primaryText)
                 .lineLimit(1)
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 12)
-        .background(.white.opacity(0.7))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .background(AppTheme.panelRaised)
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous)
+                .stroke(AppTheme.line, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
     }
 }
 
@@ -487,12 +609,13 @@ struct ConnectionBarView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Connections")
                 .font(.headline)
+                .foregroundStyle(AppTheme.primaryText)
 
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("MIDI Output")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                     Picker("MIDI Output", selection: $midi.selectedOutputId) {
                         if midi.outputs.isEmpty {
                             Text("No MIDI outputs")
@@ -505,32 +628,34 @@ struct ConnectionBarView: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    .tint(AppTheme.primaryText)
                     .disabled(midi.outputs.isEmpty)
                 }
 
                 Button("Refresh MIDI") {
                     midi.refreshOutputs()
                 }
+                .buttonStyle(MinimalButtonStyle())
                 .disabled(midi.outputs.isEmpty)
             }
 
             HStack(spacing: 6) {
                 Text("MIDI:")
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
                 if midi.isVirtualSourceActive {
                     Text("Source: \(midi.virtualSourceName)")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 }
                 if let selected = midi.outputs.first(where: { $0.id == midi.selectedOutputId }) {
                     Text("Selected: \(selected.name)")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 } else {
                     Text("No output selected")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 }
             }
 
@@ -538,9 +663,18 @@ struct ConnectionBarView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("OSC Host")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                     TextField("192.168.1.10 or udp://192.168.1.10:9000", text: $store.oscHost)
                         .oscHostInputModifiers()
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(AppTheme.panelRaised)
+                        .foregroundStyle(AppTheme.primaryText)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous)
+                                .stroke(AppTheme.line, lineWidth: 1)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
                         .onSubmit {
                             Task {
                                 await store.updateOscHost(store.oscHost.trimmingCharacters(in: .whitespacesAndNewlines))
@@ -551,7 +685,7 @@ struct ConnectionBarView: View {
                 Button("Scan QR") {
                     showingScanner = true
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(MinimalButtonStyle())
 
                 Toggle(isOn: Binding(
                     get: { store.oscEnabled },
@@ -568,64 +702,66 @@ struct ConnectionBarView: View {
                         Text("OSC Bridge")
                     }
                 }
+                .foregroundStyle(AppTheme.primaryText)
+                .tint(AppTheme.primaryText)
                 .disabled(osc.state == .connecting)
             }
 
             if midi.outputs.isEmpty {
                 Text(midi.isVirtualSourceActive ? "System MIDI source is active." : "Connect a MIDI device.")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
             }
 
             if let error = store.oscHostError {
                 Text(error)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(AppTheme.danger)
                     .font(.footnote)
             }
             if let hint = store.oscHostHint {
                 Text(hint)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
                     .font(.footnote)
             }
 
             if osc.state == .disconnected {
                 HStack(spacing: 12) {
                     Text("OSC not connected")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                     Button("Reconnect") {
                         Task {
                             await store.setOscEnabled(true)
                         }
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(MinimalButtonStyle())
                     .disabled(store.oscHostError != nil)
                 }
             } else if osc.state == .connecting {
                 Text("OSC connecting...")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
             }
 
             HStack(spacing: 6) {
                 Text("OSC:")
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
                 switch osc.state {
                 case .connected:
                     Text("Connected")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 case .connecting:
                     Text("Connecting")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 case .disconnected:
                     Text("Disconnected")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 }
                 if osc.queuedCount > 0 {
                     Text("Queued: \(osc.queuedCount)")
                         .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(AppTheme.mutedText)
                 }
             }
         }
@@ -647,11 +783,11 @@ struct ConnectionBarView: View {
     private var oscStatusColor: Color {
         switch osc.state {
         case .connected:
-            return .green
+            return AppTheme.success
         case .connecting:
-            return .yellow
+            return AppTheme.warning
         case .disconnected:
-            return .gray
+            return AppTheme.mutedText
         }
     }
 }
@@ -670,12 +806,15 @@ struct LogPanelView: View {
             HStack {
                 Text("Log")
                     .font(.headline)
+                    .foregroundStyle(AppTheme.primaryText)
                 Spacer()
                 Toggle("Debug", isOn: $logs.isEnabled)
                     .toggleStyle(.switch)
+                    .tint(AppTheme.primaryText)
                 Button("Clear") {
                     logs.clear()
                 }
+                .buttonStyle(MinimalButtonStyle())
             }
 
             if logs.isEnabled {
@@ -684,17 +823,22 @@ struct LogPanelView: View {
                         ForEach(logs.entries) { entry in
                             Text("\(formatted(entry.timestamp))  \(entry.message)")
                                 .font(.system(.footnote, design: .monospaced))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(AppTheme.mutedText)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
+                    .padding(8)
                 }
                 .frame(maxHeight: maxHeight)
-                .background(Color.gray.opacity(0.08))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .background(AppTheme.panelRaised)
+                .overlay(
+                    RoundedRectangle(cornerRadius: AppTheme.padRadius, style: .continuous)
+                        .stroke(AppTheme.line, lineWidth: 1)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: AppTheme.padRadius, style: .continuous))
             } else {
                 Text("Debug logging disabled")
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
                     .font(.footnote)
             }
         }
@@ -723,9 +867,13 @@ struct SectionBarView: View {
                         .padding(.vertical, 10)
                         .padding(.horizontal, 16)
                         .frame(maxWidth: .infinity)
-                        .background(selectedSection == section ? Color.primary : Color.gray.opacity(0.12))
-                        .foregroundStyle(selectedSection == section ? .white : .primary)
-                        .clipShape(Capsule())
+                        .background(selectedSection == section ? AppTheme.primaryText : AppTheme.panelRaised)
+                        .foregroundStyle(selectedSection == section ? AppTheme.background : AppTheme.primaryText)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous)
+                                .stroke(selectedSection == section ? AppTheme.primaryText : AppTheme.line, lineWidth: 1)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
                 }
             }
         }
@@ -755,16 +903,20 @@ struct ProfileBarView: View {
                                         .font(.caption)
                                         .padding(.horizontal, 6)
                                         .padding(.vertical, 2)
-                                        .background(Color.yellow.opacity(0.9))
-                                        .foregroundStyle(.black)
-                                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                                        .background(AppTheme.warning)
+                                        .foregroundStyle(AppTheme.background)
+                                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                                 }
                             }
                             .padding(.vertical, 8)
                             .padding(.horizontal, 12)
-                            .background(profile.id == selectedId ? .blue : .gray.opacity(0.14))
-                            .foregroundStyle(profile.id == selectedId ? .white : .primary)
-                            .clipShape(Capsule())
+                            .background(profile.id == selectedId ? AppTheme.primaryText : AppTheme.panelRaised)
+                            .foregroundStyle(profile.id == selectedId ? AppTheme.background : AppTheme.primaryText)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous)
+                                    .stroke(profile.id == selectedId ? AppTheme.primaryText : AppTheme.line, lineWidth: 1)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
                         }
                         .id(profile.id)
                     }
@@ -798,10 +950,11 @@ struct ProfileIssuesView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Profile warnings")
                         .font(.subheadline)
+                        .foregroundStyle(AppTheme.primaryText)
                     ForEach(list.prefix(3), id: \.self) { issue in
                         Text("- \(issue)")
                             .font(.footnote)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(AppTheme.mutedText)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
@@ -871,7 +1024,7 @@ struct PadGridView: View {
 
         if profile.pads.isEmpty {
             Text("No pads in this profile.")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(AppTheme.mutedText)
                 .frame(maxWidth: .infinity, alignment: .leading)
         } else {
             Grid(horizontalSpacing: spacing, verticalSpacing: spacing) {
@@ -927,30 +1080,34 @@ struct PadView: View {
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .padding(.horizontal, 18)
+                .foregroundStyle(isOn ? AppTheme.background : AppTheme.primaryText)
 
             Text(pad.riskLevel.label)
                 .font(.caption2.weight(.bold))
                 .padding(.horizontal, 5)
                 .padding(.vertical, 2)
-                .background(pad.riskLevel.color.opacity(0.9))
-                .foregroundStyle(.black)
-                .clipShape(RoundedRectangle(cornerRadius: 5))
+                .background(pad.riskLevel.badgeFill)
+                .foregroundStyle(pad.riskLevel.badgeForeground)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4, style: .continuous)
+                        .stroke(AppTheme.line, lineWidth: pad.riskLevel == .low ? 1 : 0)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                 .padding(6)
         }
             .frame(maxWidth: .infinity, minHeight: minHeight)
             .padding(8)
-            .background(isOn ? Color.green.opacity(0.9) : pad.riskLevel.color.opacity(0.12))
-            .foregroundStyle(isOn ? .black : .primary)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .background(isOn ? AppTheme.success : AppTheme.panelRaised)
+            .foregroundStyle(isOn ? AppTheme.background : AppTheme.primaryText)
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.padRadius, style: .continuous))
             .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(pad.riskLevel.color.opacity(pad.riskLevel == .critical ? 0.9 : 0.35), lineWidth: pad.riskLevel == .critical ? 2 : 1)
+                RoundedRectangle(cornerRadius: AppTheme.padRadius, style: .continuous)
+                    .stroke(isOn ? AppTheme.success : pad.riskLevel.color.opacity(pad.riskLevel == .critical ? 1 : 0.58), lineWidth: pad.riskLevel == .critical ? 2 : 1)
             )
-            .shadow(color: isOn ? Color.green.opacity(0.2) : .clear, radius: 6)
             .scaleEffect(isPressed ? 0.98 : 1.0)
             .animation(.easeOut(duration: 0.08), value: isPressed)
             .animation(.easeInOut(duration: 0.15), value: isOn)
-            .contentShape(RoundedRectangle(cornerRadius: 10))
+            .contentShape(RoundedRectangle(cornerRadius: AppTheme.padRadius, style: .continuous))
             .onTapGesture {
                 if pad.isToggle {
                     onTap()
@@ -989,16 +1146,20 @@ struct PadSliderView: View {
             HStack(alignment: .firstTextBaseline) {
                 Text(pad.label ?? pad.id)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
                     .lineLimit(2)
                 Spacer()
                 Text(pad.riskLevel.label)
                     .font(.caption2.weight(.bold))
                     .padding(.horizontal, 5)
                     .padding(.vertical, 2)
-                    .background(pad.riskLevel.color.opacity(0.9))
-                    .foregroundStyle(.black)
-                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .background(pad.riskLevel.badgeFill)
+                    .foregroundStyle(pad.riskLevel.badgeForeground)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4, style: .continuous)
+                            .stroke(AppTheme.line, lineWidth: pad.riskLevel == .low ? 1 : 0)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
             }
             Slider(
                 value: $localValue,
@@ -1006,6 +1167,7 @@ struct PadSliderView: View {
                 step: stepValue
             )
             .controlSize(.large)
+            .tint(AppTheme.primaryText)
             .onChange(of: localValue) { _, newValue in
                 let intValue = Int(newValue.rounded())
                 if intValue != value {
@@ -1021,17 +1183,17 @@ struct PadSliderView: View {
             if showValue {
                 Text("\(value)")
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(AppTheme.mutedText)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
         .frame(maxWidth: .infinity, minHeight: minHeight)
         .padding(8)
-        .background(pad.riskLevel.color.opacity(0.12))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .background(AppTheme.panelRaised)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.padRadius, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(pad.riskLevel.color.opacity(pad.riskLevel == .critical ? 0.9 : 0.35), lineWidth: pad.riskLevel == .critical ? 2 : 1)
+            RoundedRectangle(cornerRadius: AppTheme.padRadius, style: .continuous)
+                .stroke(pad.riskLevel.color.opacity(pad.riskLevel == .critical ? 1 : 0.58), lineWidth: pad.riskLevel == .critical ? 2 : 1)
         )
         .onAppear {
             localValue = Double(value)
@@ -1042,17 +1204,23 @@ struct PadSliderView: View {
 struct LoadingOverlayView: View {
     var body: some View {
         ZStack {
-            Color.black.opacity(0.2)
+            AppTheme.background.opacity(0.72)
                 .ignoresSafeArea()
             VStack(spacing: 12) {
                 ProgressView()
                     .progressViewStyle(.circular)
+                    .tint(AppTheme.primaryText)
                 Text("Loading mappings…")
                     .font(.headline)
+                    .foregroundStyle(AppTheme.primaryText)
             }
             .padding(20)
-            .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .background(AppTheme.panel)
+            .overlay(
+                RoundedRectangle(cornerRadius: AppTheme.panelRadius, style: .continuous)
+                    .stroke(AppTheme.line, lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.panelRadius, style: .continuous))
         }
         .transition(.opacity)
     }
