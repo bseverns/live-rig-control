@@ -317,9 +317,6 @@
         },
         {
           "type": "boolean"
-        },
-        {
-          "type": "null"
         }
       ]
     },
@@ -337,7 +334,8 @@
       "properties": {
         "address": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "\\S"
         },
         "args": {
           "$ref": "#/$defs/oscArgs"
@@ -383,7 +381,8 @@
       "properties": {
         "address": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "\\S"
         },
         "args": {
           "$ref": "#/$defs/oscArgs"
@@ -394,8 +393,7 @@
     "midiMapping": {
       "type": "object",
       "required": [
-        "type",
-        "channel"
+        "type"
       ],
       "properties": {
         "type": {
@@ -484,6 +482,7 @@
           },
           "then": {
             "required": [
+              "channel",
               "note"
             ]
           }
@@ -498,6 +497,7 @@
           },
           "then": {
             "required": [
+              "channel",
               "cc"
             ]
           }
@@ -512,6 +512,7 @@
           },
           "then": {
             "required": [
+              "channel",
               "program"
             ]
           }
@@ -527,7 +528,12 @@
           "then": {
             "required": [
               "realtime"
-            ]
+            ],
+            "not": {
+              "required": [
+                "channel"
+              ]
+            }
           }
         }
       ]

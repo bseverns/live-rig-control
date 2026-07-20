@@ -180,7 +180,7 @@ struct GroupMapping: Codable {
 
 struct MidiMapping: Codable {
     let type: String
-    let channel: Int
+    let channel: Int?
     let note: Int?
     let cc: Int?
     let onVelocity: Int?

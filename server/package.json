@@ -10,6 +10,7 @@
   "main": "osc-bridge.js",
   "scripts": {
     "start": "node osc-bridge.js",
+    "test": "node --no-warnings --test osc-queue-policy.test.js",
     "validate-mappings": "node validate-mappings.js",
     "simulate-mapping": "node simulate-mapping.js",
     "generate-handbook": "node generate-handbook.js"

@@ -43,7 +43,18 @@ const ajv = new Ajv2020({ allErrors: true, strict: false });
 const validate = ajv.compile(schema);
 
 const ok = validate(mappings);
-if (ok) {
+const semanticErrors = [];
+const padIds = new Set();
+for (const [profileId, profile] of Object.entries(mappings.profiles ?? {})) {
+  for (const pad of profile.pads ?? []) {
+    if (padIds.has(pad.id)) {
+      semanticErrors.push(`duplicate pad id "${pad.id}" in profile "${profileId}"`);
+    }
+    padIds.add(pad.id);
+  }
+}
+
+if (ok && semanticErrors.length === 0) {
   console.log("mappings.json is valid.");
   process.exit(0);
 }
@@ -52,5 +63,8 @@ console.error("mappings.json failed validation:");
 for (const err of validate.errors ?? []) {
   const at = err.instancePath ? `at ${err.instancePath}` : "at root";
   console.error(`- ${at}: ${err.message}`);
+}
+for (const error of semanticErrors) {
+  console.error(`- ${error}`);
 }
 process.exit(1);

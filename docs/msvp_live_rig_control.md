@@ -5,7 +5,7 @@ This document explains the focused contract between:
 - `live-rig-control` as the performer-facing emitter
 - `MSVP / MidiVideoSyphonBeats` as the visual endpoint
 
-The machine-readable mirror is [contracts/msvp_live_rig_control.yaml](/Users/bseverns/Documents/GitHub/live-rig-control/contracts/msvp_live_rig_control.yaml). It stays deliberately small: scenes, macro lane, analysis lane, and transport ownership.
+The machine-readable mirror is [`contracts/msvp_live_rig_control.yaml`](../contracts/msvp_live_rig_control.yaml). It stays deliberately small: scenes, macro lane, analysis lane, and transport ownership.
 
 ## Intent
 
@@ -37,7 +37,9 @@ But the semantic meaning of each scene stays fixed.
 - Primary transport: OSC
 - Fallback transport: MIDI note
 - Controller behavior: `live-rig-control` emits OSC scene commands on the `msvp` profile
-- Endpoint fallback: MSVP still exposes note fallback on channel `10`, notes `60..62`
+- Endpoint fallback: MSVP exposes note fallback on channel `10` for Intro, Crash,
+  and Soft (`60..62`). Clean Camera and Blackout are controller-side OSC-only
+  commands until their endpoint fallback mappings are added to the MSVP interop.
 
 The controller intentionally keeps scenes OSC-only here to avoid double-trigger semantics. The fallback note vocabulary still exists in the contract and in MSVP for manual/debug paths.
 

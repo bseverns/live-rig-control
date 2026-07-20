@@ -24,6 +24,10 @@ function queueOptionsForMapping(mapping) {
   return { policy, queueKey, ttlMs };
 }
 
+export function shouldQueueOscPolicy(policy) {
+  return policy !== "never" && policy !== "safety";
+}
+
 function resolveOscArg(arg, { value = null, state = null } = {}) {
   if (typeof arg !== "string") return arg;
   if (arg === "$value" && Number.isFinite(value)) return value;
@@ -60,7 +64,7 @@ function resolveOscArgs(mapping, { state = null, value = null } = {}) {
 
 function enqueuePayload(payload, options = {}) {
   const policy = options.policy || "ttl";
-  if (policy === "never") {
+  if (!shouldQueueOscPolicy(policy)) {
     notifyStatus(oscStatus, "OSC offline; message dropped");
     return false;
   }
@@ -74,7 +78,7 @@ function enqueuePayload(payload, options = {}) {
     expiresAt: policy === "ttl" ? now + (options.ttlMs || 1000) : null
   };
 
-  if (policy === "latest" || policy === "safety") {
+  if (policy === "latest") {
     const existingIndex = pendingMessages.findIndex((entry) => entry.queueKey === queueKey);
     if (existingIndex >= 0) {
       pendingMessages.splice(existingIndex, 1);
@@ -208,7 +212,7 @@ export function sendOscValue(mapping, value) {
   if (!mapping?.osc) return false;
   const payload = {
     address: mapping.osc.address,
-    args: resolveOscArgs(mapping, { value }),
+    args: resolveOscArgs(mapping, { value, state: "value" }),
     state: "value"
   };
   return sendPayload(payload, queueOptionsForMapping(mapping));

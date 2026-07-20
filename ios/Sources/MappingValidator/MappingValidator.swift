@@ -68,6 +68,44 @@ public struct MidiMapping: Codable {
 
 public struct OscMapping: Codable {
     public let address: String?
+    public let args: [CodableValue]?
+    public let onArgs: [CodableValue]?
+    public let offArgs: [CodableValue]?
+}
+
+public enum CodableValue: Codable {
+    case string(String)
+    case int(Int)
+    case double(Double)
+    case bool(Bool)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else if let value = try? container.decode(Int.self) {
+            self = .int(value)
+        } else if let value = try? container.decode(Double.self) {
+            self = .double(value)
+        } else if let value = try? container.decode(Bool.self) {
+            self = .bool(value)
+        } else {
+            throw DecodingError.typeMismatch(
+                CodableValue.self,
+                .init(codingPath: decoder.codingPath, debugDescription: "Unsupported OSC arg type")
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .string(let value): try container.encode(value)
+        case .int(let value): try container.encode(value)
+        case .double(let value): try container.encode(value)
+        case .bool(let value): try container.encode(value)
+        }
+    }
 }
 
 public struct UiMapping: Codable {
@@ -121,7 +159,7 @@ public struct MappingValidator {
                     continue
                 }
                 if globalPadIds.contains(pad.id) {
-                    result.warnings.append("[\(profileId)] duplicate pad id across profiles: \(pad.id)")
+                    result.errors.append("[\(profileId)] duplicate pad id across profiles: \(pad.id)")
                 } else {
                     globalPadIds.insert(pad.id)
                 }
@@ -190,18 +228,24 @@ public struct MappingValidator {
 
                     switch midi.type {
                     case "note":
+                        requireValue("midi.note", midi.note, result: &result, prefix: prefix)
                         validateRange("midi.note", midi.note, min: 0, max: 127, result: &result, prefix: prefix)
                         validateRange("midi.onVelocity", midi.onVelocity, min: 0, max: 127, result: &result, prefix: prefix)
                         validateRange("midi.offVelocity", midi.offVelocity, min: 0, max: 127, result: &result, prefix: prefix)
                     case "cc":
+                        requireValue("midi.cc", midi.cc, result: &result, prefix: prefix)
                         validateRange("midi.cc", midi.cc, min: 0, max: 127, result: &result, prefix: prefix)
                         validateRange("midi.onValue", midi.onValue, min: 0, max: 127, result: &result, prefix: prefix)
                         validateRange("midi.offValue", midi.offValue, min: 0, max: 127, result: &result, prefix: prefix)
                     case "program":
+                        requireValue("midi.program", midi.program, result: &result, prefix: prefix)
                         validateRange("midi.program", midi.program, min: 0, max: 127, result: &result, prefix: prefix)
                         validateRange("midi.bankMsb", midi.bankMsb, min: 0, max: 127, result: &result, prefix: prefix)
                         validateRange("midi.bankLsb", midi.bankLsb, min: 0, max: 127, result: &result, prefix: prefix)
                     case "realtime":
+                        if midi.channel != nil {
+                            result.errors.append(prefix + "midi.channel must be omitted for realtime messages.")
+                        }
                         if let realtime = midi.realtime {
                             let allowed = ["start", "continue", "stop"]
                             if !allowed.contains(realtime) {
@@ -213,13 +257,23 @@ public struct MappingValidator {
                     case .none:
                         break
                     case .some:
-                        result.warnings.append(prefix + "midi.type unrecognized.")
+                        result.errors.append(prefix + "midi.type unrecognized.")
                     }
+                }
+
+                if let osc = pad.osc, osc.address?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty != false {
+                    result.errors.append("[\(profileId)] pad \(pad.id) osc.address missing or empty.")
                 }
             }
         }
 
         return result
+    }
+}
+
+func requireValue(_ label: String, _ value: Int?, result: inout ValidationResult, prefix: String) {
+    if value == nil {
+        result.errors.append("\(prefix)\(label) missing.")
     }
 }
 

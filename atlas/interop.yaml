@@ -12,7 +12,7 @@ interfaces:
       protocol: ws
       notes: Optional OSC bridge WebSocket port used by the browser UI.
   urls:
-    - http://localhost:8080 (or whatever you serve public/ on)
+    - http://localhost:8080/public/ (serve the repository root)
     - ws(s)://<host>:9001 (OSC bridge)
   protocols:
     - WebMIDI (browser -> MIDI output devices)

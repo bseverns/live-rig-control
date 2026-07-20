@@ -7,11 +7,11 @@ Generated from `src/mappings.json`. Edit the mapping, then run `npm --prefix ser
 | Transport | show | performanceDeck | 3 |
 | Patterns | show | performanceDeck | 1 |
 | Seeds | sound | parameterBoard, min card 180px | 12 |
-| FX Macros | sound | parameterBoard, min card 180px | 19 |
+| FX Macros | sound | parameterBoard, min card 180px | 18 |
 | Drum Pads | sound | mappedGrid | 47 |
 | Drum Controls | sound | parameterBoard, min card 180px | 16 |
 | Synth | sound | parameterBoard, min card 180px | 25 |
-| MSVP | video | parameterBoard, min card 180px | 19 |
+| MSVP | video | parameterBoard, min card 180px | 21 |
 | Video Feed | video | mappedGrid | 12 |
 | Video Input | video | mappedGrid | 26 |
 | Controller Slots | setup | parameterBoard, min card 120px | 42 |
@@ -73,7 +73,6 @@ Generated from `src/mappings.json`. Edit the mapping, then run `npm --prefix ser
 | `pcm30_f4_mael` | F4 Maelstrom (CC4) | low | never | MIDI CC 4 ch 11 |  |
 | `pcm30_f5_retrace` | F5 ReTrace (CC5) | low | never | MIDI CC 5 ch 11 |  |
 | `pcm30_f6_contrast` | F6 Contrast (CC6) | low | never | MIDI CC 6 ch 11 |  |
-| `pcm30_f7_spare` | F7 Spare (CC7) | low | never | MIDI CC 7 ch 11 |  |
 | `pcm30_f8_blackout` | F8 Blackout (CC8) | critical | safety | MIDI CC 8 ch 11 |  |
 | `pcm30_k1_glitch` | K1 Fine Glitch (CC21) | low | never | MIDI CC 21 ch 11 |  |
 | `pcm30_k2_fb` | K2 Fine FB (CC22) | low | never | MIDI CC 22 ch 11 |  |
@@ -210,11 +209,13 @@ Generated from `src/mappings.json`. Edit the mapping, then run `npm --prefix ser
 
 | Pad | Label | Risk | Queue | Transport | Notes |
 | --- | --- | --- | --- | --- | --- |
-| `vid_scene_intro` | Scene Intro | high | ttl | OSC /video/scene/intro | Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 60 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror. |
-| `vid_scene_crash` | Scene Crash | high | ttl | OSC /video/scene/crash | Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 61 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror. |
-| `vid_scene_soft` | Scene Soft | high | ttl | OSC /video/scene/soft | Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 62 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror. |
-| `vid_scene_clean_camera` | Clean Camera | high | ttl | OSC /video/scene/clean_camera | Shared scene cue. OSC primary in live-rig-control; canonical MIDI fallback note is 64 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror. |
-| `vid_state_blackout` | Blackout | critical | safety | OSC /rig/state/blackout | Shared blackout state. OSC primary in live-rig-control; canonical MIDI fallback note is 63 on the live-rig semantic lane. Generated from the committed live-rig snapshot mirror. |
+| `vid_scene_intro` | Scene Intro | high | ttl | OSC /video/scene/intro | scene.intro from live-rig controller export. Canonical MIDI fallback is ch 10 note 60. Generated from the committed live-rig snapshot mirror. |
+| `vid_scene_crash` | Scene Crash | high | ttl | OSC /video/scene/crash | scene.crash from live-rig controller export. Canonical MIDI fallback is ch 10 note 61. Generated from the committed live-rig snapshot mirror. |
+| `vid_scene_soft` | Scene Soft | high | ttl | OSC /video/scene/soft | scene.soft from live-rig controller export. Canonical MIDI fallback is ch 10 note 62. Generated from the committed live-rig snapshot mirror. |
+| `vid_scene_clean_camera` | Clean Camera | high | ttl | OSC /video/scene/clean_camera | scene.clean_camera from live-rig controller export. Canonical MIDI fallback is ch 10 note 64. Generated from the committed live-rig snapshot mirror. |
+| `vid_state_blackout` | Blackout | critical | safety | OSC /rig/state/blackout | state.blackout from live-rig controller export. Canonical MIDI fallback is ch 10 note 63. Generated from the committed live-rig snapshot mirror. |
+| `rig_state_manual_override` | Manual Override | high | ttl | OSC /rig/state/manual_override | state.manual_override from live-rig controller export. Canonical MIDI fallback is ch 10 cc 64. Generated from the committed live-rig snapshot mirror. |
+| `macro_analysis_blend` | Analysis Blend | medium | latest | OSC /macro/analysis_blend | macro.analysis_blend from live-rig controller export. Generated from the committed live-rig snapshot mirror. |
 | `msvp_macro_lines_per_frame` | Macro Density (CC1) | low | never | MIDI CC 1 ch 10 | MSVP macro lane. Canonical param linesPerFrame, OSC equivalent /msvp/macro/linesPerFrame. |
 | `msvp_macro_max_line_size` | Macro Line Size (CC2) | low | never | MIDI CC 2 ch 10 | MSVP macro lane. Canonical param maxLineSize, OSC equivalent /msvp/macro/maxLineSize. |
 | `msvp_macro_opacity_min` | Macro Opacity Floor (CC3) | low | never | MIDI CC 3 ch 10 | MSVP macro lane. Canonical param opacityMin, OSC equivalent /msvp/macro/opacityMin. |

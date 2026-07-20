@@ -17,7 +17,7 @@ Before:
 }
 ```
 
-After (backward compatible):
+After (required for toggle pads):
 
 ```json
 {
@@ -32,6 +32,7 @@ After (backward compatible):
 ```
 
 Notes:
-- Keep `args` if you need older clients that only read `args`.
+- Keep `args` only as the generic/on value alongside explicit `onArgs` and
+  `offArgs`; runtime mappings reject implicit toggle release semantics.
 - For momentary pads, `args` alone is still valid.
 - If your off state uses a different value, set `offArgs` accordingly.

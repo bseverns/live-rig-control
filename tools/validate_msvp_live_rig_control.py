@@ -130,7 +130,10 @@ def validate_live_rig(mappings_path: Path, contract: dict[str, Any]) -> tuple[li
         add_mismatch(errors, f"{mappings_path}:{profile_id}", "order", profile.get("order"), controller["order"])
 
     scene_contract = contract["controls"]["scene_triggers"]
-    expected_scenes = {scene["semantic_id"]: scene for scene in scene_contract["scenes"]}
+    expected_scenes = {
+        scene["semantic_id"]: scene
+        for scene in scene_contract["scenes"] + scene_contract.get("controller_only_scenes", [])
+    }
     for scene_id, expected in expected_scenes.items():
         pad = profile_pads.get(scene_id)
         if pad is None:
@@ -146,7 +149,7 @@ def validate_live_rig(mappings_path: Path, contract: dict[str, Any]) -> tuple[li
     for pad_id in sorted(all_pads):
         if pad_id in allowed_additional_ids:
             continue
-        if pad_id.startswith("vid_scene_") and pad_id not in expected_scenes:
+        if (pad_id.startswith("vid_scene_") or pad_id == "vid_state_blackout") and pad_id not in expected_scenes:
             errors.append(f"{mappings_path}: unknown semantic ID '{pad_id}'")
 
     validate_controller_lane(errors, str(mappings_path), profile_pads, "macro", contract["controls"]["macro_lane"])
@@ -440,7 +443,7 @@ def validate_msvp(interop_path: Path, contract: dict[str, Any]) -> tuple[list[st
             )
 
     for pad_id in sorted(pads_by_id):
-        if pad_id.startswith("vid_scene_") and pad_id not in expected_scenes:
+        if (pad_id.startswith("vid_scene_") or pad_id == "vid_state_blackout") and pad_id not in expected_scenes:
             errors.append(f"{interop_path}: unknown semantic ID '{pad_id}'")
 
     validate_endpoint_lane(errors, pads_by_id, interop_path, "macro", macro_contract)

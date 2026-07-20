@@ -16,10 +16,7 @@
       "scene_transport": "osc_primary",
       "scene_midi_fallback_emitted_by_controller": false,
       "continuous_shaping_transport": "midi_cc",
-      "allowed_additional_semantic_ids": [
-        "vid_scene_clean_camera",
-        "vid_state_blackout"
-      ]
+      "allowed_additional_semantic_ids": []
     },
     "endpoint_runtime": {
       "interop_version": "1.0.0",
@@ -107,6 +104,20 @@
             "osc_address": "/video/scene/soft",
             "midi_note": 62,
             "preset": "soft"
+          }
+        ],
+        "controller_only_scenes": [
+          {
+            "semantic_id": "vid_scene_clean_camera",
+            "label": "Clean Camera",
+            "osc_address": "/video/scene/clean_camera",
+            "preset": "clean_camera"
+          },
+          {
+            "semantic_id": "vid_state_blackout",
+            "label": "Blackout",
+            "osc_address": "/rig/state/blackout",
+            "preset": "blackout"
           }
         ]
       },

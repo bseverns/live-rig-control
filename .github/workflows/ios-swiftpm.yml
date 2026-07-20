@@ -4,10 +4,30 @@ on:
   push:
     paths:
       - "ios/**"
+      - "src/mappings.json"
+      - "src/*.js"
+      - "interop.schema.json"
+      - "atlas/live-rig.default.json"
+      - "contracts/**"
+      - "tools/**"
+      - "server/package.json"
+      - "server/package-lock.json"
+      - "server/*.js"
+      - "docs/operator-handbook.md"
       - ".github/workflows/ios-swiftpm.yml"
   pull_request:
     paths:
       - "ios/**"
+      - "src/mappings.json"
+      - "src/*.js"
+      - "interop.schema.json"
+      - "atlas/live-rig.default.json"
+      - "contracts/**"
+      - "tools/**"
+      - "server/package.json"
+      - "server/package-lock.json"
+      - "server/*.js"
+      - "docs/operator-handbook.md"
       - ".github/workflows/ios-swiftpm.yml"
 
 permissions:
@@ -24,6 +44,28 @@ jobs:
 
       - name: Swift version
         run: swift --version
+
+      - name: Set up Node
+        uses: actions/setup-node@1e60f620b9541dbe69b58c19a8a55d0a2b9c55c8 # v4.0.4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Validate mapping and contract gates
+        run: |
+          npm ci --prefix server
+          npm --prefix server test
+          npm --prefix server run validate-mappings
+          cmp -s src/mappings.json ios/Sources/LiveRigControlApp/Resources/mappings.json
+          python3 tools/sync_live_rig_authority.py --check
+          python3 tools/validate_msvp_live_rig_control.py
+          npm --prefix server run generate-handbook
+          git diff --exit-code -- docs/operator-handbook.md
+
+      - name: Test Swift mapping validator
+        working-directory: ios
+        run: swift test --enable-swift-testing --filter MappingValidatorTests
 
       - name: Build iOS (simulator)
         working-directory: ios

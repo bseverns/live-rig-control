@@ -199,32 +199,32 @@ final class MappingStore: ObservableObject {
     }
 
     func setOscEnabled(_ enabled: Bool) async {
-        oscEnabled = enabled
-        UserDefaults.standard.set(enabled, forKey: Self.oscEnabledKey)
         if enabled {
+            guard validateAndPersistOscHost(oscHost) else {
+                oscEnabled = false
+                UserDefaults.standard.set(false, forKey: Self.oscEnabledKey)
+                logs.add("OSC not enabled: fix the OSC host")
+                return
+            }
+            oscEnabled = true
+            UserDefaults.standard.set(true, forKey: Self.oscEnabledKey)
             logs.add("OSC enabled")
             await osc.connect(host: oscHost)
         } else {
+            oscEnabled = false
+            UserDefaults.standard.set(false, forKey: Self.oscEnabledKey)
             logs.add("OSC disabled")
             osc.disconnect()
         }
     }
 
-    func updateOscHost(_ host: String) async {
+    func updateOscHost(_ host: String, reconnect: Bool = true) async {
         let trimmed = host.trimmingCharacters(in: .whitespacesAndNewlines)
-        let sanitized = sanitizeOscHost(trimmed)
-        oscHost = sanitized
-        oscHostError = validateOscHost(sanitized)
-        oscHostHint = sanitized != trimmed ? "Host normalized to \(sanitized)" : nil
-        if oscHostError != nil {
-            logs.add("OSC host invalid")
-            return
-        }
-        OscHostStorage.save(sanitized)
-        logs.add("OSC host set to \(sanitized.isEmpty ? "localhost" : sanitized)")
-        if oscEnabled {
+        guard validateAndPersistOscHost(trimmed) else { return }
+        logs.add("OSC host set to \(oscHost.isEmpty ? "localhost" : oscHost)")
+        if reconnect && oscEnabled {
             osc.disconnect()
-            await osc.connect(host: sanitized)
+            await osc.connect(host: oscHost)
         }
     }
 
@@ -247,17 +247,26 @@ final class MappingStore: ObservableObject {
                 (pad.osc?.address.contains("/overlay/") ?? false) ||
                 (pad.osc?.address.contains("/fx/") ?? false)
         }
+        let canSendOsc = oscEnabled && osc.state == .connected
+
+        if !canSendOsc, (overlayPads + blackoutPads).contains(where: { $0.osc != nil }) {
+            logs.add("Safe blackout OSC dropped: OSC is disabled or disconnected")
+        }
 
         for pad in overlayPads {
             padStates[pad.id] = false
             sendMidiIfNeeded(for: pad, state: false)
-            sendOscIfNeeded(for: pad, state: false, force: true)
+            if canSendOsc {
+                sendOscIfNeeded(for: pad, state: false, queuePolicy: "never")
+            }
         }
 
         for pad in blackoutPads {
             padStates[pad.id] = true
             sendMidiIfNeeded(for: pad, state: true)
-            sendOscIfNeeded(for: pad, state: true, force: true)
+            if canSendOsc {
+                sendOscIfNeeded(for: pad, state: true, queuePolicy: "never")
+            }
         }
         logs.add("Safe blackout executed")
     }
@@ -266,23 +275,23 @@ final class MappingStore: ObservableObject {
         guard let midiMapping = pad.midi else { return }
         switch midiMapping.type {
         case "note":
-            guard let note = midiMapping.note else { return }
+            guard let channel = midiMapping.channel, let note = midiMapping.note else { return }
             let velocityOverride = profileControlState(for: selectedProfileId).velocityOverrides[pad.id]
             let velocity = velocityOverride ?? midiMapping.onVelocity ?? profileControlState(for: selectedProfileId).velocity
-            logs.add("MIDI note \(note) ch \(midiMapping.channel) \(state ? "on" : "off")")
+            logs.add("MIDI note \(note) ch \(channel) \(state ? "on" : "off")")
             midi.sendNote(
-                channel: midiMapping.channel,
+                channel: channel,
                 note: note,
                 onVelocity: velocity,
                 offVelocity: midiMapping.offVelocity ?? 0,
                 isOn: state
             )
         case "cc":
-            guard let cc = midiMapping.cc else { return }
+            guard let channel = midiMapping.channel, let cc = midiMapping.cc else { return }
             let value = state ? (midiMapping.onValue ?? 127) : (midiMapping.offValue ?? 0)
-            logs.add("MIDI CC \(cc) ch \(midiMapping.channel) = \(value)")
+            logs.add("MIDI CC \(cc) ch \(channel) = \(value)")
             midi.sendCC(
-                channel: midiMapping.channel,
+                channel: channel,
                 cc: cc,
                 value: value
             )
@@ -302,7 +311,7 @@ final class MappingStore: ObservableObject {
     }
 
     private func sendProgramChangeForPad(_ pad: Pad, program: Int) {
-        guard let midiMapping = pad.midi else { return }
+        guard let midiMapping = pad.midi, let channel = midiMapping.channel else { return }
         var bankMsb = midiMapping.bankMsb
         var bankLsb = midiMapping.bankLsb
         var safeProgram = program
@@ -315,9 +324,9 @@ final class MappingStore: ObservableObject {
                 safeProgram = min(program, 121)
             }
         }
-        logs.add("MIDI program \(safeProgram) ch \(midiMapping.channel)")
+        logs.add("MIDI program \(safeProgram) ch \(channel)")
         midi.sendProgramChange(
-            channel: midiMapping.channel,
+            channel: channel,
             program: safeProgram,
             bankMsb: bankMsb,
             bankLsb: bankLsb
@@ -385,9 +394,24 @@ final class MappingStore: ObservableObject {
         profileControls[key] = state
     }
 
-    private func sendOscIfNeeded(for pad: Pad, state: Bool, force: Bool = false) {
-        guard (oscEnabled || force), pad.osc != nil else { return }
-        osc.send(pad: pad, state: state ? "on" : "off")
+    private func sendOscIfNeeded(for pad: Pad, state: Bool, queuePolicy: String? = nil) {
+        guard oscEnabled, pad.osc != nil else { return }
+        osc.send(pad: pad, state: state ? "on" : "off", queuePolicy: queuePolicy)
+    }
+
+    @discardableResult
+    private func validateAndPersistOscHost(_ host: String) -> Bool {
+        let trimmed = host.trimmingCharacters(in: .whitespacesAndNewlines)
+        let sanitized = sanitizeOscHost(trimmed)
+        oscHost = sanitized
+        oscHostError = validateOscHost(sanitized)
+        oscHostHint = sanitized != trimmed ? "Host normalized to \(sanitized)" : nil
+        guard oscHostError == nil else {
+            logs.add("OSC host invalid")
+            return false
+        }
+        OscHostStorage.save(sanitized)
+        return true
     }
 
     private func sendOscValueIfNeeded(for pad: Pad, value: Int) {
@@ -549,9 +573,9 @@ final class MappingStore: ObservableObject {
     private func sendMidiForSlider(padId: String, midiMapping: MidiMapping, value: Int) {
         switch midiMapping.type {
         case "cc":
-            guard let cc = midiMapping.cc else { return }
-            midi.sendCC(channel: midiMapping.channel, cc: cc, value: value)
-            logs.add("MIDI CC \(cc) ch \(midiMapping.channel) = \(value)")
+            guard let channel = midiMapping.channel, let cc = midiMapping.cc else { return }
+            midi.sendCC(channel: channel, cc: cc, value: value)
+            logs.add("MIDI CC \(cc) ch \(channel) = \(value)")
         case "program":
             sendProgramChangeForPadId(padId, midiMapping: midiMapping, program: value)
         default:
@@ -560,6 +584,7 @@ final class MappingStore: ObservableObject {
     }
 
     private func sendProgramChangeForPadId(_ padId: String, midiMapping: MidiMapping, program: Int) {
+        guard let channel = midiMapping.channel else { return }
         let mode = midiMapping.programBankMode ?? "none"
         let bankMsb: Int?
         let bankLsb: Int?
@@ -587,8 +612,8 @@ final class MappingStore: ObservableObject {
             bankLsb = nil
             safeProgram = program
         }
-        midi.sendProgramChange(channel: midiMapping.channel, program: safeProgram, bankMsb: bankMsb, bankLsb: bankLsb)
-        logs.add("MIDI Program ch \(midiMapping.channel) = \(safeProgram)")
+        midi.sendProgramChange(channel: channel, program: safeProgram, bankMsb: bankMsb, bankLsb: bankLsb)
+        logs.add("MIDI Program ch \(channel) = \(safeProgram)")
     }
 }
 

@@ -20,7 +20,7 @@ Surface Pro and talk to the hybrid live rig defined in the `live-rig` repo.
   - `server/osc-bridge.js` runs on the same machine as the browser or on a
     nearby host.
   - Receives validated JSON over WebSocket and forwards OSC over UDP.
-  - Binds to `127.0.0.1` by default and can optionally require a shared token.
+  - Binds to `127.0.0.1` by default. Binding to any non-loopback host requires a shared `BRIDGE_TOKEN`.
 
 - **Live Rig**
   - DAW, video engine, and hardware synths receive MIDI/OSC and act

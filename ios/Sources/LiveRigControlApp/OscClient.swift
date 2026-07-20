@@ -92,24 +92,24 @@ final class OscClient: ObservableObject {
         onEvent?("OSC disconnected")
     }
 
-    func send(pad: Pad, state: String) {
+    func send(pad: Pad, state: String, queuePolicy: String? = nil) {
         guard let osc = pad.osc else { return }
         let args = osc.resolvedArgs(forState: state, value: nil)
         guard let message = makeOutboundMessage(address: osc.address, args: args, state: state) else { return }
-        sendMessage(message, queueOptions: queueOptions(for: pad))
+        sendMessage(message, queueOptions: queueOptions(for: pad, policyOverride: queuePolicy))
     }
 
     func send(pad: Pad, value: Int) {
         guard let osc = pad.osc else { return }
-        let args = osc.resolvedArgs(forState: nil, value: value)
+        let args = osc.resolvedArgs(forState: "value", value: value)
         guard let message = makeOutboundMessage(address: osc.address, args: args, state: nil) else { return }
         sendMessage(message, queueOptions: queueOptions(for: pad))
     }
 
     private var lastHost: String = ""
 
-    private func queueOptions(for pad: Pad) -> (policy: String, key: String, ttl: TimeInterval) {
-        let policy = pad.queuePolicy ?? (pad.ui?.type == "slider" ? "latest" : "ttl")
+    private func queueOptions(for pad: Pad, policyOverride: String? = nil) -> (policy: String, key: String, ttl: TimeInterval) {
+        let policy = policyOverride ?? pad.queuePolicy ?? (pad.ui?.type == "slider" ? "latest" : "ttl")
         let ttl = TimeInterval(pad.queueTtlMs ?? 1000) / 1000.0
         return (policy: policy, key: pad.id, ttl: ttl)
     }
@@ -183,13 +183,13 @@ final class OscClient: ObservableObject {
 
     private func enqueue(_ message: OutboundMessage, options: (policy: String, key: String, ttl: TimeInterval)? = nil) {
         let policy = options?.policy ?? "ttl"
-        if policy == "never" {
+        if policy == "never" || policy == "safety" {
             onEvent?("OSC offline; message dropped")
             return
         }
 
         let key = options?.key ?? UUID().uuidString
-        if policy == "latest" || policy == "safety" {
+        if policy == "latest" {
             pendingMessages.removeAll { $0.key == key }
         }
 

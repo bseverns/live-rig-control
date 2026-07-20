@@ -1303,7 +1303,7 @@ function sendProgramValue(pad, value) {
   recordSent(pad.id, { midi: { type: "program", value: clamped } });
 }
 
-function sendOutputs(pad, state, { force = false } = {}) {
+function sendOutputs(pad, state, { suppressOsc = false, oscQueuePolicy = null } = {}) {
   if (pad.midi) {
     if (pad.midi.type === "note") {
       const override = getProfileVelocityOverride(currentProfileId, pad.id);
@@ -1334,8 +1334,8 @@ function sendOutputs(pad, state, { force = false } = {}) {
     }
   }
 
-  if ((oscEnabled || force) && pad.osc) {
-    sendOscMessage(pad, state);
+  if (!suppressOsc && oscEnabled && pad.osc) {
+    sendOscMessage(oscQueuePolicy ? { ...pad, queuePolicy: oscQueuePolicy } : pad, state);
     addLog(`OSC ${pad.osc.address} ${state}`);
     recordSent(pad.id, { osc: { address: pad.osc.address, state } });
   }
@@ -1364,6 +1364,11 @@ function safeBlackout() {
     pad.osc?.address?.includes("/overlay/") ||
     pad.osc?.address?.includes("/fx/")
   );
+  const canSendOsc = oscEnabled && oscStatus === "connected";
+
+  if (!canSendOsc && [...overlayPads, ...blackoutPads].some((pad) => pad.osc)) {
+    addLog("Safe blackout OSC dropped: OSC is disabled or disconnected");
+  }
 
   overlayPads.forEach((pad) => {
     setPadState(pad.id, {
@@ -1372,7 +1377,7 @@ function safeBlackout() {
       updatedAt: new Date().toISOString()
     });
     setPadUi(pad.id, false);
-    sendOutputs(pad, "off", { force: true });
+    sendOutputs(pad, "off", { suppressOsc: !canSendOsc, oscQueuePolicy: "never" });
   });
 
   blackoutPads.forEach((pad) => {
@@ -1382,7 +1387,7 @@ function safeBlackout() {
       updatedAt: new Date().toISOString()
     });
     setPadUi(pad.id, true);
-    sendOutputs(pad, "on", { force: true });
+    sendOutputs(pad, "on", { suppressOsc: !canSendOsc, oscQueuePolicy: "never" });
   });
 }
 
@@ -1426,9 +1431,15 @@ async function main() {
       renderConnections();
     });
 
-    midiAccess = await initMIDI(populateMidiOutputs);
-    if (!midiAccess) {
-      addLog("WebMIDI unavailable");
+    try {
+      midiAccess = await initMIDI(populateMidiOutputs);
+      if (!midiAccess) {
+        addLog("WebMIDI unavailable; OSC controls remain available");
+      }
+    } catch (error) {
+      midiAccess = null;
+      const message = error instanceof Error ? error.message : "permission rejected";
+      addLog(`WebMIDI unavailable: ${message}; OSC controls remain available`);
     }
 
     chooseInitialProfile();

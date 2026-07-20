@@ -23,6 +23,10 @@ const ALLOWED_ORIGINS = new Set(
     .filter(Boolean)
 );
 
+function isLoopbackAddress(value) {
+  return value === "localhost" || value === "::1" || value === "127.0.0.1" || value === "::ffff:127.0.0.1";
+}
+
 if (!Number.isInteger(WSS_PORT) || WSS_PORT <= 0) {
   throw new Error(`Invalid WSS_PORT: ${process.env.WSS_PORT}`);
 }
@@ -31,6 +35,9 @@ if (!Number.isInteger(OSC_PORT) || OSC_PORT <= 0) {
 }
 if (!Number.isInteger(MAX_WS_PAYLOAD_BYTES) || MAX_WS_PAYLOAD_BYTES < 512) {
   throw new Error(`Invalid MAX_WS_PAYLOAD_BYTES: ${process.env.MAX_WS_PAYLOAD_BYTES}`);
+}
+if (!isLoopbackAddress(BIND_HOST) && !BRIDGE_TOKEN) {
+  throw new Error("BRIDGE_TOKEN is required when BIND_HOST is not loopback");
 }
 
 const ajv = new Ajv({ allErrors: true, strict: true });
@@ -78,10 +85,6 @@ const udpPort = new osc.UDPPort({
 });
 
 udpPort.open();
-
-function isLoopbackAddress(value) {
-  return value === "::1" || value === "127.0.0.1" || value === "::ffff:127.0.0.1";
-}
 
 function normalizeRemoteAddress(value) {
   return typeof value === "string" ? value : "";

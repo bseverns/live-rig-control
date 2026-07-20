@@ -46,6 +46,7 @@ swift build --sdk "$SDK_PATH"
 - Changing the selected MIDI output updates the target send port.
 - MIDI sends no-op cleanly when no output is selected.
 - Note, CC, Program Change, and realtime messages land on the expected target.
+- Network MIDI accepts only hosts already in the Core MIDI contact list. Add the show host there before launch; the app does not accept arbitrary inbound hosts.
 
 ### OSC behavior
 
@@ -53,6 +54,7 @@ swift build --sdk "$SDK_PATH"
 - Host or endpoint updates persist after relaunch.
 - Disconnect/reconnect behavior is visible in the status UI.
 - Queued OSC messages drain correctly after reconnect.
+- Safe Blackout while OSC is disabled or disconnected is logged and dropped; it must not fire after reconnect. Normal slider updates still keep only the latest queued value.
 - UDP endpoint form works, for example `udp://192.168.1.10:9000`.
 - WebSocket endpoint form still works for the legacy bridge path.
 

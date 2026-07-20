@@ -462,6 +462,7 @@ struct HeaderPanelView: View {
     @ObservedObject var midi: MidiManager
     @ObservedObject var osc: OscClient
     @State private var safeBlackoutArmed = false
+    @State private var safeBlackoutArmId: UUID?
     let selectedProfileName: String?
     let onShowConnections: () -> Void
     let onShowLogs: () -> Void
@@ -556,13 +557,18 @@ struct HeaderPanelView: View {
     private func handleSafeBlackout() {
         if safeBlackoutArmed {
             safeBlackoutArmed = false
+            safeBlackoutArmId = nil
             store.safeBlackout()
             return
         }
 
+        let armId = UUID()
         safeBlackoutArmed = true
+        safeBlackoutArmId = armId
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            guard safeBlackoutArmId == armId else { return }
             safeBlackoutArmed = false
+            safeBlackoutArmId = nil
         }
     }
 }
@@ -675,6 +681,11 @@ struct ConnectionBarView: View {
                                 .stroke(AppTheme.line, lineWidth: 1)
                         )
                         .clipShape(RoundedRectangle(cornerRadius: AppTheme.controlRadius, style: .continuous))
+                        .onChange(of: store.oscHost) { host in
+                            Task {
+                                await store.updateOscHost(host, reconnect: false)
+                            }
+                        }
                         .onSubmit {
                             Task {
                                 await store.updateOscHost(store.oscHost.trimmingCharacters(in: .whitespacesAndNewlines))

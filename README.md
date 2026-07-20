@@ -47,17 +47,16 @@ those mappings and sends real-time signals.
    cd live-rig-control
    ```
 
-2. Serve the `public/` folder (pick one):
+2. Serve the repository root so the UI can load `src/mappings.json`:
 
    ```bash
-   cd public
    python -m http.server 8080
    ```
 
 3. On the Surface Pro, open Chrome/Edge and visit:
 
    ```
-   http://localhost:8080
+   http://localhost:8080/public/
    ```
 
 4. When prompted, allow MIDI access. In the UI, select your desired MIDI output
@@ -70,7 +69,7 @@ those mappings and sends real-time signals.
 
 - The bridge now binds to `127.0.0.1` by default, not all interfaces.
 - Allowed browser origins default to `http://localhost:8080` and `http://127.0.0.1:8080`.
-- You can require a shared token with `BRIDGE_TOKEN`; the browser can pass it via
+- A non-loopback `BIND_HOST` requires a nonempty `BRIDGE_TOKEN`. The browser passes it via
   `?osc_token=...` in the page URL or `localStorage.oscBridgeToken`.
 - Bridge env examples live in [`server/.env.example`](server/.env.example).
 

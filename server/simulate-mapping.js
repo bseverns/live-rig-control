@@ -17,6 +17,9 @@ function parseArgs(argv) {
     } else if (arg === "--state" || arg === "-s") {
       opts.state = argv[i + 1];
       i += 1;
+    } else if (arg === "--value" || arg === "-v") {
+      opts.value = argv[i + 1];
+      i += 1;
     } else if (arg === "--help" || arg === "-h") {
       opts.help = true;
     }
@@ -25,8 +28,8 @@ function parseArgs(argv) {
 }
 
 function usage() {
-  console.log("Usage: node simulate-mapping.js --id <padId> [--state on|off] [--mappings <path>]");
-  console.log("Defaults: --state on --mappings ../src/mappings.json");
+  console.log("Usage: node simulate-mapping.js --id <padId> [--state on|off] [--value 0..127] [--mappings <path>]");
+  console.log("Button default: --state on. Sliders require --value. Mappings default: ../src/mappings.json");
 }
 
 function normalizeState(state) {
@@ -54,17 +57,55 @@ function isTogglePad(pad) {
   return false;
 }
 
-function resolveOscArgs(osc, state) {
-  if (state === "on") {
-    return osc.onArgs ?? osc.args ?? [];
+function resolveOscArg(arg, { state, value }) {
+  if (typeof arg !== "string") return arg;
+  if (arg === "$value" && Number.isFinite(value)) return value;
+  if (arg === "$value01" && Number.isFinite(value)) return value / 127;
+  if (arg === "$state" && state) return state;
+
+  let resolved = arg;
+  if (Number.isFinite(value)) {
+    resolved = resolved
+      .replaceAll("$value01", String(value / 127))
+      .replaceAll("$value", String(value));
   }
-  return osc.offArgs ?? [0];
+  if (state) {
+    resolved = resolved.replaceAll("$state", state);
+  }
+  return resolved;
 }
 
-function buildOutputs(pad, state) {
+function resolveOscArgs(osc, { state, value }) {
+  let args;
+  if (Number.isFinite(value)) {
+    args = osc.args ?? [];
+  } else if (state === "on") {
+    args = osc.onArgs ?? osc.args ?? [];
+  } else {
+    args = osc.offArgs ?? [0];
+  }
+  return args.map((arg) => resolveOscArg(arg, { state, value }));
+}
+
+function normalizeValue(rawValue, pad) {
+  if (rawValue === undefined) return null;
+  const value = Number(rawValue);
+  const min = pad.ui?.min ?? 0;
+  const max = pad.ui?.max ?? 127;
+  if (!Number.isFinite(value) || !Number.isInteger(value) || value < min || value > max) {
+    throw new Error(`Invalid value "${rawValue}". Use an integer from ${min} to ${max}.`);
+  }
+  return value;
+}
+
+function isSlider(pad) {
+  return pad.ui?.type === "slider";
+}
+
+function buildOutputs(pad, state, value = null) {
   const outputs = [];
   if (pad.osc) {
-    const args = resolveOscArgs(pad.osc, state);
+    const args = resolveOscArgs(pad.osc, { state, value });
     outputs.push(`OSC -> ${pad.osc.address} ${JSON.stringify(args)}`);
   }
   if (pad.midi) {
@@ -76,21 +117,21 @@ function buildOutputs(pad, state) {
         `MIDI -> note ch${pad.midi.channel} note ${pad.midi.note} vel ${velocity}`
       );
     } else if (pad.midi.type === "cc") {
-      const value = state === "on"
+      const outputValue = Number.isFinite(value) ? value : state === "on"
         ? pad.midi.onValue ?? 127
         : pad.midi.offValue ?? 0;
       outputs.push(
-        `MIDI -> cc ch${pad.midi.channel} cc ${pad.midi.cc} val ${value}`
+        `MIDI -> cc ch${pad.midi.channel} cc ${pad.midi.cc} val ${outputValue}`
       );
     } else if (pad.midi.type === "program") {
-      if (state === "on") {
+      if (state === "on" || Number.isFinite(value)) {
         const bankMsb = Number.isFinite(pad.midi.bankMsb) ? pad.midi.bankMsb : null;
         const bankLsb = Number.isFinite(pad.midi.bankLsb) ? pad.midi.bankLsb : null;
         const bankInfo = bankMsb !== null || bankLsb !== null
           ? ` bank ${bankMsb ?? "-"},${bankLsb ?? "-"}`
           : "";
         outputs.push(
-          `MIDI -> program ch${pad.midi.channel} program ${pad.midi.program}${bankInfo}`
+          `MIDI -> program ch${pad.midi.channel} program ${value ?? pad.midi.program}${bankInfo}`
         );
       }
     } else if (pad.midi.type === "realtime") {
@@ -131,16 +172,21 @@ if (!found) {
 }
 
 let state = "on";
+let value = null;
 try {
   state = normalizeState(opts.state);
+  value = normalizeValue(opts.value, found);
+  if (isSlider(found) && value === null) {
+    throw new Error(`Slider "${found.id}" requires --value.`);
+  }
 } catch (err) {
   console.error(err.message);
   process.exit(1);
 }
 
 console.log(`Pad: ${found.id} (profile ${foundProfileId})`);
-console.log(`State: ${state}`);
-for (const line of buildOutputs(found, state)) {
+console.log(value === null ? `State: ${state}` : `Value: ${value}`);
+for (const line of buildOutputs(found, value === null ? state : "value", value)) {
   console.log(line);
 }
 

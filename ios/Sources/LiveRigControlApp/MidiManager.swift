@@ -262,14 +262,6 @@ final class MidiManager: ObservableObject {
         return fallback
     }
 
-    private func validateChannel(_ channel: Int) -> Bool {
-        channel >= 1 && channel <= 16
-    }
-
-    private func validateDataByte(_ value: Int) -> Bool {
-        value >= 0 && value <= 127
-    }
-
     private func clampChannel(_ channel: Int) -> Int {
         min(16, max(1, channel))
     }
@@ -288,10 +280,10 @@ final class MidiManager: ObservableObject {
         if session.isEnabled == false {
             session.isEnabled = true
         }
-        session.connectionPolicy = .anyone
+        session.connectionPolicy = .hostsInContactList
 
         let displayName = session.localName.isEmpty ? "Session 1" : session.localName
-        onEvent?("Network MIDI enabled: \(displayName) port \(session.networkPort)")
+        onEvent?("Network MIDI enabled for hosts in the contact list: \(displayName) port \(session.networkPort)")
 
         let sourceName = MidiManager.endpointName(session.sourceEndpoint(), fallback: "Network Source")
         let destinationName = MidiManager.endpointName(session.destinationEndpoint(), fallback: "Network Destination")

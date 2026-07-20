@@ -77,3 +77,5 @@ Then store those base64 values in the matching GitHub repository secrets.
 - The app currently targets iPadOS and uses the `ios/LiveRigControlApp.xcodeproj` target setup.
 - `OSC_HOST` in the plist is only a default seed value; runtime state is persisted in app storage.
 - For local OSC bridge use, default to loopback or trusted LAN endpoints only.
+- Network MIDI accepts hosts in the iPad's MIDI Network Setup contact list by
+  default; add a trusted rig host there before using Network MIDI.

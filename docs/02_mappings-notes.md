@@ -64,6 +64,7 @@ the mapping stays auditable.
   map more honestly than binary toggles.
 - Sliders default to sending CC values; pads use note/program/realtime for
   discrete actions.
+- MIDI realtime Start/Continue/Stop are system messages and have no channel field.
 - When a control is binary but still “feels” continuous (e.g. FX On/Off),
   it stays a toggle to avoid ambiguity.
 

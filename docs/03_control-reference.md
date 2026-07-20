@@ -69,11 +69,11 @@ The repo currently defines these runtime profiles in `src/mappings.json`:
 
 | Profile ID | Label | Pads | Primary Transport | Why this profile exists |
 | --- | --- | ---: | --- | --- |
-| `msvp` | MSVP | 19 | OSC scenes + MIDI CC | Explicit MSVP page for shared semantic scene/state controls, macro shaping, and analysis shaping. |
+| `msvp` | MSVP | 21 | OSC scenes + MIDI CC | Explicit MSVP page for shared semantic scene/state controls, macro shaping, and analysis shaping. |
 | `nwWrldFeed` | nw_wrld Feed Bridge | 12 | OSC bridge control | Feed and mixer-state commands stay separate from playable MIDI mappings. |
 | `nwWrldInput` | nw_wrld Input (MIDI) | 26 | MIDI note | A dedicated MIDI mapping page for NW World and SCapps input lanes. |
 | `patterns` | Patterns | 1 | MIDI note | Keep pattern changes small and explicit. |
-| `pcm30Macros` | PCM-30 Macros (Ch11) | 19 | MIDI note + CC | Quick insert/macro gestures without opening the full synth page. |
+| `pcm30Macros` | PCM-30 Macros (Ch11) | 18 | MIDI note + CC | Quick insert/macro gestures without opening the full synth page. |
 | `drumStack` | DrumKid Controls (Ch10) | 16 | MIDI CC | Continuous drum-engine parameter shaping. |
 | `drumStackNotes` | Drum Stack Notes (Ch10) | 47 | MIDI note | Dense hit surface for live drum triggering. |
 | `electribe` | Electribe 2S (Ch11) | 25 | MIDI CC + Program | Full sound-design and pattern-selection page. |

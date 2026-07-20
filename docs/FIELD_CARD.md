@@ -5,15 +5,15 @@ A browser-based grid control surface that fires MIDI/OSC cues for the live rig.
 Built to mirror the rig mapping docs while staying fast, legible, and stage-proof.
 
 ## Quickstart
-1. Serve `public/` (ex: `python -m http.server 8080`).
-2. Open `http://localhost:8080` and grant MIDI access.
+1. From the repository root, run `python -m http.server 8080`.
+2. Open `http://localhost:8080/public/` and grant MIDI access if MIDI is needed.
 3. Pick a MIDI output, toggle OSC if you have the bridge on.
 
 ## Primary endpoints/ports
 
 | Interface | Default | Protocol | What it does |
 | --- | --- | --- | --- |
-| Static UI | `http://localhost:8080` | HTTP | Serves the control surface UI. |
+| Static UI | `http://localhost:8080/public/` | HTTP | Serves the control surface UI and mapping file from the repository root. |
 | OSC bridge | `ws://127.0.0.1:9001` | WebSocket | Ships OSC payloads when enabled; localhost-only by default. |
 | MIDI out | Device-specific | WebMIDI | Sends notes/CCs per `src/mappings.json`. |
 
