@@ -10,7 +10,8 @@ Use this after changing either `src/mappings.json` or `MidiVideoSyphonBeats/data
    python3 tools/validate_msvp_live_rig_control.py
    ```
 
-2. Confirm the OSC bridge is up if you plan to test scene cues from the controller.
+2. For a direct MSVP test, start the bridge with `OSC_PORT=9010 npm start` and
+   confirm its log says `Forwarding to OSC 127.0.0.1:9010`.
 3. Confirm MSVP is pointed at a real MIDI loopback/input, not only Java’s `Real Time Sequencer`.
 
 ## Checklist

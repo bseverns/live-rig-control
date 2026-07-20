@@ -8,6 +8,9 @@ This repo now exposes one explicit MSVP page in `src/mappings.json`:
 
 For the machine-readable contract mirror, see `contracts/msvp_live_rig_control.yaml`.
 
+For direct OSC routing to MSVP, start the bridge from `server/` with
+`OSC_PORT=9010 npm start`; port `9000` remains the bridge default for other rig targets.
+
 ## What This Repo Sends To MSVP
 
 ### Scene row

@@ -37,9 +37,10 @@ But the semantic meaning of each scene stays fixed.
 - Primary transport: OSC
 - Fallback transport: MIDI note
 - Controller behavior: `live-rig-control` emits OSC scene commands on the `msvp` profile
-- Endpoint fallback: MSVP exposes note fallback on channel `10` for Intro, Crash,
-  and Soft (`60..62`). Clean Camera and Blackout are controller-side OSC-only
-  commands until their endpoint fallback mappings are added to the MSVP interop.
+- Endpoint behavior: MSVP exposes note fallback on channel `10` for Intro, Crash,
+  and Soft (`60..62`). Clean Camera and Blackout remain OSC-only: MSVP maps
+  `/video/scene/clean_camera` to its neutral preset and `/rig/state/blackout` to
+  its existing blackout state.
 
 The controller intentionally keeps scenes OSC-only here to avoid double-trigger semantics. The fallback note vocabulary still exists in the contract and in MSVP for manual/debug paths.
 
@@ -89,7 +90,7 @@ MSVP never becomes the clock source. If clock is missing, it becomes stale; it d
 ## TODOs From Current Evidence
 
 - TODO: `live-rig-control` does not yet auto-fail over from OSC scene commands to the MIDI note fallback path.
-- TODO: the checked-in MSVP interop file keeps `runtime.rigTunedMode` off by default; deployment enablement stays operator-controlled.
+- TODO: the checked-in MSVP interop file keeps `runtime.rigTunedMode` off by default; show launches enable it with `MSVP_RIG_TUNED_MODE=true`.
 
 ## Validation Commands
 
