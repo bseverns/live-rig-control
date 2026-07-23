@@ -7,12 +7,12 @@ Generated from `src/mappings.json`. Edit the mapping, then run `npm --prefix ser
 | Transport | show | performanceDeck | 3 |
 | Patterns | show | performanceDeck | 1 |
 | Seeds | sound | parameterBoard, min card 180px | 12 |
-| FX Macros | sound | parameterBoard, min card 180px | 18 |
 | Drum Pads | sound | mappedGrid | 47 |
 | Drum Controls | sound | parameterBoard, min card 180px | 16 |
 | Synth | sound | parameterBoard, min card 180px | 25 |
 | MSVP | video | parameterBoard, min card 180px | 21 |
 | Video Feed | video | mappedGrid | 12 |
+| FX Macros | video | parameterBoard, min card 180px | 18 |
 | Video Input | video | mappedGrid | 26 |
 | Controller Slots | setup | parameterBoard, min card 120px | 42 |
 
@@ -58,33 +58,6 @@ Generated from `src/mappings.json`. Edit the mapping, then run `npm --prefix ser
 | `seedbox_seed_spread` | Spread | low | never | MIDI CC 27 ch 1 | MN42 param map CC27: seed stereo spread macro. |
 | `seedbox_seed_mutate` | Mutate | low | never | MIDI CC 28 ch 1 | MN42 param map CC28: seed mutation depth macro. |
 | `seedbox_quantize` | Quantize | low | never | MIDI CC 18 ch 1 | SeedBox quantize control CC18. Value encoding follows the SeedBox MN42 map. |
-
-## FX Macros
-
-- ID: `pcm30Macros`
-- Section: `sound`
-- Layout: `parameterBoard, min card 180px`
-
-| Pad | Label | Risk | Queue | Transport | Notes |
-| --- | --- | --- | --- | --- | --- |
-| `pcm30_f1_xfade` | F1 XFade (CC1) | low | never | MIDI CC 1 ch 11 |  |
-| `pcm30_f2_fb` | F2 FB Feedback (CC2) | low | never | MIDI CC 2 ch 11 |  |
-| `pcm30_f3_mosh` | F3 Mosh (CC3) | low | never | MIDI CC 3 ch 11 |  |
-| `pcm30_f4_mael` | F4 Maelstrom (CC4) | low | never | MIDI CC 4 ch 11 |  |
-| `pcm30_f5_retrace` | F5 ReTrace (CC5) | low | never | MIDI CC 5 ch 11 |  |
-| `pcm30_f6_contrast` | F6 Contrast (CC6) | low | never | MIDI CC 6 ch 11 |  |
-| `pcm30_f8_blackout` | F8 Blackout (CC8) | critical | safety | MIDI CC 8 ch 11 |  |
-| `pcm30_k1_glitch` | K1 Fine Glitch (CC21) | low | never | MIDI CC 21 ch 11 |  |
-| `pcm30_k2_fb` | K2 Fine FB (CC22) | low | never | MIDI CC 22 ch 11 |  |
-| `pcm30_k3_warp` | K3 Warp (CC23) | low | never | MIDI CC 23 ch 11 |  |
-| `pcm30_k4_wire` | K4 Wireframe (CC24) | low | never | MIDI CC 24 ch 11 |  |
-| `pcm30_k5_texture` | K5 Texture (CC25) | low | never | MIDI CC 25 ch 11 |  |
-| `pcm30_k6_blend` | K6 frZone Blend (CC26) | low | never | MIDI CC 26 ch 11 |  |
-| `pcm30_k7_hue` | K7 Hue (CC27) | low | never | MIDI CC 27 ch 11 |  |
-| `pcm30_k8_spare` | K8 Spare (CC28) | low | never | MIDI CC 28 ch 11 |  |
-| `pcm30_scene_crash` | Scene Crash (Note60) | high | never | MIDI note 60 ch 11 |  |
-| `pcm30_scene_soft` | Scene Soft (Note61) | high | never | MIDI note 61 ch 11 |  |
-| `pcm30_blackout` | Blackout (Note62) | critical | safety | MIDI note 62 ch 11 |  |
 
 ## Drum Pads
 
@@ -251,6 +224,33 @@ Generated from `src/mappings.json`. Edit the mapping, then run `npm --prefix ser
 | `nw_overlay_text` | Overlay: Text | medium | ttl | OSC /nw_wrld/overlay/text |  |
 | `nw_overlay_grid` | Overlay: Grid | medium | ttl | OSC /nw_wrld/overlay/grid |  |
 | `nw_overlay_mask` | Overlay: Mask | medium | ttl | OSC /nw_wrld/overlay/mask |  |
+
+## FX Macros
+
+- ID: `pcm30Macros`
+- Section: `video`
+- Layout: `parameterBoard, min card 180px`
+
+| Pad | Label | Risk | Queue | Transport | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `pcm30_f1_xfade` | F1 XFade (CC1) | low | never | MIDI CC 1 ch 11 |  |
+| `pcm30_f2_fb` | F2 FB Feedback (CC2) | low | never | MIDI CC 2 ch 11 |  |
+| `pcm30_f3_mosh` | F3 Mosh (CC3) | low | never | MIDI CC 3 ch 11 |  |
+| `pcm30_f4_mael` | F4 Maelstrom (CC4) | low | never | MIDI CC 4 ch 11 |  |
+| `pcm30_f5_retrace` | F5 ReTrace (CC5) | low | never | MIDI CC 5 ch 11 |  |
+| `pcm30_f6_contrast` | F6 Contrast (CC6) | low | never | MIDI CC 6 ch 11 |  |
+| `pcm30_f8_blackout` | F8 Blackout (CC8) | critical | safety | MIDI CC 8 ch 11 |  |
+| `pcm30_k1_glitch` | K1 Fine Glitch (CC21) | low | never | MIDI CC 21 ch 11 |  |
+| `pcm30_k2_fb` | K2 Fine FB (CC22) | low | never | MIDI CC 22 ch 11 |  |
+| `pcm30_k3_warp` | K3 Warp (CC23) | low | never | MIDI CC 23 ch 11 |  |
+| `pcm30_k4_wire` | K4 Wireframe (CC24) | low | never | MIDI CC 24 ch 11 |  |
+| `pcm30_k5_texture` | K5 Texture (CC25) | low | never | MIDI CC 25 ch 11 |  |
+| `pcm30_k6_blend` | K6 frZone Blend (CC26) | low | never | MIDI CC 26 ch 11 |  |
+| `pcm30_k7_hue` | K7 Hue (CC27) | low | never | MIDI CC 27 ch 11 |  |
+| `pcm30_k8_spare` | K8 Spare (CC28) | low | never | MIDI CC 28 ch 11 |  |
+| `pcm30_scene_crash` | Scene Crash (Note60) | high | never | MIDI note 60 ch 11 |  |
+| `pcm30_scene_soft` | Scene Soft (Note61) | high | never | MIDI note 61 ch 11 |  |
+| `pcm30_blackout` | Blackout (Note62) | critical | safety | MIDI note 62 ch 11 |  |
 
 ## Video Input
 

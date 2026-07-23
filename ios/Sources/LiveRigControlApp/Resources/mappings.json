@@ -1728,7 +1728,7 @@
           "queuePolicy": "safety"
         }
       ],
-      "section": "sound",
+      "section": "video",
       "order": 20,
       "layout": {
         "kind": "parameterBoard",
