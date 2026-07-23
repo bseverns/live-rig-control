@@ -240,6 +240,7 @@ struct ContentView: View {
 private enum ProfileLayoutKind {
     case performanceDeck
     case parameterBoard
+    case bankedGrid
     case mappedGrid
 }
 
@@ -317,6 +318,8 @@ private extension Profile {
             return .performanceDeck
         case "parameterBoard":
             return .parameterBoard
+        case "bankedGrid":
+            return .bankedGrid
         default:
             return .mappedGrid
         }
@@ -362,6 +365,16 @@ struct ProfileSurfaceView: View {
                 onPadPress: onPadPress,
                 onPadRelease: onPadRelease
             )
+        case .bankedGrid:
+            BankedGridView(
+                profile: profile,
+                padStates: padStates,
+                sliderValue: sliderValue,
+                onSliderChange: onSliderChange,
+                onPadTap: onPadTap,
+                onPadPress: onPadPress,
+                onPadRelease: onPadRelease
+            )
         case .mappedGrid:
             PadGridContainer(
                 profile: profile,
@@ -372,6 +385,101 @@ struct ProfileSurfaceView: View {
                 onPadPress: onPadPress,
                 onPadRelease: onPadRelease
             )
+        }
+    }
+}
+
+struct BankedGridView: View {
+    let profile: Profile
+    let padStates: [String: Bool]
+    let sliderValue: (Pad) -> Int
+    let onSliderChange: (Pad, Int) -> Void
+    let onPadTap: (Pad) -> Void
+    let onPadPress: (Pad) -> Void
+    let onPadRelease: (Pad) -> Void
+    @State private var selectedBankId: String?
+
+    private var banks: [LayoutBankMapping] {
+        profile.layout?.banks ?? []
+    }
+
+    private var selectedBank: LayoutBankMapping? {
+        banks.first(where: { $0.id == selectedBankId }) ?? banks.first
+    }
+
+    private var selectedPads: [Pad] {
+        guard let selectedBank else {
+            return profile.sortedPadsForDisplay
+        }
+        let rows = Set(selectedBank.rows)
+        return profile.sortedPadsForDisplay.filter { pad in
+            guard let row = pad.row else { return false }
+            return rows.contains(row)
+        }
+    }
+
+    var body: some View {
+        GeometryReader { proxy in
+            let width = max(proxy.size.width, 320)
+            let bankColumns = [
+                GridItem(.adaptive(minimum: 58, maximum: 120), spacing: 8)
+            ]
+            let controlColumns = [
+                GridItem(
+                    .adaptive(
+                        minimum: profile.minCardWidth,
+                        maximum: width > 900 ? 220 : 180
+                    ),
+                    spacing: 12
+                )
+            ]
+
+            VStack(alignment: .leading, spacing: 14) {
+                LazyVGrid(columns: bankColumns, alignment: .leading, spacing: 8) {
+                    ForEach(banks) { bank in
+                        Button(bank.label) {
+                            selectedBankId = bank.id
+                        }
+                        .buttonStyle(
+                            MinimalButtonStyle(
+                                isSelected: bank.id == selectedBank?.id
+                            )
+                        )
+                        .accessibilityAddTraits(bank.id == selectedBank?.id ? .isSelected : [])
+                    }
+                }
+
+                ScrollView(.vertical) {
+                    LazyVGrid(columns: controlColumns, alignment: .leading, spacing: 12) {
+                        ForEach(selectedPads) { pad in
+                            if pad.ui?.type == "slider" {
+                                PadSliderView(
+                                    pad: pad,
+                                    value: sliderValue(pad),
+                                    onChange: { onSliderChange(pad, $0) },
+                                    minHeight: 150
+                                )
+                            } else {
+                                PadView(
+                                    pad: pad,
+                                    isOn: padStates[pad.id] ?? false,
+                                    onTap: { onPadTap(pad) },
+                                    onPress: { onPadPress(pad) },
+                                    onRelease: { onPadRelease(pad) },
+                                    minHeight: 112
+                                )
+                            }
+                        }
+                    }
+                    .padding(.bottom, 12)
+                }
+                .scrollIndicators(.visible)
+            }
+            .onAppear {
+                if selectedBankId == nil {
+                    selectedBankId = banks.first?.id
+                }
+            }
         }
     }
 }

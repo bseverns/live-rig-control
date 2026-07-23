@@ -2957,7 +2957,46 @@
       "section": "sound",
       "order": 30,
       "layout": {
-        "kind": "mappedGrid",
+        "kind": "bankedGrid",
+        "minCardWidth": 120,
+        "banks": [
+          {
+            "id": "kit",
+            "label": "Kit",
+            "rows": [
+              0,
+              1
+            ]
+          },
+          {
+            "id": "a",
+            "label": "A",
+            "rows": [
+              4
+            ]
+          },
+          {
+            "id": "b",
+            "label": "B",
+            "rows": [
+              5
+            ]
+          },
+          {
+            "id": "c",
+            "label": "C",
+            "rows": [
+              6
+            ]
+          },
+          {
+            "id": "d",
+            "label": "D",
+            "rows": [
+              7
+            ]
+          }
+        ],
         "riskDisplay": true
       }
     },

@@ -7,7 +7,7 @@ Generated from `src/mappings.json`. Edit the mapping, then run `npm --prefix ser
 | Transport | show | performanceDeck | 3 |
 | Patterns | show | performanceDeck | 1 |
 | Seeds | sound | parameterBoard, min card 180px | 12 |
-| Drum Pads | sound | mappedGrid | 47 |
+| Drum Pads | sound | bankedGrid, min card 120px | 47 |
 | Drum Controls | sound | parameterBoard, min card 180px | 16 |
 | Synth | sound | parameterBoard, min card 180px | 25 |
 | MSVP | video | parameterBoard, min card 180px | 21 |
@@ -63,7 +63,7 @@ Generated from `src/mappings.json`. Edit the mapping, then run `npm --prefix ser
 
 - ID: `drumStackNotes`
 - Section: `sound`
-- Layout: `mappedGrid`
+- Layout: `bankedGrid, min card 120px`
 
 | Pad | Label | Risk | Queue | Transport | Notes |
 | --- | --- | --- | --- | --- | --- |

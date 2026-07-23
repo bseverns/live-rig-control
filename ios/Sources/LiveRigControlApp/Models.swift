@@ -139,6 +139,13 @@ struct LayoutMapping: Codable {
     let kind: String
     let minCardWidth: Int?
     let riskDisplay: Bool?
+    let banks: [LayoutBankMapping]?
+}
+
+struct LayoutBankMapping: Codable, Identifiable {
+    let id: String
+    let label: String
+    let rows: [Int]
 }
 
 struct GroupMapping: Codable {

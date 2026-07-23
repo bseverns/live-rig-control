@@ -435,6 +435,42 @@ input[type="text"] {
   gap: var(--surface-gap);
 }
 
+.banked-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.bank-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  gap: 8px;
+}
+
+.bank-chip {
+  min-height: 42px;
+  padding: 8px 12px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--panel-raised);
+}
+
+.bank-chip.active {
+  color: var(--bg);
+  background: var(--text);
+  border-color: var(--text);
+}
+
+.banked-grid-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--banked-card-min, 120px)), 1fr));
+  gap: var(--surface-gap);
+  align-items: stretch;
+}
+
+.banked-grid-controls .slider-pad {
+  min-height: 150px;
+}
+
 .mapped-grid {
   overflow: auto;
 }

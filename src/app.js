@@ -49,6 +49,7 @@ const logs = [];
 const padState = new Map();
 const padElements = new Map();
 const profileControls = new Map();
+const selectedBankByProfile = new Map();
 const sliderValues = new Map();
 const lastSliderSend = new Map();
 const pendingSliderValues = new Map();
@@ -131,12 +132,22 @@ function normalizeProfiles(mappingDoc) {
 }
 
 function normalizeLayout(layout) {
-  const allowedKinds = new Set(["performanceDeck", "parameterBoard", "mappedGrid"]);
+  const allowedKinds = new Set(["performanceDeck", "parameterBoard", "bankedGrid", "mappedGrid"]);
   const kind = allowedKinds.has(layout?.kind) ? layout.kind : "mappedGrid";
   const minCardWidth = Number.isFinite(layout?.minCardWidth) ? layout.minCardWidth : 180;
+  const banks = Array.isArray(layout?.banks)
+    ? layout.banks
+      .filter((bank) => bank && typeof bank.id === "string" && Array.isArray(bank.rows))
+      .map((bank) => ({
+        id: bank.id,
+        label: typeof bank.label === "string" ? bank.label : bank.id,
+        rows: bank.rows.filter(Number.isFinite)
+      }))
+    : [];
   return {
     kind,
     minCardWidth,
+    banks,
     riskDisplay: layout?.riskDisplay !== false
   };
 }
@@ -566,6 +577,11 @@ function renderSurface(profile) {
     return;
   }
 
+  if (layout === "bankedGrid") {
+    renderBankedGrid(profile);
+    return;
+  }
+
   surface.style.removeProperty("--parameter-card-min");
   surface.className = "surface mapped-grid";
   const cols = Math.max(profile.gridSize?.[0] ?? 8, 1);
@@ -600,6 +616,54 @@ function renderSurface(profile) {
   });
 
   surface.appendChild(grid);
+}
+
+function renderBankedGrid(profile) {
+  const layout = normalizeLayout(profile.layout);
+  const banks = layout.banks;
+  if (banks.length === 0) {
+    surface.className = "surface parameter-board";
+    surface.style.setProperty("--parameter-card-min", `${layout.minCardWidth}px`);
+    sortedPadsForDisplay(profile).forEach((pad) => surface.appendChild(createPadElement(pad)));
+    return;
+  }
+
+  const storedBankId = selectedBankByProfile.get(profile.id);
+  const selectedBank = banks.find((bank) => bank.id === storedBankId) ?? banks[0];
+  selectedBankByProfile.set(profile.id, selectedBank.id);
+
+  surface.className = "surface banked-grid";
+  surface.style.removeProperty("--parameter-card-min");
+  surface.style.setProperty("--banked-card-min", `${layout.minCardWidth}px`);
+
+  const selector = document.createElement("div");
+  selector.className = "bank-selector";
+  selector.setAttribute("role", "tablist");
+  selector.setAttribute("aria-label", `${profileName(profile)} bank`);
+
+  banks.forEach((bank) => {
+    const button = document.createElement("button");
+    const isSelected = bank.id === selectedBank.id;
+    button.type = "button";
+    button.className = `bank-chip${isSelected ? " active" : ""}`;
+    button.textContent = bank.label;
+    button.setAttribute("role", "tab");
+    button.setAttribute("aria-selected", String(isSelected));
+    button.addEventListener("click", () => {
+      selectedBankByProfile.set(profile.id, bank.id);
+      renderSurface(profile);
+    });
+    selector.appendChild(button);
+  });
+
+  const selectedRows = new Set(selectedBank.rows);
+  const controls = document.createElement("div");
+  controls.className = "banked-grid-controls";
+  sortedPadsForDisplay(profile)
+    .filter((pad) => selectedRows.has(pad.row))
+    .forEach((pad) => controls.appendChild(createPadElement(pad)));
+
+  surface.append(selector, controls);
 }
 
 function createPadElement(pad) {
